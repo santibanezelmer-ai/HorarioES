@@ -8804,7 +8804,9 @@ async function loginWithGoogle() {
   btn.textContent = 'Conectando...';
   const { error } = await supa.auth.signInWithOAuth({
     provider: 'google',
-    options: { redirectTo: window.location.href }
+    options: {
+      redirectTo: 'https://santibanezelmer-ai.github.io/HorarioES/'
+    }
   });
   if (error) {
     btn.disabled = false;
