@@ -8753,6 +8753,7 @@ function seedDemoData() {
 const SUPA_URL  = 'https://sxadthmnijgitmxpdjbu.supabase.co';
 const SUPA_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN4YWR0aG1uaWpnaXRteHBkamJ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4NjY4MjEsImV4cCI6MjA4OTQ0MjgyMX0.Vizjlook_aiU25CnVuRurYrLgBlj9acb8Wdl6Hl5gxY';
 const COLEGIO_ID = 'default';
+let _saveTimeout = null;
 
 const supa = supabase.createClient(SUPA_URL, SUPA_KEY, {
   auth: {
