@@ -8762,6 +8762,14 @@ let _syncTimeout = null;
 // ── Auth ─────────────────────────────────────────────────────────
 
 async function supaInit() {
+  // Manejar el callback OAuth (hash en la URL)
+  if (window.location.hash.includes('access_token')) {
+    const { data, error } = await supa.auth.getSession();
+    if (error) console.warn('Error al procesar sesión:', error.message);
+    // Limpiar hash de la URL sin recargar
+    history.replaceState(null, '', window.location.pathname);
+  }
+
   // Verificar sesión activa
   const { data: { session } } = await supa.auth.getSession();
   if (session) {
