@@ -8215,16 +8215,16 @@ function confirmLoadBackup() {
   if (!_pendingBackupData) return;
   try {
     DB = _pendingBackupData;
-    // Ensure all courses have schedule entries
     (DB.cursos || []).forEach(c => { if (!DB.schedule[c.id]) initCourseSchedule(c.id); });
-    // Re-init espacios if missing
     if (!DB.espacios) DB.espacios = [];
     if (!DB.docenteBlocks) DB.docenteBlocks = {};
-    saveDB();
+    // Guardar en localStorage
+    localStorage.setItem('horarioES_db', JSON.stringify(DB));
+    // Guardar inmediatamente en Supabase (sin debounce)
+    supaSaveDB().then(() => showToast('✅ Datos guardados en la nube'));
     renderDashboard();
     closeModal('modal-backup-import');
     _pendingBackupData = null;
-    showToast('✅ Datos cargados correctamente');
     showPanel('dashboard');
   } catch(err) {
     showToast('❌ Error al cargar los datos: ' + err.message, 'error');
