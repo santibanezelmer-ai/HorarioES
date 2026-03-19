@@ -8853,17 +8853,25 @@ async function supaLoadDB() {
       .from('horario_db')
       .select('data')
       .eq('colegio_id', COLEGIO_ID)
-      .single();
+      .maybeSingle();
 
-    if (error && error.code !== 'PGRST116') throw error;
+    if (error) throw error;
 
-    if (data?.data) {
+    if (data?.data && Object.keys(data.data).length > 0) {
+      // Datos en Supabase — usarlos como fuente de verdad
       DB = data.data;
       localStorage.setItem('horarioES_db', JSON.stringify(DB));
+      console.log('✅ Datos cargados desde Supabase');
     } else {
-      // Primera vez — cargar desde localStorage si hay algo
+      // Sin datos en Supabase — migrar desde localStorage si hay algo
       const saved = localStorage.getItem('horarioES_db');
-      if (saved) { try { DB = JSON.parse(saved); } catch(e) {} }
+      if (saved) {
+        try {
+          DB = JSON.parse(saved);
+          console.log('⬆️ Subiendo localStorage a Supabase...');
+          await supaSaveDB();
+        } catch(e) { console.warn('Error parseando localStorage', e); }
+      }
     }
   } catch(e) {
     console.warn('Supabase load error, usando localStorage:', e.message);
@@ -8929,12 +8937,13 @@ function supaStartRealtime() {
 // ═══════════════════════════════════════════════════════════════
 
 function initApp() {
-  // Solo migrar — no recargar desde localStorage (supaLoadDB ya cargó los datos)
   migrateDB();
   detectConflicts();
   updateConflictBadge();
   renderDashboard();
   applySchoolBrandingToUI();
+  setupPrintPanel();
+  showPanel('dashboard');
 }
 
 document.addEventListener('keydown', e => {
