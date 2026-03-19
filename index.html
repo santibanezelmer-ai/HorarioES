@@ -8769,8 +8769,11 @@ let _syncTimeout = null;
 // ── Auth ─────────────────────────────────────────────────────────
 
 async function supaInit() {
-  // Escuchar cambios de sesión PRIMERO — antes de verificar sesión actual
+  showToast('🔄 Iniciando conexión...');
+
+  // Escuchar cambios de sesión PRIMERO
   supa.auth.onAuthStateChange(async (event, session) => {
+    showToast('Auth: ' + event);
     if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
       supaUser = session.user;
       document.getElementById('login-screen').style.display = 'none';
@@ -8788,10 +8791,14 @@ async function supaInit() {
   });
 
   // Si hay hash con token en la URL, dejar que onAuthStateChange lo maneje
-  if (window.location.hash.includes('access_token')) return;
+  if (window.location.hash.includes('access_token')) {
+    showToast('🔑 Procesando token...');
+    return;
+  }
 
   // Sin hash — verificar si hay sesión guardada
-  const { data: { session } } = await supa.auth.getSession();
+  const { data: { session }, error } = await supa.auth.getSession();
+  showToast('Sesión: ' + (session ? session.user.email : 'ninguna'));
   if (session) {
     supaUser = session.user;
     await supaLoadDB();
