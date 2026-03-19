@@ -2542,9 +2542,9 @@ function saveDB(desc = null) {
   if (desc) logChange(desc);
   detectConflicts();
   updateConflictBadge();
-  // Guardar en Supabase con debounce de 1.5s para no saturar
+  // Guardar en Supabase con debounce
   clearTimeout(_saveTimeout);
-  _saveTimeout = setTimeout(() => saveDBCloud(), 1500);
+  _saveTimeout = setTimeout(() => supaSaveDB(), 1500);
 }
 
 function initCourseSchedule(cursoId) {
@@ -8832,13 +8832,16 @@ async function logout() {
 function renderUserBar() {
   const bar = document.getElementById('user-bar');
   if (!bar || !supaUser) return;
-  const name = supaUser.user_metadata?.full_name || supaUser.email;
+  const name   = supaUser.user_metadata?.full_name || supaUser.email;
   const avatar = supaUser.user_metadata?.avatar_url;
   bar.innerHTML = `
-    <div style="display:flex;align-items:center;gap:8px;padding:6px 12px;background:var(--surface2);border-radius:20px;font-size:12px">
-      ${avatar ? `<img src="${avatar}" style="width:22px;height:22px;border-radius:50%">` : ''}
-      <span style="color:var(--text2)">${name}</span>
-      <button onclick="logout()" style="background:none;border:none;cursor:pointer;color:var(--text3);font-size:11px;padding:2px 6px;border-radius:8px;hover:background:var(--surface3)">Salir</button>
+    <div style="display:flex;align-items:center;gap:8px;padding:5px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;font-size:12px">
+      ${avatar ? `<img src="${avatar}" style="width:24px;height:24px;border-radius:50%;object-fit:cover">` : `<div style="width:24px;height:24px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white">${(supaUser.email||'?')[0].toUpperCase()}</div>`}
+      <span style="color:var(--text2);max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${name}</span>
+      <button onclick="logout()" title="Cerrar sesión"
+        style="padding:4px 10px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--danger);font-size:11px;font-weight:700;cursor:pointer">
+        Salir
+      </button>
     </div>`;
 }
 
@@ -8926,8 +8929,8 @@ function supaStartRealtime() {
 // ═══════════════════════════════════════════════════════════════
 
 function initApp() {
-  loadDB();
-  seedDemoData();
+  // Solo migrar — no recargar desde localStorage (supaLoadDB ya cargó los datos)
+  migrateDB();
   detectConflicts();
   updateConflictBadge();
   renderDashboard();
