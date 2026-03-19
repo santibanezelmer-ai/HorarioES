@@ -805,7 +805,6 @@
   .preview-dur { font-size: 10px; margin-left: auto; opacity: 0.7; }
 </style>
 <!-- Supabase SDK -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -8213,20 +8212,20 @@ function showBackupPreview(meta, fileName) {
 
 function confirmLoadBackup() {
   if (!_pendingBackupData) return;
-  alert('supaUser al importar: ' + (supaUser ? supaUser.email : 'NULL'));
   try {
     DB = _pendingBackupData;
     (DB.cursos || []).forEach(c => { if (!DB.schedule[c.id]) initCourseSchedule(c.id); });
-    if (!DB.espacios) DB.espacios = [];
+    if (!DB.espacios)     DB.espacios     = {};
     if (!DB.docenteBlocks) DB.docenteBlocks = {};
     localStorage.setItem('horarioES_db', JSON.stringify(DB));
-    supaSaveDB().then(() => showToast('✅ Datos guardados en la nube'));
+    supaGuardar();
     renderDashboard();
     closeModal('modal-backup-import');
     _pendingBackupData = null;
+    showToast('✅ Datos importados');
     showPanel('dashboard');
   } catch(err) {
-    showToast('❌ Error al cargar los datos: ' + err.message, 'error');
+    showToast('❌ Error: ' + err.message, 'error');
   }
 }
 
@@ -8746,114 +8745,65 @@ function seedDemoData() {
 
 
 // ═══════════════════════════════════════════════════════════════
-// SUPABASE — CONFIG
+// SUPABASE
 // ═══════════════════════════════════════════════════════════════
 
-const SUPA_URL  = 'https://sxadthmnijgitmxpdjbu.supabase.co';
-const SUPA_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN4YWR0aG1uaWpnaXRteHBkamJ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4NjY4MjEsImV4cCI6MjA4OTQ0MjgyMX0.Vizjlook_aiU25CnVuRurYrLgBlj9acb8Wdl6Hl5gxY';
+const SUPA_URL   = 'https://sxadthmnijgitmxpdjbu.supabase.co';
+const SUPA_KEY   = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN4YWR0aG1uaWpnaXRteHBkamJ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4NjY4MjEsImV4cCI6MjA4OTQ0MjgyMX0.Vizjlook_aiU25CnVuRurYrLgBlj9acb8Wdl6Hl5gxY';
 const COLEGIO_ID = 'default';
-let _saveTimeout = null;
+
+let _supaUser    = null;
+let _supaChannel = null;
+let _saveTimer   = null;
 
 const supa = supabase.createClient(SUPA_URL, SUPA_KEY, {
-  auth: {
-    detectSessionInUrl: true,
-    persistSession: true,
-    autoRefreshToken: true,
-  }
+  auth: { detectSessionInUrl: true, persistSession: true, autoRefreshToken: true }
 });
-let supaUser = null;
-let supaRealtimeChannel = null;
-let _syncTimeout = null;
 
-// ── Auth ─────────────────────────────────────────────────────────
-
-async function supaInit() {
-  showToast('🔄 Iniciando conexión...');
-
-  // Escuchar cambios de sesión PRIMERO
-  supa.auth.onAuthStateChange(async (event, session) => {
-    showToast('Auth: ' + event);
-    if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
-      supaUser = session.user;
-      document.getElementById('login-screen').style.display = 'none';
-      document.getElementById('app-root').style.display = '';
-      await supaLoadDB();
-      initApp();
-      renderUserBar();
-      supaStartRealtime();
-    }
-    if (event === 'SIGNED_OUT') {
-      supaUser = null;
-      document.getElementById('app-root').style.display = 'none';
-      showLoginScreen();
-    }
-  });
-
-  // Si hay hash con token en la URL, dejar que onAuthStateChange lo maneje
-  if (window.location.hash.includes('access_token')) {
-    showToast('🔑 Procesando token...');
-    return;
-  }
-
-  // Sin hash — verificar si hay sesión guardada
-  const { data: { session }, error } = await supa.auth.getSession();
-  showToast('Sesión: ' + (session ? session.user.email : 'ninguna'));
-  if (session) {
-    supaUser = session.user;
-    await supaLoadDB();
-    initApp();
-    renderUserBar();
-    supaStartRealtime();
-  } else {
-    showLoginScreen();
-  }
-}
+// ── Helpers ──────────────────────────────────────────────────
 
 function showLoginScreen() {
   document.getElementById('login-screen').style.display = 'flex';
-  document.getElementById('app-root').style.display = 'none';
+  document.getElementById('app-root').style.display    = 'none';
+}
+
+function showApp() {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app-root').style.display    = 'block';
 }
 
 async function loginWithGoogle() {
   const btn = document.getElementById('btn-google-login');
-  btn.disabled = true;
+  btn.disabled    = true;
   btn.textContent = 'Conectando...';
-  const { error } = await supa.auth.signInWithOAuth({
+  await supa.auth.signInWithOAuth({
     provider: 'google',
-    options: {
-      redirectTo: 'https://santibanezelmer-ai.github.io/HorarioES/'
-    }
+    options:  { redirectTo: 'https://santibanezelmer-ai.github.io/HorarioES/' }
   });
-  if (error) {
-    btn.disabled = false;
-    btn.textContent = '🔑 Iniciar sesión con Google';
-    showToast('Error al conectar con Google', 'error');
-  }
 }
 
 async function logout() {
   await supa.auth.signOut();
+  _supaUser = null;
+  document.getElementById('user-bar').innerHTML = '';
+  showLoginScreen();
 }
 
 function renderUserBar() {
-  const bar = document.getElementById('user-bar');
-  if (!bar || !supaUser) return;
-  const name   = supaUser.user_metadata?.full_name || supaUser.email;
-  const avatar = supaUser.user_metadata?.avatar_url;
-  bar.innerHTML = `
-    <div style="display:flex;align-items:center;gap:8px;padding:5px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;font-size:12px">
-      ${avatar ? `<img src="${avatar}" style="width:24px;height:24px;border-radius:50%;object-fit:cover">` : `<div style="width:24px;height:24px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white">${(supaUser.email||'?')[0].toUpperCase()}</div>`}
-      <span style="color:var(--text2);max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${name}</span>
-      <button onclick="logout()" title="Cerrar sesión"
-        style="padding:4px 10px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--danger);font-size:11px;font-weight:700;cursor:pointer">
-        Salir
-      </button>
-    </div>`;
+  const bar    = document.getElementById('user-bar');
+  if (!bar || !_supaUser) return;
+  const name   = _supaUser.user_metadata?.full_name || _supaUser.email;
+  const avatar = _supaUser.user_metadata?.avatar_url;
+  bar.innerHTML = `<div style="display:flex;align-items:center;gap:8px;padding:5px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;font-size:12px">
+    ${avatar ? `<img src="${avatar}" style="width:24px;height:24px;border-radius:50%;object-fit:cover">` : `<div style="width:24px;height:24px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white">${(name||'?')[0].toUpperCase()}</div>`}
+    <span style="color:var(--text2);max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${name}</span>
+    <button onclick="logout()" style="padding:3px 10px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--danger);font-size:11px;font-weight:700;cursor:pointer">Salir</button>
+  </div>`;
 }
 
-// ── Sync con Supabase ─────────────────────────────────────────────
+// ── Cargar DB desde Supabase ──────────────────────────────────
 
-async function supaLoadDB() {
+async function supaLoad() {
   try {
     const { data, error } = await supa
       .from('horario_db')
@@ -8863,94 +8813,74 @@ async function supaLoadDB() {
 
     if (error) throw error;
 
-    if (data?.data && Object.keys(data.data).length > 0) {
-      // Datos en Supabase — usarlos como fuente de verdad
+    if (data && data.data && Object.keys(data.data).length > 0) {
       DB = data.data;
       localStorage.setItem('horarioES_db', JSON.stringify(DB));
-      console.log('✅ Datos cargados desde Supabase');
+      showToast('☁️ Datos sincronizados');
     } else {
-      // Sin datos en Supabase — migrar desde localStorage si hay algo
-      const saved = localStorage.getItem('horarioES_db');
-      if (saved) {
-        try {
-          DB = JSON.parse(saved);
-          console.log('⬆️ Subiendo localStorage a Supabase...');
-          await supaSaveDB();
-        } catch(e) { console.warn('Error parseando localStorage', e); }
+      // Sin datos en Supabase — usar localStorage y subirlo
+      const local = localStorage.getItem('horarioES_db');
+      if (local) {
+        try { DB = JSON.parse(local); } catch(e) {}
+        await supaGuardar();
       }
     }
   } catch(e) {
-    console.warn('Supabase load error, usando localStorage:', e.message);
-    const saved = localStorage.getItem('horarioES_db');
-    if (saved) { try { DB = JSON.parse(saved); } catch(e2) {} }
+    console.warn('supaLoad error:', e.message);
+    const local = localStorage.getItem('horarioES_db');
+    if (local) { try { DB = JSON.parse(local); } catch(e2) {} }
   }
 }
 
-async function supaSaveDB() {
-  if (!supaUser) {
-    alert('supaSaveDB: supaUser es null — no hay sesión');
-    return;
-  }
-  alert('Guardando... usuario: ' + supaUser.email);
+// ── Guardar DB en Supabase ────────────────────────────────────
+
+async function supaGuardar() {
+  if (!_supaUser) { console.warn('supaGuardar: sin usuario'); return; }
   try {
     const { error } = await supa
       .from('horario_db')
-      .upsert({
-        colegio_id: COLEGIO_ID,
-        data: DB,
-        updated_by: supaUser.id
-      }, { onConflict: 'colegio_id' });
-    if (error) {
-      alert('Error Supabase: ' + error.message);
-      throw error;
-    }
-    alert('✅ Guardado OK');
+      .upsert({ colegio_id: COLEGIO_ID, data: DB, updated_by: _supaUser.id },
+               { onConflict: 'colegio_id' });
+    if (error) throw error;
+    showToast('☁️ Guardado');
   } catch(e) {
-    alert('catch: ' + e.message);
-    showToast('⚠️ Error sincronizando — guardado localmente', 'error');
+    console.warn('supaGuardar error:', e.message);
+    showToast('⚠️ Sin conexión — guardado local', 'error');
   }
 }
 
-// Debounce — esperar 800ms después del último cambio antes de sincronizar
-function scheduleSyncDB() {
-  clearTimeout(_syncTimeout);
-  _syncTimeout = setTimeout(() => supaSaveDB(), 800);
+function supaGuardarDebounce() {
+  clearTimeout(_saveTimer);
+  _saveTimer = setTimeout(() => supaGuardar(), 1500);
 }
 
-// ── Realtime — escuchar cambios de otros usuarios ────────────────
+// ── Realtime ──────────────────────────────────────────────────
 
-function supaStartRealtime() {
-  if (supaRealtimeChannel) supa.removeChannel(supaRealtimeChannel);
-  supaRealtimeChannel = supa
-    .channel('horario_db_changes')
+function supaRealtime() {
+  if (_supaChannel) supa.removeChannel(_supaChannel);
+  _supaChannel = supa.channel('horario_db_changes')
     .on('postgres_changes', {
-      event: 'UPDATE',
-      schema: 'public',
-      table: 'horario_db',
+      event: 'UPDATE', schema: 'public', table: 'horario_db',
       filter: `colegio_id=eq.${COLEGIO_ID}`
-    }, async (payload) => {
-      // Ignorar cambios propios
-      if (payload.new.updated_by === supaUser?.id) return;
-      // Cargar datos nuevos
-      if (payload.new.data) {
+    }, payload => {
+      if (payload.new?.updated_by === _supaUser?.id) return;
+      if (payload.new?.data) {
         DB = payload.new.data;
         localStorage.setItem('horarioES_db', JSON.stringify(DB));
-        loadDB(); // re-aplicar migraciones
+        migrateDB();
         refreshHorario();
         renderDashboard();
-        showToast('🔄 Horario actualizado por otro usuario');
+        showToast('🔄 Actualizado por otro usuario');
       }
     })
     .subscribe();
 }
 
+// ── Iniciar app después de login ──────────────────────────────
 
-
-// ═══════════════════════════════════════════════════════════════
-// INIT
-// ═══════════════════════════════════════════════════════════════
-
-function initApp() {
+async function iniciarApp(user) {
+  _supaUser = user;
+  await supaLoad();
   migrateDB();
   detectConflicts();
   updateConflictBadge();
@@ -8958,26 +8888,51 @@ function initApp() {
   applySchoolBrandingToUI();
   setupPrintPanel();
   showPanel('dashboard');
+  showApp();
+  renderUserBar();
+  supaRealtime();
 }
 
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'));
-  if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key === 'z') { e.preventDefault(); undoAction(); }
-  if ((e.ctrlKey || e.metaKey) && (e.key === 'y' || (e.shiftKey && e.key === 'z'))) { e.preventDefault(); redoAction(); }
-});
+// ── Init principal ────────────────────────────────────────────
 
-document.addEventListener('click', e => {
-  const search = document.getElementById('sidebar-search');
-  const results = document.getElementById('sidebar-search-results');
-  if (search && results && !search.contains(e.target) && !results.contains(e.target)) {
-    results.style.display = 'none';
+async function supaInit() {
+  // Escuchar cambios de auth
+  supa.auth.onAuthStateChange(async (event, session) => {
+    if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+      if (!_supaUser || _supaUser.id !== session.user.id) {
+        await iniciarApp(session.user);
+      }
+    }
+    if (event === 'SIGNED_OUT') {
+      _supaUser = null;
+      showLoginScreen();
+    }
+  });
+
+  // Verificar sesión existente
+  const { data: { session } } = await supa.auth.getSession();
+  if (session) {
+    await iniciarApp(session.user);
+  } else {
+    showLoginScreen();
   }
-});
+}
 
-// Arrancar con auth
+// ── Sobrescribir saveDB para incluir sync ─────────────────────
+
+const _saveDBBase = saveDB;
+saveDB = function(desc = null) {
+  pushHistory();
+  localStorage.setItem('horarioES_db', JSON.stringify(DB));
+  if (desc) logChange(desc);
+  detectConflicts();
+  updateConflictBadge();
+  supaGuardarDebounce();
+};
+
+// ── Iniciar ───────────────────────────────────────────────────
+
+function initApp() {}  // vacío — iniciarApp lo reemplaza
+
 supaInit();
 </script>
-</div><!-- /app -->
-</div><!-- /app-root -->
-</body>
-</html>
