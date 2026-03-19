@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HorarioES — Sistema de Horarios Escolares</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.7/dist/umd/supabase.js"></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
 
@@ -8896,6 +8896,22 @@ async function iniciarApp(user) {
 // ── Init principal ────────────────────────────────────────────
 
 async function supaInit() {
+  // Verificar que el SDK cargó
+  if (typeof supabase === 'undefined') {
+    console.warn('Supabase SDK no cargó — modo offline');
+    loadDB();
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app-root').style.display = 'block';
+    migrateDB();
+    detectConflicts();
+    updateConflictBadge();
+    renderDashboard();
+    applySchoolBrandingToUI();
+    setupPrintPanel();
+    showPanel('dashboard');
+    return;
+  }
+
   // Escuchar cambios de auth
   supa.auth.onAuthStateChange(async (event, session) => {
     if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
