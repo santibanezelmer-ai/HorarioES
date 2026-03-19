@@ -8768,29 +8768,9 @@ let _syncTimeout = null;
 // ── Auth ─────────────────────────────────────────────────────────
 
 async function supaInit() {
-  // Manejar el callback OAuth (hash en la URL)
-  if (window.location.hash.includes('access_token')) {
-    const { data, error } = await supa.auth.getSession();
-    if (error) console.warn('Error al procesar sesión:', error.message);
-    // Limpiar hash de la URL sin recargar
-    history.replaceState(null, '', window.location.pathname);
-  }
-
-  // Verificar sesión activa
-  const { data: { session } } = await supa.auth.getSession();
-  if (session) {
-    supaUser = session.user;
-    await supaLoadDB();
-    initApp();
-    renderUserBar();
-    supaStartRealtime();
-  } else {
-    showLoginScreen();
-  }
-
-  // Escuchar cambios de sesión
+  // Escuchar cambios de sesión PRIMERO — antes de verificar sesión actual
   supa.auth.onAuthStateChange(async (event, session) => {
-    if (event === 'SIGNED_IN') {
+    if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
       supaUser = session.user;
       document.getElementById('login-screen').style.display = 'none';
       document.getElementById('app-root').style.display = '';
@@ -8805,6 +8785,21 @@ async function supaInit() {
       showLoginScreen();
     }
   });
+
+  // Si hay hash con token en la URL, dejar que onAuthStateChange lo maneje
+  if (window.location.hash.includes('access_token')) return;
+
+  // Sin hash — verificar si hay sesión guardada
+  const { data: { session } } = await supa.auth.getSession();
+  if (session) {
+    supaUser = session.user;
+    await supaLoadDB();
+    initApp();
+    renderUserBar();
+    supaStartRealtime();
+  } else {
+    showLoginScreen();
+  }
 }
 
 function showLoginScreen() {
