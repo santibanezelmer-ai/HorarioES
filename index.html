@@ -8213,14 +8213,13 @@ function showBackupPreview(meta, fileName) {
 
 function confirmLoadBackup() {
   if (!_pendingBackupData) return;
+  alert('supaUser al importar: ' + (supaUser ? supaUser.email : 'NULL'));
   try {
     DB = _pendingBackupData;
     (DB.cursos || []).forEach(c => { if (!DB.schedule[c.id]) initCourseSchedule(c.id); });
     if (!DB.espacios) DB.espacios = [];
     if (!DB.docenteBlocks) DB.docenteBlocks = {};
-    // Guardar en localStorage
     localStorage.setItem('horarioES_db', JSON.stringify(DB));
-    // Guardar inmediatamente en Supabase (sin debounce)
     supaSaveDB().then(() => showToast('✅ Datos guardados en la nube'));
     renderDashboard();
     closeModal('modal-backup-import');
