@@ -2722,7 +2722,7 @@ function renderEstadisticasUTP() {
               if (!isClaseSlot(sNum)) return;
             }
             if (blk.tipo === 'libre') libreUsed++;
-            else if (blk.tipo === 'jec' && esExtra) lectivasExtraUsed++;
+            else if (blk.tipo === 'jec') lectivasExtraUsed++; // JEC = lectiva
             else noLectUsed++;
           });
         }
@@ -6280,9 +6280,9 @@ function buildDocenteScheduleHTML(docenteId) {
   }
 
   // ── Conteo horas por tipo ─────────────────────────────────────
-  let adminCount  = 0; // admin, reunion, planif, otro, jec → van a Admin
-  let libreCount  = 0; // libre → va a UTP/Libre
-  let lectivasExtra = 0; // bloques extra que sean lectivos (JEC con cuentaHoras)
+  let adminCount    = 0; // admin, reunion, planif, otro → Admin
+  let libreCount    = 0; // libre → UTP/Libre
+  let lectivasExtra = 0; // JEC y bloques extra lectivos → Lectivas
   const personalBlocks = DB.docenteBlocks?.[docenteId] || {};
 
   // Contar slots normales (índice numérico)
@@ -6292,18 +6292,19 @@ function buildDocenteScheduleHTML(docenteId) {
       const pb = personalBlocks[pDay]?.[s];
       if (pb && pb.cuentaHoras !== false) {
         if (pb.tipo === 'libre') libreCount++;
+        else if (pb.tipo === 'jec') lectivasExtra++; // JEC = lectiva
         else adminCount++;
       }
     }
 
-  // Contar slots extra (clave 'extra_HH:MM') — pueden ser admin, libre, jec, etc.
+  // Contar slots extra (clave 'extra_HH:MM')
   for (let pDay = 0; pDay < 5; pDay++) {
     const dayBlocks = personalBlocks[pDay] || {};
     Object.entries(dayBlocks).forEach(([slotKey, pb]) => {
       if (!slotKey.startsWith('extra_')) return;
       if (!pb || pb.cuentaHoras === false) return;
       if (pb.tipo === 'libre') libreCount++;
-      else if (pb.tipo === 'jec') lectivasExtra++; // JEC cuenta como lectiva
+      else if (pb.tipo === 'jec') lectivasExtra++; // JEC = lectiva
       else adminCount++;
     });
   }
@@ -6397,8 +6398,7 @@ function buildDocenteScheduleHTML(docenteId) {
     + (acompCount   ? ' · ' + acompCount + 'h acomp.'  : '')
     + (pieAsigCount ? ' · ' + pieAsigCount + 'h PIE'   : '')
     + (lectivasExtra? ' · ' + lectivasExtra + 'h extra' : ''));
-  html += resCard('📋', 'Admin', adminCount, adminC || 0, '#6366f1', 'Reuniones · Planif. · Otro');
-  // UTP/Libre = contrato + horas libres marcadas
+  html += resCard('📋', 'Admin', adminCount, adminC || 0, '#6366f1', 'Reuniones · Planif. · Otro');  // UTP/Libre = contrato + horas libres marcadas
   const utpTotal = utpC + libreCount;
   html += '<div style="padding:11px 13px"><div style="font-size:10px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">🕐 UTP/Libre</div>';
   html += '<div style="font-size:17px;font-weight:800;color:#f59e0b">' + utpTotal + '<span style="font-size:11px;color:var(--text3);font-weight:400">h</span></div>';
