@@ -8888,7 +8888,11 @@ async function supaLoadDB() {
 }
 
 async function supaSaveDB() {
-  if (!supaUser) return;
+  if (!supaUser) {
+    alert('supaSaveDB: supaUser es null — no hay sesión');
+    return;
+  }
+  alert('Guardando... usuario: ' + supaUser.email);
   try {
     const { error } = await supa
       .from('horario_db')
@@ -8897,9 +8901,13 @@ async function supaSaveDB() {
         data: DB,
         updated_by: supaUser.id
       }, { onConflict: 'colegio_id' });
-    if (error) throw error;
+    if (error) {
+      alert('Error Supabase: ' + error.message);
+      throw error;
+    }
+    alert('✅ Guardado OK');
   } catch(e) {
-    console.warn('Supabase save error:', e.message);
+    alert('catch: ' + e.message);
     showToast('⚠️ Error sincronizando — guardado localmente', 'error');
   }
 }
