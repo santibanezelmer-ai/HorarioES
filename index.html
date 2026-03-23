@@ -4024,19 +4024,28 @@ function calcDocenteHours(docenteId) {
   const personal = DB.docenteBlocks?.[docenteId];
   if (personal) {
     for (let d = 0; d < 5; d++) {
-      for (let s = 0; s < getBlocksPerDay(); s++) {
-        if (!isClaseSlot(s)) continue;
+      const dayBlocks = personal[d] || {};
 
-        const pb = personal[d]?.[s];
-        if (pb && pb.cuentaHoras !== false) {
-          total += slotToHoras(s);
+      Object.entries(dayBlocks).forEach(([slotKey, pb]) => {
+        if (!pb || pb.cuentaHoras === false) return;
+
+        if (slotKey.toString().startsWith('extra_')) {
+          total += extraSlotToHoras();
+          return;
         }
-      }
+
+        const s = parseInt(slotKey, 10);
+        if (Number.isNaN(s)) return;
+        if (!isClaseSlot(s)) return;
+
+        total += slotToHoras(s);
+      });
     }
   }
 
   return Math.round(total * 100) / 100;
 }
+  
 function docenteTeachesAsigInCiclo(docente, asigId, ciclo) {
   const asigs = migrateDocAsigs(docente.asignaturas);
   if (!asigs[asigId]) return false;
