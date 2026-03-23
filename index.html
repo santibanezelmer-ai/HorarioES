@@ -2780,7 +2780,9 @@ function renderEstadisticasUTP() {
       for (let s = 0; s < getBlocksPerDay(); s++) {
         if (!isClaseSlot(s)) continue;
         const b = DB.schedule[c.id]?.[d]?.[s];
-        if (b?.asigId) horasPorAsig[b.asigId] = (horasPorAsig[b.asigId] || 0) + 1;
+        if (b?.asigId) {
+          horasPorAsig[b.asigId] = (horasPorAsig[b.asigId] || 0) + slotToHoras(s);
+        }
       }
   });
   const asigsSorted = DB.asignaturas
