@@ -2702,7 +2702,9 @@ function renderEstadisticasUTP() {
             for (let s = 0; s < getBlocksPerDay(); s++) {
               if (!isClaseSlot(s)) continue;
               const b = DB.schedule[c.id]?.[day]?.[s];
-              if (b?.docenteId === doc.id || b?.asistenteId === doc.id) lectivasUsed++;
+              if (b?.docenteId === doc.id || b?.asistenteId === doc.id) {
+                lectivasUsed += slotToHoras(s);
+              }
             }
         });
         // No lectivas — separar libre de admin, incluyendo slots extra
