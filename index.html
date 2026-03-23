@@ -4000,33 +4000,42 @@ function isLCMAsig(asigId) {
   return n.includes('lcm') || n.includes('lenguaje') || n.includes('comunicación') || n.includes('comunicacion');
 }
 
-// Count hours a docente has assigned, excluding recreo/colacion slots
+// Count assigned hours for a docente, excluding recreo/colacion slots
 function calcDocenteHours(docenteId) {
-  let count = 0;
+  let total = 0;
+
+  // Bloques en cursos
   DB.cursos.forEach(c => {
-    for (let d = 0; d < 5; d++)
+    for (let d = 0; d < 5; d++) {
       for (let s = 0; s < getBlocksPerDay(); s++) {
         if (!isClaseSlot(s)) continue;
+
         const b = DB.schedule[c.id]?.[d]?.[s];
         if (!b) continue;
-        if (b.docenteId === docenteId || b.asistenteId === docenteId) count++;
+
+        if (b.docenteId === docenteId || b.asistenteId === docenteId) {
+          total += slotToHoras(s);
+        }
       }
+    }
   });
 
-  return Math.round(total * 100) / 100;
-}
-  });
-  // Count personal docente blocks that have cuentaHoras=true
+  // Bloques personales del docente que cuentan horas
   const personal = DB.docenteBlocks?.[docenteId];
   if (personal) {
-    for (let d = 0; d < 5; d++)
+    for (let d = 0; d < 5; d++) {
       for (let s = 0; s < getBlocksPerDay(); s++) {
         if (!isClaseSlot(s)) continue;
+
         const pb = personal[d]?.[s];
-        if (pb && pb.cuentaHoras !== false) count++;
+        if (pb && pb.cuentaHoras !== false) {
+          total += slotToHoras(s);
+        }
       }
+    }
   }
-  return count;
+
+  return Math.round(total * 100) / 100;
 }
 function docenteTeachesAsigInCiclo(docente, asigId, ciclo) {
   const asigs = migrateDocAsigs(docente.asignaturas);
