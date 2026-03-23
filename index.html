@@ -4002,21 +4002,15 @@ function isLCMAsig(asigId) {
 
 // Count hours a docente has assigned, excluding recreo/colacion slots
 function calcDocenteHours(docenteId) {
-  let total = 0;
-
+  let count = 0;
   DB.cursos.forEach(c => {
-    for (let d = 0; d < 5; d++) {
+    for (let d = 0; d < 5; d++)
       for (let s = 0; s < getBlocksPerDay(); s++) {
         if (!isClaseSlot(s)) continue;
-
         const b = DB.schedule[c.id]?.[d]?.[s];
         if (!b) continue;
-
-        if (b.docenteId === docenteId || b.asistenteId === docenteId) {
-          total += slotToHoras(s);
-        }
+        if (b.docenteId === docenteId || b.asistenteId === docenteId) count++;
       }
-    }
   });
 
   return Math.round(total * 100) / 100;
