@@ -1250,6 +1250,7 @@
         <div class="view-tabs">
           <div class="view-tab active" onclick="switchView('curso', this)">Por Curso</div>
           <div class="view-tab" onclick="switchView('docente', this)">Por Docente</div>
+          <button class="btn btn-secondary btn-sm" onclick="refreshHorario()" style="margin-left:auto;font-size:11px">🔄 Actualizar</button>
         </div>
         <div class="flex items-center gap-2 mb-4">
           <select class="filter-select" id="vista-select" onchange="renderVista()">
@@ -6014,9 +6015,10 @@ function clearSchedule() {
 
 function switchView(type, el) {
   currentViewType = type;
+  horarioViewType = type;
   document.querySelectorAll('.view-tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
-  setupVistaPanel();
+  refreshHorario();
 }
 
 function setupVistaPanel() {
