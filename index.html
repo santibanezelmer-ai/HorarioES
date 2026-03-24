@@ -6345,14 +6345,9 @@ function buildDocenteScheduleHTML(docenteId) {
   const lectivasAsig= Math.round((claseCount + acompCount + pieAsigCount + lectivasExtra) * 10) / 10;
   const adminCountR  = Math.round(adminCount * 10) / 10;
   const libreCountR  = Math.round(libreCount * 10) / 10;
-  const totalAsig    = Math.round((lectivasAsig + adminCountR + libreCountR) * 10) / 10;
+  // totalAsig se calcula después de conocer recreosH (se recalcula en la sección UTP)
 
-
-
-  const pctTotal = contrato ? Math.min(100, Math.round(totalAsig / contrato * 100)) : 0;
   const pctLect  = lectivasC ? Math.min(100, Math.round(lectivasAsig / lectivasC * 100)) : 0;
-
-  const colorTotal = totalAsig > contrato ? 'var(--danger)' : pctTotal >= 100 ? 'var(--success)' : 'var(--accent)';
   const colorLect  = lectivasAsig > lectivasC ? 'var(--danger)' : pctLect >= 100 ? 'var(--success)' : pctLect >= 80 ? 'var(--warning)' : 'var(--accent)';
 
   const presenciaMins = docente ? calcHorasPresencia(docente) : null;
@@ -6407,6 +6402,24 @@ function buildDocenteScheduleHTML(docenteId) {
 
   html += '</tbody></table></div>';
 
+  // Calcular recreos/colaciones dentro del horario del docente → van a UTP/Libre
+  let recreosH = 0;
+  for (let rDay = 0; rDay < 5; rDay++) {
+    if (docente?.dias && !docente.dias.includes(rDay)) continue;
+    DB.bloques.forEach((blq, rSlot) => {
+      if (blq.tipo === 'recreo' || blq.tipo === 'colacion') {
+        if (isSlotDentroHorario(docente, rDay, rSlot)) {
+          recreosH += blq.duracion / 60;
+        }
+      }
+    });
+  }
+  recreosH = Math.round(recreosH * 10) / 10;
+
+  const totalAsig = Math.round((lectivasAsig + adminCountR + libreCountR + recreosH) * 10) / 10;
+  const pctTotal  = contrato ? Math.min(100, Math.round(totalAsig / contrato * 100)) : 0;
+  const colorTotal = totalAsig > contrato ? 'var(--danger)' : pctTotal >= 100 ? 'var(--success)' : 'var(--accent)';
+
   // Resumen: Total → Lectivas → Admin → PIE → UTP
   html += '<div style="margin-top:12px;border:1px solid var(--border);border-radius:10px;overflow:hidden">';
   html += '<div style="background:var(--surface2);padding:7px 14px;font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--border)">Resumen de carga horaria' + (presenciaMins ? ' &nbsp;·&nbsp; 🕐 ' + presenciaStr + '/sem' + (diasHorario ? ' (' + diasHorario + ')' : '') : '') + '</div>';
@@ -6417,12 +6430,13 @@ function buildDocenteScheduleHTML(docenteId) {
     + (acompCount   ? ' · ' + Math.round(acompCount*10)/10 + 'h acomp.' : '')
     + (pieAsigCount ? ' · ' + Math.round(pieAsigCount*10)/10 + 'h PIE'  : '')
     + (lectivasExtra? ' · ' + Math.round(lectivasExtra*10)/10 + 'h JEC' : ''));
-  html += resCard('📋', 'Admin', adminCountR, adminC || 0, '#6366f1', 'Reuniones · Planif. · Otro');  // UTP/Libre = contrato + horas libres marcadas
-  const utpTotal = utpC + libreCountR;
+  html += resCard('📋', 'Admin', adminCountR, adminC || 0, '#6366f1', 'Reuniones · Planif. · Otro');
+
+  const utpTotal = Math.round((utpC + libreCountR + recreosH) * 10) / 10;
   html += '<div style="padding:11px 13px"><div style="font-size:10px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">🕐 UTP/Libre</div>';
   html += '<div style="font-size:17px;font-weight:800;color:#f59e0b">' + utpTotal + '<span style="font-size:11px;color:var(--text3);font-weight:400">h</span></div>';
   html += '<div style="height:3px;border-radius:99px;background:var(--surface3);margin-top:4px"><div style="width:' + (contrato ? Math.min(100,Math.round(utpTotal/contrato*100)) : 0) + '%;height:100%;border-radius:99px;background:#f59e0b"></div></div>';
-  html += '<div style="font-size:10px;color:var(--text3);margin-top:3px">' + (libreCount ? libreCount + 'h libres asig. + ' : '') + utpC + 'h contrato</div></div>';
+  html += '<div style="font-size:10px;color:var(--text3);margin-top:3px">' + (recreosH ? recreosH + 'h recreos + ' : '') + (libreCountR ? libreCountR + 'h libres + ' : '') + utpC + 'h contrato</div></div>';
   html += '</div></div>';
 
   // Tabla por curso
