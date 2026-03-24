@@ -2702,7 +2702,7 @@ function renderEstadisticasUTP() {
             for (let s = 0; s < getBlocksPerDay(); s++) {
               if (!isClaseSlot(s)) continue;
               const b = DB.schedule[c.id]?.[day]?.[s];
-              if (b?.docenteId === doc.id || b?.asistenteId === doc.id) lectivasUsed += slotToHoras(s);
+              if (b?.docenteId === doc.id || b?.asistenteId === doc.id) lectivasUsed++;
             }
         });
         // No lectivas — separar libre de admin, incluyendo slots extra
@@ -2721,10 +2721,9 @@ function renderEstadisticasUTP() {
               const sNum = parseInt(slotKey);
               if (!isClaseSlot(sNum)) return;
             }
-            const h = esExtra ? 0.75 : slotToHoras(parseInt(slotKey));
-            if (blk.tipo === 'libre') libreUsed += h;
-            else if (blk.tipo === 'jec') lectivasExtraUsed += h;
-            else noLectUsed += h;
+            if (blk.tipo === 'libre') libreUsed++;
+            else if (blk.tipo === 'jec') lectivasExtraUsed++;
+            else noLectUsed++;
           });
         }
         // PIE cuenta como lectivas
@@ -2733,12 +2732,12 @@ function renderEstadisticasUTP() {
         for (let day = 0; day < 5; day++)
           for (let s = 0; s < getBlocksPerDay(); s++) {
             if (!isClaseSlot(s)) continue;
-            if (piePlanD[day]?.[s]) pieUsed += slotToHoras(s);
+            if (piePlanD[day]?.[s]) pieUsed++;
           }
-        const lectivasUsedTotal = Math.round((lectivasUsed + pieUsed + lectivasExtraUsed) * 10) / 10;
+        const lectivasUsedTotal = lectivasUsed + pieUsed + lectivasExtraUsed;
         const lect    = getHorasLectivas(doc);
         const adminC  = doc.horasAdmin ?? Math.max(0, (doc.horas||0) - lect);
-        const total   = Math.round((lectivasUsedTotal + noLectUsed + libreUsed) * 10) / 10;
+        const total   = lectivasUsedTotal + noLectUsed + libreUsed;
         const contrato= doc.horas || 0;
         const pctL    = lect ? Math.min(100, Math.round(lectivasUsedTotal / lect * 100)) : 0;
         const pctNL   = adminC ? Math.min(100, Math.round(noLectUsed / adminC * 100)) : 0;
@@ -2779,7 +2778,7 @@ function renderEstadisticasUTP() {
       for (let s = 0; s < getBlocksPerDay(); s++) {
         if (!isClaseSlot(s)) continue;
         const b = DB.schedule[c.id]?.[d]?.[s];
-        if (b?.asigId) horasPorAsig[b.asigId] = Math.round(((horasPorAsig[b.asigId] || 0) + slotToHoras(s)) * 10) / 10;
+        if (b?.asigId) horasPorAsig[b.asigId] = (horasPorAsig[b.asigId] || 0) + 1;
       }
   });
   const asigsSorted = DB.asignaturas
@@ -4011,27 +4010,19 @@ function calcDocenteHours(docenteId) {
         if (!isClaseSlot(s)) continue;
         const b = DB.schedule[c.id]?.[d]?.[s];
         if (!b) continue;
-        if (b.docenteId === docenteId || b.asistenteId === docenteId) count += slotToHoras(s);
+        if (b.docenteId === docenteId || b.asistenteId === docenteId) count++;
       }
   });
   const personal = DB.docenteBlocks?.[docenteId];
   if (personal) {
-    for (let d = 0; d < 5; d++) {
-      const dayB = personal[d] || {};
-      Object.entries(dayB).forEach(([slotKey, pb]) => {
-        if (!pb || pb.cuentaHoras === false) return;
-        const esExtra = slotKey.toString().startsWith('extra_');
-        if (!esExtra) {
-          const sNum = parseInt(slotKey);
-          if (!isClaseSlot(sNum)) return;
-          count += slotToHoras(sNum);
-        } else {
-          count += 0.75; // extra = 45min
-        }
-      });
-    }
+    for (let d = 0; d < 5; d++)
+      for (let s = 0; s < getBlocksPerDay(); s++) {
+        if (!isClaseSlot(s)) continue;
+        const pb = personal[d]?.[s];
+        if (pb && pb.cuentaHoras !== false) count++;
+      }
   }
-  return Math.round(count * 10) / 10;
+  return count;
 }
 function docenteTeachesAsigInCiclo(docente, asigId, ciclo) {
   const asigs = migrateDocAsigs(docente.asignaturas);
@@ -6190,7 +6181,7 @@ function buildDocenteScheduleHTML(docenteId) {
         const matchAcomp = !matchPrincipal && DB.cursos.find(c => DB.schedule[c.id]?.[day]?.[slot]?.asistenteId === docenteId);
 
         if (matchPrincipal) {
-          claseCount += slotToHoras(slot);
+          claseCount++;
           const b = DB.schedule[matchPrincipal.id][day][slot];
           const a = getAsig(b.asigId);
           const pb = getDocenteBlock(docenteId, day, slot);
@@ -6201,7 +6192,7 @@ function buildDocenteScheduleHTML(docenteId) {
               ${pb ? `<div style="font-size:8px;color:#6366f1;margin-top:1px;font-weight:700">📋 ${(DB_TIPO_META[pb.tipo]||DB_TIPO_META.admin).label.split(' ')[0]}</div>` : ''}
             </div></td>`;
         } else if (matchAcomp) {
-          acompCount += slotToHoras(slot);
+          acompCount++;
           const b = DB.schedule[matchAcomp.id][day][slot];
           const a = getAsig(b.asigId);
           const pb = getDocenteBlock(docenteId, day, slot);
@@ -6311,10 +6302,9 @@ function buildDocenteScheduleHTML(docenteId) {
       if (!isClaseSlot(s)) continue;
       const pb = personalBlocks[pDay]?.[s];
       if (pb && pb.cuentaHoras !== false) {
-        const h = slotToHoras(s);
-        if (pb.tipo === 'libre') libreCount += h;
-        else if (pb.tipo === 'jec') lectivasExtra += h;
-        else adminCount += h;
+          if (pb.tipo === 'libre') libreCount++;
+        else if (pb.tipo === 'jec') lectivasExtra++;
+        else adminCount++;
       }
     }
 
@@ -6324,10 +6314,9 @@ function buildDocenteScheduleHTML(docenteId) {
     Object.entries(dayBlocks).forEach(([slotKey, pb]) => {
       if (!slotKey.startsWith('extra_')) return;
       if (!pb || pb.cuentaHoras === false) return;
-      const h = extraSlotToHoras();
-      if (pb.tipo === 'libre') libreCount += h;
-      else if (pb.tipo === 'jec') lectivasExtra += h;
-      else adminCount += h;
+      if (pb.tipo === 'libre') libreCount++;
+      else if (pb.tipo === 'jec') lectivasExtra++;
+      else adminCount++;
     });
   }
 
@@ -6339,7 +6328,7 @@ function buildDocenteScheduleHTML(docenteId) {
   for (let pDay = 0; pDay < 5; pDay++)
     for (let s = 0; s < getBlocksPerDay(); s++) {
       if (!isClaseSlot(s)) continue;
-      if (piePlanDoc[pDay]?.[s]) pieAsigCount += slotToHoras(s);
+      if (piePlanDoc[pDay]?.[s]) pieAsigCount++;
     }
 
   // ── Datos de contrato ─────────────────────────────────────────
@@ -6349,10 +6338,10 @@ function buildDocenteScheduleHTML(docenteId) {
   const pieC        = 0;
   const utpC        = getHorasUTP(docente);
   // PIE cuenta como lectivas
-  const lectivasAsig= Math.round((claseCount + acompCount + pieAsigCount + lectivasExtra) * 10) / 10;
-  const totalAsig   = Math.round((lectivasAsig + adminCount + libreCount) * 10) / 10;
-  const adminCountR = Math.round(adminCount * 10) / 10;
-  const libreCountR = Math.round(libreCount * 10) / 10;
+  const lectivasAsig= claseCount + acompCount + pieAsigCount + lectivasExtra;
+  const totalAsig   = lectivasAsig + adminCount + libreCount;
+
+
 
   const pctTotal = contrato ? Math.min(100, Math.round(totalAsig / contrato * 100)) : 0;
   const pctLect  = lectivasC ? Math.min(100, Math.round(lectivasAsig / lectivasC * 100)) : 0;
@@ -6418,12 +6407,12 @@ function buildDocenteScheduleHTML(docenteId) {
   html += '<div style="display:grid;grid-template-columns:repeat(4,1fr)">';
   html += resCard('⏱', 'Total', totalAsig, contrato, colorTotal, pctTotal + '% contrato');
   html += resCard('🏫', 'Lectivas', lectivasAsig, lectivasC, colorLect,
-    Math.round(claseCount*10)/10 + 'h clase'
-    + (acompCount   ? ' · ' + Math.round(acompCount*10)/10 + 'h acomp.'  : '')
-    + (pieAsigCount ? ' · ' + Math.round(pieAsigCount*10)/10 + 'h PIE'   : '')
-    + (lectivasExtra? ' · ' + Math.round(lectivasExtra*10)/10 + 'h JEC'  : ''));
+    claseCount + 'h clase'
+    + (acompCount   ? ' · ' + acompCount + 'h acomp.'  : '')
+    + (pieAsigCount ? ' · ' + pieAsigCount + 'h PIE'   : '')
+    + (lectivasExtra? ' · ' + lectivasExtra + 'h JEC'  : ''));
   html += resCard('📋', 'Admin', adminCountR, adminC || 0, '#6366f1', 'Reuniones · Planif. · Otro');  // UTP/Libre = contrato + horas libres marcadas
-  const utpTotal = utpC + libreCountR;
+  const utpTotal = utpC + libreCount;
   html += '<div style="padding:11px 13px"><div style="font-size:10px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">🕐 UTP/Libre</div>';
   html += '<div style="font-size:17px;font-weight:800;color:#f59e0b">' + utpTotal + '<span style="font-size:11px;color:var(--text3);font-weight:400">h</span></div>';
   html += '<div style="height:3px;border-radius:99px;background:var(--surface3);margin-top:4px"><div style="width:' + (contrato ? Math.min(100,Math.round(utpTotal/contrato*100)) : 0) + '%;height:100%;border-radius:99px;background:#f59e0b"></div></div>';
