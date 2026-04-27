@@ -872,6 +872,9 @@
         <button class="nav-item" onclick="showPanel('pie')">
           <span class="icon">♿</span> Programa PIE
         </button>
+        <button class="nav-item" onclick="showPanel('planificaciones')">
+          <span class="icon">📋</span> Planificaciones
+        </button>
         <button class="nav-item" onclick="showPanel('cursos')">
           <span class="icon">🎓</span> Cursos
         </button>
@@ -1071,6 +1074,36 @@
         </div>
         <div id="pie-list">
           <div class="text-muted text-sm" style="padding:24px;text-align:center">No hay docentes con horas PIE registradas</div>
+        </div>
+      </div>
+
+      <!-- PLANIFICACIONES -->
+      <div class="panel" id="panel-planificaciones">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px">
+          <div>
+            <h2 style="font-size:16px;font-weight:700;margin:0">📋 Planificaciones</h2>
+            <div style="font-size:12px;color:var(--text2);margin-top:2px">Seguimiento mensual por docente y asignatura</div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+            <select class="form-select" id="plan-anio" style="width:100px" onchange="renderPlanificaciones()">
+            </select>
+            <button class="btn btn-secondary btn-sm" onclick="printPlanificaciones(false)">🖨️ Imprimir con datos</button>
+            <button class="btn btn-secondary btn-sm" onclick="printPlanificaciones(true)">📄 Imprimir en blanco</button>
+          </div>
+        </div>
+        <!-- Filtros -->
+        <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+          <select class="form-select" id="plan-filtro-docente" style="flex:1;min-width:160px" onchange="renderPlanificaciones()">
+            <option value="">Todos los docentes</option>
+          </select>
+          <select class="form-select" id="plan-filtro-tipo" style="width:160px" onchange="renderPlanificaciones()">
+            <option value="">Todos los tipos</option>
+            <option value="asignatura">Asignaturas</option>
+            <option value="jec">Talleres JEC</option>
+          </select>
+        </div>
+        <div id="plan-list">
+          <div class="text-muted text-sm" style="padding:24px;text-align:center">Cargando…</div>
         </div>
       </div>
 
@@ -2386,6 +2419,8 @@ let DB = {
   piePlan: {},
   // reemplazantes: contratos de docentes reemplazantes por tiempo definido
   reemplazantes: [],
+  // planificaciones[docenteId][asigId][anio][mes] = { estado, fecha, obs }
+  planificaciones: {},
   config: {
     viernesMaxSlot: null,
     schoolName: '',
@@ -2448,6 +2483,7 @@ function loadDB() {
   if (!DB.docenteBlocks) DB.docenteBlocks = {};
   if (!DB.piePlan) DB.piePlan = {};
   if (!DB.reemplazantes) DB.reemplazantes = [];
+  if (!DB.planificaciones) DB.planificaciones = {};
   // Migrate docentes: ensure ficha, horarioDias, esPIE, horasUTP exist
   DB.docentes.forEach(d => {
     if (!d.ficha) d.ficha = {};
@@ -2582,6 +2618,7 @@ const panelTitles = {
   bloques:  ['Configurar Bloques Horarios', 'Ajusta cantidad, nombres y horarios de cada bloque'],
   espacios: ['Espacios', 'Gestiona gimnasios, laboratorios y otros espacios físicos'],
   pie: ['Programa PIE', 'Docentes de Integración Escolar'],
+  planificaciones: ['Planificaciones', 'Seguimiento mensual de planificaciones'],
   establecimiento: ['Establecimiento', 'Nombre y logo del colegio o escuela'],
 };
 
@@ -2600,6 +2637,7 @@ function showPanel(name) {
   }
   if (name === 'docentes') renderDocentesTable();
   if (name === 'pie') renderPIEPanel();
+  if (name === 'planificaciones') initPlanificaciones();
   if (name === 'estadisticas') renderEstadisticasUTP();
   if (name === 'cursos') renderCursosTable();
   if (name === 'asignaturas') renderAsigTable();
@@ -2869,6 +2907,278 @@ function statCard(icon, label, value, sub, color) {
 // ═══════════════════════════════════════════════════════════════
 // PROGRAMA PIE
 // ═══════════════════════════════════════════════════════════════
+
+// ═══════════════════════════════════════════════════════════════
+// PLANIFICACIONES
+// ═══════════════════════════════════════════════════════════════
+
+const MESES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+const ESTADOS = {
+  pendiente: { label: 'Pendiente', color: '#6b7280', bg: 'var(--surface2)', icon: '⏳' },
+  entregado: { label: 'Entregado', color: '#10b981', bg: 'rgba(16,185,129,0.1)', icon: '✅' },
+  atrasado:  { label: 'Atrasado',  color: '#ef4444', bg: 'rgba(239,68,68,0.1)',  icon: '❌' },
+};
+
+function initPlanificaciones() {
+  // Poblar selector de año
+  const anioSel = document.getElementById('plan-anio');
+  const anioActual = new Date().getFullYear();
+  anioSel.innerHTML = '';
+  for (let a = anioActual - 1; a <= anioActual + 1; a++) {
+    anioSel.innerHTML += `<option value="${a}" ${a === anioActual ? 'selected' : ''}>${a}</option>`;
+  }
+
+  // Poblar filtro de docentes
+  const docSel = document.getElementById('plan-filtro-docente');
+  docSel.innerHTML = '<option value="">Todos los docentes</option>' +
+    DB.docentes.map(d => `<option value="${d.id}">${d.nombre}</option>`).join('');
+
+  renderPlanificaciones();
+}
+
+function getAsignaturasDocente(docenteId) {
+  // Obtener asignaturas que el docente tiene asignadas + JEC
+  const asigs = new Set();
+  DB.cursos.forEach(c => {
+    for (let d = 0; d < 5; d++)
+      for (let s = 0; s < getBlocksPerDay(); s++) {
+        if (!isClaseSlot(s)) continue;
+        const b = DB.schedule[c.id]?.[d]?.[s];
+        if (b?.docenteId === docenteId && b?.asigId) asigs.add(b.asigId + ':asignatura');
+      }
+  });
+  // JEC del docente
+  const pb = DB.docenteBlocks?.[docenteId] || {};
+  for (let d = 0; d < 5; d++) {
+    Object.values(pb[d] || {}).forEach(b => {
+      if (b?.tipo === 'jec' && b?.jecAsigId) asigs.add(b.jecAsigId + ':jec');
+    });
+  }
+  return [...asigs].map(x => {
+    const [id, tipo] = x.split(':');
+    const a = getAsig(id);
+    return a ? { id, nombre: a.nombre, abrev: a.abrev, color: a.color, tipo } : null;
+  }).filter(Boolean);
+}
+
+function getPlanState(docenteId, asigId, anio, mes) {
+  return DB.planificaciones?.[docenteId]?.[asigId]?.[anio]?.[mes] || { estado: 'pendiente', fecha: '', obs: '' };
+}
+
+function setPlanState(docenteId, asigId, anio, mes, data) {
+  if (!DB.planificaciones) DB.planificaciones = {};
+  if (!DB.planificaciones[docenteId]) DB.planificaciones[docenteId] = {};
+  if (!DB.planificaciones[docenteId][asigId]) DB.planificaciones[docenteId][asigId] = {};
+  if (!DB.planificaciones[docenteId][asigId][anio]) DB.planificaciones[docenteId][asigId][anio] = {};
+  DB.planificaciones[docenteId][asigId][anio][mes] = data;
+  saveDB();
+}
+
+function renderPlanificaciones() {
+  const container = document.getElementById('plan-list');
+  if (!container) return;
+  const anio    = parseInt(document.getElementById('plan-anio')?.value || new Date().getFullYear());
+  const filtDoc = document.getElementById('plan-filtro-docente')?.value || '';
+  const filtTipo= document.getElementById('plan-filtro-tipo')?.value || '';
+
+  const docentes = DB.docentes.filter(d => !filtDoc || d.id === filtDoc);
+  if (!docentes.length) { container.innerHTML = '<div class="text-muted text-sm" style="padding:24px;text-align:center">No hay docentes registrados</div>'; return; }
+
+  container.innerHTML = '';
+
+  docentes.forEach(doc => {
+    const asigs = getAsignaturasDocente(doc.id).filter(a => !filtTipo || a.tipo === filtTipo);
+    if (!asigs.length) return;
+
+    // Contar estado general del docente
+    let total = asigs.length * 12, entregados = 0;
+    asigs.forEach(a => {
+      for (let m = 0; m < 12; m++) {
+        if (getPlanState(doc.id, a.id, anio, m).estado === 'entregado') entregados++;
+      }
+    });
+    const pct = Math.round(entregados / total * 100);
+    const colorPct = pct >= 100 ? '#10b981' : pct >= 50 ? '#f59e0b' : '#ef4444';
+
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.style.marginBottom = '12px';
+
+    let html = `<div class="card-header" style="cursor:pointer" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+      <span>📋</span><h3>${doc.nombre}</h3>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:10px">
+        <div style="width:100px;height:5px;border-radius:99px;background:var(--surface3)">
+          <div style="width:${pct}%;height:100%;border-radius:99px;background:${colorPct}"></div>
+        </div>
+        <span style="font-size:11px;color:${colorPct};font-weight:700">${entregados}/${total}</span>
+      </div>
+    </div>
+    <div class="card-body" style="padding:12px">`;
+
+    asigs.forEach(asig => {
+      html += `<div style="margin-bottom:12px">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+          <span style="width:10px;height:10px;border-radius:50%;background:${asig.color};display:inline-block"></span>
+          <strong style="font-size:12px">${asig.nombre}</strong>
+          <span style="font-size:10px;padding:1px 6px;border-radius:8px;background:${asig.tipo==='jec'?'rgba(245,158,11,0.15)':'rgba(79,142,247,0.15)'};color:${asig.tipo==='jec'?'#f59e0b':'var(--accent)'}">${asig.tipo==='jec'?'JEC':'Asignatura'}</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:4px">`;
+
+      for (let mes = 0; mes < 12; mes++) {
+        const plan = getPlanState(doc.id, asig.id, anio, mes);
+        const est  = ESTADOS[plan.estado] || ESTADOS.pendiente;
+        html += `<div onclick="openPlanModal('${doc.id}','${asig.id}',${anio},${mes})"
+          style="padding:5px 4px;border-radius:6px;background:${est.bg};border:1px solid ${est.color}33;cursor:pointer;text-align:center;transition:all .15s"
+          title="${MESES[mes]} — ${est.label}${plan.fecha?' · '+plan.fecha:''}">
+          <div style="font-size:8px;color:var(--text3);margin-bottom:1px">${MESES[mes].slice(0,3)}</div>
+          <div style="font-size:14px">${est.icon}</div>
+          ${plan.fecha?`<div style="font-size:7px;color:${est.color}">${plan.fecha.slice(5)}</div>`:''}
+        </div>`;
+      }
+      html += '</div></div>';
+    });
+
+    html += '</div>';
+    card.innerHTML = html;
+    container.appendChild(card);
+  });
+}
+
+function openPlanModal(docenteId, asigId, anio, mes) {
+  const doc  = getDocente(docenteId);
+  const asig = getAsig(asigId);
+  const plan = getPlanState(docenteId, asigId, anio, mes);
+
+  const estados = Object.entries(ESTADOS).map(([k, v]) =>
+    `<option value="${k}" ${plan.estado === k ? 'selected' : ''}>${v.icon} ${v.label}</option>`
+  ).join('');
+
+  const content = `<div style="padding:16px">
+    <div style="font-size:13px;font-weight:700;margin-bottom:12px">${doc?.nombre} — ${asig?.nombre} — ${MESES[mes]} ${anio}</div>
+    <div class="form-group mb-3">
+      <label class="form-label">Estado</label>
+      <select class="form-select" id="pm-estado">${estados}</select>
+    </div>
+    <div class="form-group mb-3">
+      <label class="form-label">Fecha de entrega</label>
+      <input type="date" class="form-input" id="pm-fecha" value="${plan.fecha || ''}">
+    </div>
+    <div class="form-group mb-3">
+      <label class="form-label">Observación</label>
+      <input type="text" class="form-input" id="pm-obs" value="${plan.obs || ''}" placeholder="Opcional…" maxlength="80">
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
+      <button class="btn btn-secondary" onclick="this.closest('.plan-modal-wrap').remove()">Cancelar</button>
+      <button class="btn btn-primary" onclick="savePlanModal('${docenteId}','${asigId}',${anio},${mes},this)">Guardar</button>
+    </div>
+  </div>`;
+
+  // Modal flotante simple
+  const existing = document.querySelector('.plan-modal-wrap');
+  if (existing) existing.remove();
+  const wrap = document.createElement('div');
+  wrap.className = 'plan-modal-wrap';
+  wrap.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;display:flex;align-items:center;justify-content:center';
+  wrap.innerHTML = `<div style="background:var(--surface);border-radius:12px;min-width:340px;max-width:480px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.4)">
+    <div style="padding:14px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
+      <strong>Planificación</strong>
+      <button onclick="this.closest('.plan-modal-wrap').remove()" style="background:none;border:none;cursor:pointer;font-size:16px;color:var(--text3)">✕</button>
+    </div>
+    ${content}
+  </div>`;
+  wrap.addEventListener('click', e => { if (e.target === wrap) wrap.remove(); });
+  document.body.appendChild(wrap);
+}
+
+function savePlanModal(docenteId, asigId, anio, mes, btn) {
+  const estado = document.getElementById('pm-estado').value;
+  const fecha  = document.getElementById('pm-fecha').value;
+  const obs    = document.getElementById('pm-obs').value.trim();
+  setPlanState(docenteId, asigId, anio, mes, { estado, fecha, obs });
+  btn.closest('.plan-modal-wrap').remove();
+  renderPlanificaciones();
+  showToast('✅ Planificación guardada');
+}
+
+function printPlanificaciones(enBlanco = false) {
+  const anio    = parseInt(document.getElementById('plan-anio')?.value || new Date().getFullYear());
+  const filtDoc = document.getElementById('plan-filtro-docente')?.value || '';
+  const filtTipo= document.getElementById('plan-filtro-tipo')?.value || '';
+  const schoolName = DB.config?.schoolName || 'HorarioES';
+  const schoolLogo = DB.config?.schoolLogo || '';
+  const hoy = new Date().toLocaleDateString('es-CL', { day:'2-digit', month:'long', year:'numeric' });
+
+  const docentes = DB.docentes.filter(d => !filtDoc || d.id === filtDoc);
+
+  let pages = '';
+  docentes.forEach(doc => {
+    const asigs = getAsignaturasDocente(doc.id).filter(a => !filtTipo || a.tipo === filtTipo);
+    if (!asigs.length) return;
+
+    let tableRows = '';
+    asigs.forEach(asig => {
+      let mesesCells = '';
+      for (let mes = 0; mes < 12; mes++) {
+        const plan = enBlanco ? { estado: 'pendiente', fecha: '' } : getPlanState(doc.id, asig.id, anio, mes);
+        const est  = ESTADOS[plan.estado] || ESTADOS.pendiente;
+        mesesCells += `<td style="padding:6px 4px;border:1px solid #e5e7eb;text-align:center;min-width:55px">
+          ${enBlanco
+            ? '<div style="height:20px;border-bottom:1px solid #d1d5db;margin:0 4px"></div>'
+            : `<div style="font-size:11pt;color:${est.color}">${est.icon}</div>
+               ${plan.fecha ? `<div style="font-size:7pt;color:#6b7280">${plan.fecha.slice(5)}</div>` : ''}
+               ${plan.obs   ? `<div style="font-size:7pt;color:#6b7280">${plan.obs}</div>` : ''}`
+          }
+        </td>`;
+      }
+      tableRows += `<tr>
+        <td style="padding:6px 8px;border:1px solid #e5e7eb;font-size:8pt;white-space:nowrap">
+          <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${asig.color};margin-right:4px"></span>
+          ${asig.nombre}
+          <span style="font-size:7pt;color:${asig.tipo==='jec'?'#f59e0b':'#6b7280'};margin-left:4px">${asig.tipo==='jec'?'JEC':''}</span>
+        </td>
+        ${mesesCells}
+      </tr>`;
+    });
+
+    pages += `<div style="page-break-after:always;padding:12mm;font-family:Arial,sans-serif">
+      <div style="display:flex;align-items:center;gap:12px;border-bottom:3px solid var(--accent,#4f8ef7);padding-bottom:8px;margin-bottom:12px">
+        ${schoolLogo ? `<img src="${schoolLogo}" style="height:36px;width:36px;object-fit:contain">` : '<span style="font-size:24px">🏫</span>'}
+        <div style="flex:1">
+          <div style="font-size:9pt;color:#6b7280">${schoolName}</div>
+          <div style="font-size:14pt;font-weight:800">📋 Planificaciones ${anio} — ${doc.nombre}</div>
+        </div>
+        <div style="font-size:8pt;color:#6b7280">${hoy}</div>
+      </div>
+      <table style="width:100%;border-collapse:collapse">
+        <thead>
+          <tr style="background:#f9fafb">
+            <th style="padding:6px 8px;border:1px solid #e5e7eb;font-size:8pt;text-align:left;white-space:nowrap">Asignatura</th>
+            ${MESES.map(m => `<th style="padding:6px 4px;border:1px solid #e5e7eb;font-size:7pt;text-align:center">${m.slice(0,3)}</th>`).join('')}
+          </tr>
+        </thead>
+        <tbody>${tableRows}</tbody>
+      </table>
+      ${enBlanco ? '' : `<div style="margin-top:8px;display:flex;gap:16px;font-size:8pt;color:#6b7280">
+        <span>✅ Entregado</span><span>⏳ Pendiente</span><span>❌ Atrasado</span>
+      </div>`}
+      <div style="margin-top:16px;display:flex;gap:40px">
+        <div style="flex:1;border-top:1px solid #333;padding-top:4px;font-size:8pt;color:#6b7280">Firma Docente</div>
+        <div style="flex:1;border-top:1px solid #333;padding-top:4px;font-size:8pt;color:#6b7280">Firma UTP</div>
+      </div>
+    </div>`;
+  });
+
+  if (!pages) { showToast('No hay planificaciones para imprimir', 'error'); return; }
+
+  const win = window.open('', '_blank');
+  win.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Planificaciones ${anio}</title>
+    <style>@page{size:landscape;margin:8mm} @media print{button{display:none}}</style>
+  </head><body>${pages}
+    <div style="text-align:center;margin:20px"><button onclick="window.print()" style="padding:10px 24px;font-size:14px;cursor:pointer;background:#4f8ef7;color:white;border:none;border-radius:8px">🖨️ Imprimir</button></div>
+  </body></html>`);
+  win.document.close();
+  setTimeout(() => win.print(), 400);
+}
 
 function renderPIEPanel() {
   const container = document.getElementById('pie-list');
