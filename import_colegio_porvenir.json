@@ -1,0 +1,5278 @@
+{
+  "asignaturas": [
+    {
+      "nombre": "Matemáticas",
+      "color": "#3b82f6",
+      "ciclos": [
+        "prebásica",
+        "1er ciclo",
+        "2do ciclo"
+      ],
+      "orden": 0
+    },
+    {
+      "nombre": "Lenguaje",
+      "color": "#22c55e",
+      "ciclos": [
+        "prebásica",
+        "1er ciclo",
+        "2do ciclo"
+      ],
+      "orden": 1
+    },
+    {
+      "nombre": "Ciencias",
+      "color": "#14b8a6",
+      "ciclos": [
+        "prebásica",
+        "1er ciclo",
+        "2do ciclo"
+      ],
+      "orden": 2
+    },
+    {
+      "nombre": "Historia",
+      "color": "#f97316",
+      "ciclos": [
+        "prebásica",
+        "1er ciclo",
+        "2do ciclo"
+      ],
+      "orden": 3
+    },
+    {
+      "nombre": "Ed. Física",
+      "color": "#ef4444",
+      "ciclos": [
+        "prebásica",
+        "1er ciclo",
+        "2do ciclo"
+      ],
+      "orden": 4
+    },
+    {
+      "nombre": "Inglés",
+      "color": "#8b5cf6",
+      "ciclos": [
+        "prebásica",
+        "1er ciclo",
+        "2do ciclo"
+      ],
+      "orden": 5
+    },
+    {
+      "nombre": "Música",
+      "color": "#eab308",
+      "ciclos": [
+        "prebásica",
+        "1er ciclo",
+        "2do ciclo"
+      ],
+      "orden": 6
+    },
+    {
+      "nombre": "Orientación",
+      "color": "#6366f1",
+      "ciclos": [
+        "prebásica",
+        "1er ciclo",
+        "2do ciclo"
+      ],
+      "orden": 7
+    },
+    {
+      "nombre": "Tecnología",
+      "color": "#0ea5e9",
+      "ciclos": [
+        "prebásica",
+        "1er ciclo",
+        "2do ciclo"
+      ],
+      "orden": 8
+    },
+    {
+      "nombre": "lcm",
+      "color": "#84cc16",
+      "ciclos": [
+        "prebásica",
+        "1er ciclo",
+        "2do ciclo"
+      ],
+      "orden": 9
+    },
+    {
+      "nombre": "Taller jec",
+      "color": "#a855f7",
+      "ciclos": [
+        "prebásica",
+        "1er ciclo",
+        "2do ciclo"
+      ],
+      "orden": 10
+    },
+    {
+      "nombre": "Lectura",
+      "color": "#ef4444",
+      "ciclos": [
+        "prebásica",
+        "1er ciclo",
+        "2do ciclo"
+      ],
+      "orden": 11
+    },
+    {
+      "nombre": "Artes",
+      "color": "#ef4444",
+      "ciclos": [
+        "prebásica",
+        "1er ciclo",
+        "2do ciclo"
+      ],
+      "orden": 12
+    },
+    {
+      "nombre": "Interculturalidad",
+      "color": "#ef4444",
+      "ciclos": [
+        "2do ciclo"
+      ],
+      "orden": 13
+    },
+    {
+      "nombre": "Taller Folclore",
+      "color": "#14b8a6",
+      "ciclos": [
+        "1er ciclo"
+      ],
+      "orden": 14
+    },
+    {
+      "nombre": "Taller Folclore",
+      "color": "#3b82f6",
+      "ciclos": [
+        "2do ciclo"
+      ],
+      "orden": 15
+    },
+    {
+      "nombre": "Gimnasia Ritmita Formativa",
+      "color": "#ef4444",
+      "ciclos": [
+        "prebásica",
+        "1er ciclo",
+        "2do ciclo"
+      ],
+      "orden": 16
+    },
+    {
+      "nombre": "Gimnasia Artistica",
+      "color": "#84cc16",
+      "ciclos": [
+        "prebásica",
+        "1er ciclo",
+        "2do ciclo"
+      ],
+      "orden": 17
+    },
+    {
+      "nombre": "Taller Cine",
+      "color": "#ef4444",
+      "ciclos": [
+        "1er ciclo",
+        "2do ciclo"
+      ],
+      "orden": 18
+    },
+    {
+      "nombre": "Taller Artistico",
+      "color": "#ef4444",
+      "ciclos": [
+        "1er ciclo",
+        "2do ciclo"
+      ],
+      "orden": 19
+    },
+    {
+      "nombre": "Taller Mosaico",
+      "color": "#3b82f6",
+      "ciclos": [
+        "2do ciclo"
+      ],
+      "orden": 20
+    },
+    {
+      "nombre": "Elaboración de maceteros",
+      "color": "#eab308",
+      "ciclos": [
+        "2do ciclo"
+      ],
+      "orden": 21
+    },
+    {
+      "nombre": "Cognitivo Funcional",
+      "color": "#818cf8",
+      "ciclos": [
+        "2do ciclo"
+      ],
+      "orden": 22
+    },
+    {
+      "nombre": "Tecnología y uso de redes sociales",
+      "color": "#a855f7",
+      "ciclos": [
+        "2do ciclo"
+      ],
+      "orden": 23
+    },
+    {
+      "nombre": "Artístico cultural",
+      "color": "#2dd4bf",
+      "ciclos": [
+        "2do ciclo"
+      ],
+      "orden": 24
+    },
+    {
+      "nombre": "Manejo de dinero",
+      "color": "#0ea5e9",
+      "ciclos": [
+        "2do ciclo"
+      ],
+      "orden": 25
+    },
+    {
+      "nombre": "Ventas",
+      "color": "#84cc16",
+      "ciclos": [
+        "2do ciclo"
+      ],
+      "orden": 26
+    },
+    {
+      "nombre": "Formación laboral",
+      "color": "#8b5cf6",
+      "ciclos": [
+        "2do ciclo"
+      ],
+      "orden": 27
+    },
+    {
+      "nombre": "Contexto y actualidad",
+      "color": "#22c55e",
+      "ciclos": [
+        "2do ciclo"
+      ],
+      "orden": 28
+    },
+    {
+      "nombre": "Actividades para la vida diaria",
+      "color": "#ec4899",
+      "ciclos": [
+        "2do ciclo"
+      ],
+      "orden": 29
+    },
+    {
+      "nombre": "Social",
+      "color": "#10b981",
+      "ciclos": [
+        "2do ciclo"
+      ],
+      "orden": 30
+    },
+    {
+      "nombre": "Cultivo y jardineria",
+      "color": "#ef4444",
+      "ciclos": [
+        "2do ciclo"
+      ],
+      "orden": 31
+    },
+    {
+      "nombre": "Taller Manualidades",
+      "color": "#22c55e",
+      "ciclos": [
+        "1er ciclo"
+      ],
+      "orden": 32
+    },
+    {
+      "nombre": "Taller Fomento Lector",
+      "color": "#3b82f6",
+      "ciclos": [
+        "1er ciclo"
+      ],
+      "orden": 33
+    },
+    {
+      "nombre": "Taller Reciclaje",
+      "color": "#a855f7",
+      "ciclos": [
+        "2do ciclo"
+      ],
+      "orden": 34
+    },
+    {
+      "nombre": "Taller Juegos Ludicos",
+      "color": "#ef4444",
+      "ciclos": [
+        "1er ciclo",
+        "2do ciclo"
+      ],
+      "orden": 35
+    },
+    {
+      "nombre": "Taller Huerto",
+      "color": "#8b5cf6",
+      "ciclos": [
+        "1er ciclo"
+      ],
+      "orden": 36
+    },
+    {
+      "nombre": "Taller Atletismo",
+      "color": "#ec4899",
+      "ciclos": [
+        "2do ciclo"
+      ],
+      "orden": 37
+    },
+    {
+      "nombre": "Taller Basquetbol",
+      "color": "#06b6d4",
+      "ciclos": [
+        "2do ciclo"
+      ],
+      "orden": 38
+    },
+    {
+      "nombre": "Taller Voleyball",
+      "color": "#ef4444",
+      "ciclos": [
+        "2do ciclo"
+      ],
+      "orden": 39
+    },
+    {
+      "nombre": "Taller Cocina",
+      "color": "#f97316",
+      "ciclos": [
+        "1er ciclo"
+      ],
+      "orden": 40
+    },
+    {
+      "nombre": "Taller de Arte",
+      "color": "#ef4444",
+      "ciclos": [
+        "1er ciclo"
+      ],
+      "orden": 41
+    },
+    {
+      "nombre": "Taller Convivencia",
+      "color": "#f97316",
+      "ciclos": [
+        "1er ciclo",
+        "2do ciclo"
+      ],
+      "orden": 42
+    },
+    {
+      "nombre": "Taller Periodismo",
+      "color": "#eab308",
+      "ciclos": [
+        "2do ciclo"
+      ],
+      "orden": 43
+    },
+    {
+      "nombre": "Taller Amigos del CRA",
+      "color": "#22c55e",
+      "ciclos": [
+        "2do ciclo"
+      ],
+      "orden": 44
+    },
+    {
+      "nombre": "Taller Jardineria",
+      "color": "#14b8a6",
+      "ciclos": [
+        "1er ciclo"
+      ],
+      "orden": 45
+    },
+    {
+      "nombre": "Taller Reposteria",
+      "color": "#3b82f6",
+      "ciclos": [
+        "1er ciclo"
+      ],
+      "orden": 46
+    },
+    {
+      "nombre": "Taller Puntillismo",
+      "color": "#84cc16",
+      "ciclos": [
+        "2do ciclo"
+      ],
+      "orden": 47
+    },
+    {
+      "nombre": "Taller Teatro y Titeres",
+      "color": "#8b5cf6",
+      "ciclos": [
+        "1er ciclo",
+        "2do ciclo"
+      ],
+      "orden": 48
+    }
+  ],
+  "docentes": [
+    {
+      "nombre": "Osvaldo Diaz",
+      "color": "#053291",
+      "ciclos": [
+        "2do ciclo",
+        "prebásica",
+        "1er ciclo"
+      ],
+      "dias": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "es_pie": false,
+      "horas_utp": null
+    },
+    {
+      "nombre": "Teresa Huenupan",
+      "color": "#c78c20",
+      "ciclos": [
+        "1er ciclo",
+        "2do ciclo"
+      ],
+      "dias": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "es_pie": false,
+      "horas_utp": null
+    },
+    {
+      "nombre": "Daniela Islas",
+      "color": "#bc3cbb",
+      "ciclos": [
+        "1er ciclo",
+        "2do ciclo"
+      ],
+      "dias": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "es_pie": false,
+      "horas_utp": null
+    },
+    {
+      "nombre": "Elena Urrutia",
+      "color": "#6c0949",
+      "ciclos": [
+        "1er ciclo"
+      ],
+      "dias": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "es_pie": false,
+      "horas_utp": null
+    },
+    {
+      "nombre": "Jeanette Yefi",
+      "color": "#6cac91",
+      "ciclos": [
+        "1er ciclo"
+      ],
+      "dias": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "es_pie": false,
+      "horas_utp": null
+    },
+    {
+      "nombre": "Karen Vargas",
+      "color": "#145bf9",
+      "ciclos": [
+        "2do ciclo"
+      ],
+      "dias": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "es_pie": false,
+      "horas_utp": null
+    },
+    {
+      "nombre": "Pamela Rosas",
+      "color": "#9b0275",
+      "ciclos": [
+        "2do ciclo",
+        "1er ciclo"
+      ],
+      "dias": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "es_pie": false,
+      "horas_utp": null
+    },
+    {
+      "nombre": "Ester Flores",
+      "color": "#3f3165",
+      "ciclos": [
+        "2do ciclo",
+        "1er ciclo"
+      ],
+      "dias": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "es_pie": false,
+      "horas_utp": null
+    },
+    {
+      "nombre": "Catalina Valenzuela",
+      "color": "#dfa1b7",
+      "ciclos": [
+        "prebásica",
+        "1er ciclo",
+        "2do ciclo"
+      ],
+      "dias": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "es_pie": false,
+      "horas_utp": null
+    },
+    {
+      "nombre": "Marjorie Polanco",
+      "color": "#6d49a3",
+      "ciclos": [
+        "2do ciclo"
+      ],
+      "dias": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "es_pie": false,
+      "horas_utp": null
+    },
+    {
+      "nombre": "Patricia Lagos",
+      "color": "#10d867",
+      "ciclos": [
+        "prebásica",
+        "1er ciclo",
+        "2do ciclo"
+      ],
+      "dias": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "es_pie": false,
+      "horas_utp": null
+    },
+    {
+      "nombre": "Arlette aguilar",
+      "color": "#ceb148",
+      "ciclos": [
+        "1er ciclo",
+        "2do ciclo",
+        "prebásica"
+      ],
+      "dias": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "es_pie": false,
+      "horas_utp": null
+    },
+    {
+      "nombre": "Luz Rivera",
+      "color": "#0a884a",
+      "ciclos": [
+        "1er ciclo",
+        "2do ciclo"
+      ],
+      "dias": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "es_pie": false,
+      "horas_utp": null
+    },
+    {
+      "nombre": "Marcelo Gonzalez",
+      "color": "#83bfe8",
+      "ciclos": [
+        "2do ciclo",
+        "prebásica",
+        "1er ciclo"
+      ],
+      "dias": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "es_pie": false,
+      "horas_utp": null
+    },
+    {
+      "nombre": "Karla Uribe",
+      "color": "#77f5b4",
+      "ciclos": [
+        "2do ciclo",
+        "1er ciclo"
+      ],
+      "dias": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "es_pie": false,
+      "horas_utp": null
+    },
+    {
+      "nombre": "Stephany Mardones",
+      "color": "#e370dc",
+      "ciclos": [
+        "1er ciclo"
+      ],
+      "dias": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "es_pie": false,
+      "horas_utp": null
+    },
+    {
+      "nombre": "Mery Oyarzún",
+      "color": "#6c203a",
+      "ciclos": [
+        "2do ciclo"
+      ],
+      "dias": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "es_pie": false,
+      "horas_utp": null
+    },
+    {
+      "nombre": "Ignacio",
+      "color": "#fbc86d",
+      "ciclos": [
+        "2do ciclo"
+      ],
+      "dias": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "es_pie": true,
+      "horas_utp": null
+    },
+    {
+      "nombre": "Romina",
+      "color": "#f37cd3",
+      "ciclos": [
+        "2do ciclo"
+      ],
+      "dias": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "es_pie": false,
+      "horas_utp": null
+    },
+    {
+      "nombre": "Claudia Diaz",
+      "color": "#12dba3",
+      "ciclos": [
+        "prebásica",
+        "1er ciclo"
+      ],
+      "dias": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "es_pie": true,
+      "horas_utp": null
+    },
+    {
+      "nombre": "Paola Cortes",
+      "color": "#1c7b2e",
+      "ciclos": [],
+      "dias": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "es_pie": true,
+      "horas_utp": null
+    },
+    {
+      "nombre": "Raul Tirua",
+      "color": "#061982",
+      "ciclos": [],
+      "dias": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "es_pie": true,
+      "horas_utp": null
+    },
+    {
+      "nombre": "Astrid Palma",
+      "color": "#bbc77b",
+      "ciclos": [],
+      "dias": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "es_pie": true,
+      "horas_utp": null
+    },
+    {
+      "nombre": "Camila Matus",
+      "color": "#2b9d8a",
+      "ciclos": [],
+      "dias": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "es_pie": false,
+      "horas_utp": null
+    },
+    {
+      "nombre": "Andrea Moraga",
+      "color": "#8a5942",
+      "ciclos": [
+        "1er ciclo",
+        "2do ciclo"
+      ],
+      "dias": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "es_pie": false,
+      "horas_utp": null
+    },
+    {
+      "nombre": "Marcela Yañez",
+      "color": "#2640c5",
+      "ciclos": [
+        "1er ciclo"
+      ],
+      "dias": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "es_pie": false,
+      "horas_utp": null
+    },
+    {
+      "nombre": "Jessica Angulo",
+      "color": "#813c18",
+      "ciclos": [
+        "1er ciclo"
+      ],
+      "dias": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "es_pie": false,
+      "horas_utp": null
+    },
+    {
+      "nombre": "Yeimi Yeager",
+      "color": "#4d25d8",
+      "ciclos": [
+        "1er ciclo"
+      ],
+      "dias": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "es_pie": false,
+      "horas_utp": null
+    },
+    {
+      "nombre": "Alfredo",
+      "color": "#40da91",
+      "ciclos": [
+        "2do ciclo"
+      ],
+      "dias": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "es_pie": true,
+      "horas_utp": 44
+    },
+    {
+      "nombre": "Helmers santibañez",
+      "color": "#9067b5",
+      "ciclos": [
+        "1er ciclo",
+        "prebásica",
+        "2do ciclo"
+      ],
+      "dias": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "es_pie": false,
+      "horas_utp": 40
+    },
+    {
+      "nombre": "Claudio Ruiz",
+      "color": "#4f8ef7",
+      "ciclos": [],
+      "dias": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "es_pie": false,
+      "horas_utp": null
+    },
+    {
+      "nombre": "Fabian Arriagada",
+      "color": "#7d2970",
+      "ciclos": [
+        "1er ciclo",
+        "2do ciclo"
+      ],
+      "dias": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "es_pie": false,
+      "horas_utp": null
+    },
+    {
+      "nombre": "Miguel Fregni",
+      "color": "#4f8ef7",
+      "ciclos": [
+        "1er ciclo",
+        "prebásica",
+        "2do ciclo"
+      ],
+      "dias": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "es_pie": false,
+      "horas_utp": null
+    }
+  ],
+  "cursos": [
+    {
+      "nombre": "1° Básico",
+      "nivel": "1er ciclo",
+      "prof_jefe": "Daniela Islas"
+    },
+    {
+      "nombre": "2° Básico",
+      "nivel": "1er ciclo",
+      "prof_jefe": "Elena Urrutia"
+    },
+    {
+      "nombre": "3° Básico",
+      "nivel": "1er ciclo",
+      "prof_jefe": "Jeanette Yefi"
+    },
+    {
+      "nombre": "4° Básico",
+      "nivel": "1er ciclo",
+      "prof_jefe": "Helmers santibañez"
+    },
+    {
+      "nombre": "5° Básico",
+      "nivel": "2do ciclo",
+      "prof_jefe": "Karen Vargas"
+    },
+    {
+      "nombre": "6° Básico",
+      "nivel": "2do ciclo",
+      "prof_jefe": "Pamela Rosas"
+    },
+    {
+      "nombre": "7° Básico",
+      "nivel": "2do ciclo",
+      "prof_jefe": "Marjorie Polanco"
+    },
+    {
+      "nombre": "8° Básico",
+      "nivel": "2do ciclo",
+      "prof_jefe": "Ester Flores"
+    },
+    {
+      "nombre": "Pre - Kinder NT1",
+      "nivel": "prebásica",
+      "prof_jefe": "Catalina Valenzuela"
+    },
+    {
+      "nombre": "Kinder NT2",
+      "nivel": "prebásica",
+      "prof_jefe": "Patricia Lagos"
+    },
+    {
+      "nombre": "Taller Laboral",
+      "nivel": "2do ciclo",
+      "prof_jefe": ""
+    },
+    {
+      "nombre": "OPCIÓN 4 - 1° Ciclo",
+      "nivel": "1er ciclo",
+      "prof_jefe": ""
+    },
+    {
+      "nombre": "OPCIÓN 4 - 2° Ciclo",
+      "nivel": "2do ciclo",
+      "prof_jefe": "Karla Uribe"
+    }
+  ],
+  "alumnos": [
+    {
+      "curso": "4° Básico",
+      "nombres": "Boris",
+      "apellidos": "Delgado",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 2
+    },
+    {
+      "curso": "4° Básico",
+      "nombres": "Angélica",
+      "apellidos": "Gonzalez",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 3
+    },
+    {
+      "curso": "4° Básico",
+      "nombres": "Jose",
+      "apellidos": "Gonzalez",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 4
+    },
+    {
+      "curso": "4° Básico",
+      "nombres": "Maite",
+      "apellidos": "Hernandez",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 5
+    },
+    {
+      "curso": "4° Básico",
+      "nombres": "Martin",
+      "apellidos": "Melgarejo",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 6
+    },
+    {
+      "curso": "4° Básico",
+      "nombres": "Agustina",
+      "apellidos": "Molina",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 7
+    },
+    {
+      "curso": "4° Básico",
+      "nombres": "Maite",
+      "apellidos": "Muñoz",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 8
+    },
+    {
+      "curso": "4° Básico",
+      "nombres": "Eimy",
+      "apellidos": "Paredes",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 9
+    },
+    {
+      "curso": "4° Básico",
+      "nombres": "Estefania",
+      "apellidos": "Prieto",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 10
+    },
+    {
+      "curso": "4° Básico",
+      "nombres": "Jose",
+      "apellidos": "Raimil",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 11
+    },
+    {
+      "curso": "4° Básico",
+      "nombres": "Francisca",
+      "apellidos": "Ramirez",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 12
+    },
+    {
+      "curso": "4° Básico",
+      "nombres": "Estefania",
+      "apellidos": "Saez",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 13
+    },
+    {
+      "curso": "4° Básico",
+      "nombres": "Sergio",
+      "apellidos": "Vargas",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 14
+    },
+    {
+      "curso": "4° Básico",
+      "nombres": "Agustin",
+      "apellidos": "Vega",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 15
+    },
+    {
+      "curso": "1° Básico",
+      "nombres": "Maximo",
+      "apellidos": "Bahamondes",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 1
+    },
+    {
+      "curso": "1° Básico",
+      "nombres": "Yohan",
+      "apellidos": "Castillo",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 3
+    },
+    {
+      "curso": "1° Básico",
+      "nombres": "Mateo",
+      "apellidos": "Corona",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 4
+    },
+    {
+      "curso": "1° Básico",
+      "nombres": "Emmapaz",
+      "apellidos": "Coronado",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 5
+    },
+    {
+      "curso": "1° Básico",
+      "nombres": "Leandro",
+      "apellidos": "Dumenes",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 6
+    },
+    {
+      "curso": "1° Básico",
+      "nombres": "Pascal",
+      "apellidos": "Fernández",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 7
+    },
+    {
+      "curso": "1° Básico",
+      "nombres": "Augusto",
+      "apellidos": "Guzmán",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 8
+    },
+    {
+      "curso": "1° Básico",
+      "nombres": "Ainhoa",
+      "apellidos": "Inay",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 9
+    },
+    {
+      "curso": "1° Básico",
+      "nombres": "Samantha",
+      "apellidos": "Neira",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 10
+    },
+    {
+      "curso": "1° Básico",
+      "nombres": "Alexis",
+      "apellidos": "Ojeda",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 11
+    },
+    {
+      "curso": "1° Básico",
+      "nombres": "Amelia",
+      "apellidos": "Perez",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 12
+    },
+    {
+      "curso": "1° Básico",
+      "nombres": "William",
+      "apellidos": "Petingalo",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 13
+    },
+    {
+      "curso": "1° Básico",
+      "nombres": "Alexander",
+      "apellidos": "Prieto",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 14
+    },
+    {
+      "curso": "1° Básico",
+      "nombres": "Eva",
+      "apellidos": "Reyes",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 15
+    },
+    {
+      "curso": "1° Básico",
+      "nombres": "Lautaro",
+      "apellidos": "Trunci",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 16
+    },
+    {
+      "curso": "1° Básico",
+      "nombres": "Florencia",
+      "apellidos": "Fernández",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 17
+    },
+    {
+      "curso": "1° Básico",
+      "nombres": "Antonella",
+      "apellidos": "Troncoso",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 18
+    },
+    {
+      "curso": "3° Básico",
+      "nombres": "Sofia",
+      "apellidos": "Aburto",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 1
+    },
+    {
+      "curso": "3° Básico",
+      "nombres": "Dara",
+      "apellidos": "Aburto",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 2
+    },
+    {
+      "curso": "3° Básico",
+      "nombres": "Agustina",
+      "apellidos": "Aguilar",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 3
+    },
+    {
+      "curso": "3° Básico",
+      "nombres": "Angela",
+      "apellidos": "Arriagada",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 4
+    },
+    {
+      "curso": "3° Básico",
+      "nombres": "Ian",
+      "apellidos": "Castro",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 5
+    },
+    {
+      "curso": "3° Básico",
+      "nombres": "Jesús",
+      "apellidos": "Cruz",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 6
+    },
+    {
+      "curso": "3° Básico",
+      "nombres": "Jasmin",
+      "apellidos": "Díaz",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 7
+    },
+    {
+      "curso": "3° Básico",
+      "nombres": "Alison",
+      "apellidos": "Flores",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 8
+    },
+    {
+      "curso": "3° Básico",
+      "nombres": "Alison",
+      "apellidos": "Gómez",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 9
+    },
+    {
+      "curso": "3° Básico",
+      "nombres": "Exequiel",
+      "apellidos": "González",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 10
+    },
+    {
+      "curso": "3° Básico",
+      "nombres": "Felipe",
+      "apellidos": "Hinostroza",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 11
+    },
+    {
+      "curso": "3° Básico",
+      "nombres": "Josefa",
+      "apellidos": "Jaramillo",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 12
+    },
+    {
+      "curso": "3° Básico",
+      "nombres": "Cristóbal",
+      "apellidos": "Moraga",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 13
+    },
+    {
+      "curso": "3° Básico",
+      "nombres": "Emilio",
+      "apellidos": "Palacios",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 14
+    },
+    {
+      "curso": "3° Básico",
+      "nombres": "Luke",
+      "apellidos": "Petingalo",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 15
+    },
+    {
+      "curso": "3° Básico",
+      "nombres": "Estefanía",
+      "apellidos": "Raimil",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 16
+    },
+    {
+      "curso": "3° Básico",
+      "nombres": "Daniel",
+      "apellidos": "Rios",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 17
+    },
+    {
+      "curso": "3° Básico",
+      "nombres": "Nazly",
+      "apellidos": "Sanhueza",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 18
+    },
+    {
+      "curso": "3° Básico",
+      "nombres": "Aaron",
+      "apellidos": "Torrealba",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 19
+    },
+    {
+      "curso": "3° Básico",
+      "nombres": "Tomás",
+      "apellidos": "Torres",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 20
+    },
+    {
+      "curso": "3° Básico",
+      "nombres": "Vicente",
+      "apellidos": "Valderas",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 21
+    },
+    {
+      "curso": "3° Básico",
+      "nombres": "Alexander",
+      "apellidos": "Valenzuela",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 22
+    },
+    {
+      "curso": "3° Básico",
+      "nombres": "Antonia",
+      "apellidos": "Velasquez",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 23
+    },
+    {
+      "curso": "2° Básico",
+      "nombres": "Franco",
+      "apellidos": "Aguilar",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 1
+    },
+    {
+      "curso": "2° Básico",
+      "nombres": "Lía",
+      "apellidos": "Arriagada",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 2
+    },
+    {
+      "curso": "2° Básico",
+      "nombres": "Mateo",
+      "apellidos": "Loncón",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 5
+    },
+    {
+      "curso": "2° Básico",
+      "nombres": "Horacio",
+      "apellidos": "Carrasco",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 3
+    },
+    {
+      "curso": "2° Básico",
+      "nombres": "Helen",
+      "apellidos": "Fernández",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 4
+    },
+    {
+      "curso": "2° Básico",
+      "nombres": "Victor",
+      "apellidos": "Maldonado",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 6
+    },
+    {
+      "curso": "2° Básico",
+      "nombres": "Gaspar",
+      "apellidos": "Melo",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 7
+    },
+    {
+      "curso": "2° Básico",
+      "nombres": "Yimi",
+      "apellidos": "Robles",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 9
+    },
+    {
+      "curso": "2° Básico",
+      "nombres": "Samuel",
+      "apellidos": "Santana",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 10
+    },
+    {
+      "curso": "2° Básico",
+      "nombres": "Josefa",
+      "apellidos": "Sepulveda",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 11
+    },
+    {
+      "curso": "2° Básico",
+      "nombres": "Evanyelin",
+      "apellidos": "Silva",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 12
+    },
+    {
+      "curso": "2° Básico",
+      "nombres": "Estibany",
+      "apellidos": "Soto",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 13
+    },
+    {
+      "curso": "2° Básico",
+      "nombres": "Martin",
+      "apellidos": "Soto",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 14
+    },
+    {
+      "curso": "2° Básico",
+      "nombres": "Agustina",
+      "apellidos": "Muñoz",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 8
+    },
+    {
+      "curso": "1° Básico",
+      "nombres": "Benjamin",
+      "apellidos": "Barrientos",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 2
+    },
+    {
+      "curso": "4° Básico",
+      "nombres": "Dante",
+      "apellidos": "damian",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 1
+    },
+    {
+      "curso": "4° Básico",
+      "nombres": "nallal",
+      "apellidos": "calancie",
+      "rut": "",
+      "fecha_nacimiento": "",
+      "nivel": "",
+      "apoderado": "",
+      "telefono": "",
+      "numero_lista": 16
+    }
+  ],
+  "bloques": [
+    {
+      "nombre": "inicio",
+      "hora": "08:10",
+      "duracion": 20,
+      "tipo": "clase",
+      "orden": 0
+    },
+    {
+      "nombre": "Bloque 1",
+      "hora": "08:45",
+      "duracion": 45,
+      "tipo": "clase",
+      "orden": 1
+    },
+    {
+      "nombre": "Bloque 2",
+      "hora": "09:15",
+      "duracion": 45,
+      "tipo": "clase",
+      "orden": 2
+    },
+    {
+      "nombre": "RECREO",
+      "hora": "10:00",
+      "duracion": 20,
+      "tipo": "recreo",
+      "orden": 3
+    },
+    {
+      "nombre": "Bloque 3",
+      "hora": "10:20",
+      "duracion": 45,
+      "tipo": "clase",
+      "orden": 4
+    },
+    {
+      "nombre": "Bloque 4",
+      "hora": "11:05",
+      "duracion": 45,
+      "tipo": "clase",
+      "orden": 5
+    },
+    {
+      "nombre": "RECREO",
+      "hora": "11:50",
+      "duracion": 20,
+      "tipo": "recreo",
+      "orden": 6
+    },
+    {
+      "nombre": "Bloque 5",
+      "hora": "12:10",
+      "duracion": 45,
+      "tipo": "clase",
+      "orden": 7
+    },
+    {
+      "nombre": "Bloque 6",
+      "hora": "12:55",
+      "duracion": 35,
+      "tipo": "clase",
+      "orden": 8
+    },
+    {
+      "nombre": "RECREO",
+      "hora": "13:30",
+      "duracion": 30,
+      "tipo": "clase",
+      "orden": 9
+    },
+    {
+      "nombre": "Bloque 7",
+      "hora": "14:00",
+      "duracion": 45,
+      "tipo": "clase",
+      "orden": 10
+    },
+    {
+      "nombre": "Bloque 8",
+      "hora": "14:45",
+      "duracion": 45,
+      "tipo": "clase",
+      "orden": 11
+    }
+  ],
+  "espacios": [
+    {
+      "nombre": "Gimnasio",
+      "tipo": "gimnasio",
+      "color": "#34d399"
+    },
+    {
+      "nombre": "Sala 4° Básico",
+      "tipo": "sala",
+      "color": "#4f8ef7"
+    },
+    {
+      "nombre": "Sala 1° Básico",
+      "tipo": "sala",
+      "color": "#7c6af7"
+    },
+    {
+      "nombre": "Sala 2° Básico",
+      "tipo": "sala",
+      "color": "#fbbf24"
+    },
+    {
+      "nombre": "Sala 3° Básico",
+      "tipo": "sala",
+      "color": "#f87171"
+    },
+    {
+      "nombre": "Sala 5° Básico",
+      "tipo": "sala",
+      "color": "#818cf8"
+    },
+    {
+      "nombre": "Sala 6° Básico",
+      "tipo": "sala",
+      "color": "#f472b6"
+    },
+    {
+      "nombre": "Sala 8° Básico",
+      "tipo": "sala",
+      "color": "#22d3ee"
+    },
+    {
+      "nombre": "Sala 7° Básico",
+      "tipo": "sala",
+      "color": "#a3e635"
+    }
+  ],
+  "horarios": [
+    {
+      "curso": "1° Básico",
+      "dia": 0,
+      "slot": 3,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "1° Básico",
+      "dia": 0,
+      "slot": 4,
+      "asignatura": "lcm",
+      "docente": "Daniela Islas",
+      "espacio": ""
+    },
+    {
+      "curso": "1° Básico",
+      "dia": 0,
+      "slot": 5,
+      "asignatura": "lcm",
+      "docente": "Daniela Islas",
+      "espacio": ""
+    },
+    {
+      "curso": "1° Básico",
+      "dia": 0,
+      "slot": 7,
+      "asignatura": "Inglés",
+      "docente": "Fabian Arriagada",
+      "espacio": ""
+    },
+    {
+      "curso": "1° Básico",
+      "dia": 0,
+      "slot": 8,
+      "asignatura": "Inglés",
+      "docente": "Fabian Arriagada",
+      "espacio": ""
+    },
+    {
+      "curso": "1° Básico",
+      "dia": 0,
+      "slot": 10,
+      "asignatura": "Matemáticas",
+      "docente": "Daniela Islas",
+      "espacio": ""
+    },
+    {
+      "curso": "1° Básico",
+      "dia": 0,
+      "slot": 11,
+      "asignatura": "Matemáticas",
+      "docente": "Daniela Islas",
+      "espacio": ""
+    },
+    {
+      "curso": "1° Básico",
+      "dia": 1,
+      "slot": 1,
+      "asignatura": "Lenguaje",
+      "docente": "Daniela Islas",
+      "espacio": ""
+    },
+    {
+      "curso": "1° Básico",
+      "dia": 1,
+      "slot": 2,
+      "asignatura": "Lenguaje",
+      "docente": "Daniela Islas",
+      "espacio": ""
+    },
+    {
+      "curso": "1° Básico",
+      "dia": 1,
+      "slot": 7,
+      "asignatura": "Matemáticas",
+      "docente": "Daniela Islas",
+      "espacio": ""
+    },
+    {
+      "curso": "1° Básico",
+      "dia": 1,
+      "slot": 8,
+      "asignatura": "Matemáticas",
+      "docente": "Daniela Islas",
+      "espacio": ""
+    },
+    {
+      "curso": "1° Básico",
+      "dia": 1,
+      "slot": 10,
+      "asignatura": "Taller Manualidades",
+      "docente": "Patricia Lagos",
+      "espacio": ""
+    },
+    {
+      "curso": "1° Básico",
+      "dia": 1,
+      "slot": 11,
+      "asignatura": "Taller Manualidades",
+      "docente": "Patricia Lagos",
+      "espacio": ""
+    },
+    {
+      "curso": "1° Básico",
+      "dia": 2,
+      "slot": 1,
+      "asignatura": "Música",
+      "docente": "Luz Rivera",
+      "espacio": ""
+    },
+    {
+      "curso": "1° Básico",
+      "dia": 2,
+      "slot": 2,
+      "asignatura": "Música",
+      "docente": "Luz Rivera",
+      "espacio": ""
+    },
+    {
+      "curso": "1° Básico",
+      "dia": 2,
+      "slot": 6,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "1° Básico",
+      "dia": 2,
+      "slot": 7,
+      "asignatura": "Lenguaje",
+      "docente": "Daniela Islas",
+      "espacio": ""
+    },
+    {
+      "curso": "1° Básico",
+      "dia": 2,
+      "slot": 8,
+      "asignatura": "Lenguaje",
+      "docente": "Daniela Islas",
+      "espacio": ""
+    },
+    {
+      "curso": "1° Básico",
+      "dia": 2,
+      "slot": 10,
+      "asignatura": "Taller Fomento Lector",
+      "docente": "Patricia Lagos",
+      "espacio": ""
+    },
+    {
+      "curso": "1° Básico",
+      "dia": 2,
+      "slot": 11,
+      "asignatura": "Taller Fomento Lector",
+      "docente": "Patricia Lagos",
+      "espacio": ""
+    },
+    {
+      "curso": "1° Básico",
+      "dia": 3,
+      "slot": 1,
+      "asignatura": "Artes",
+      "docente": "Pamela Rosas",
+      "espacio": ""
+    },
+    {
+      "curso": "1° Básico",
+      "dia": 3,
+      "slot": 2,
+      "asignatura": "Artes",
+      "docente": "Pamela Rosas",
+      "espacio": ""
+    },
+    {
+      "curso": "1° Básico",
+      "dia": 3,
+      "slot": 3,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "1° Básico",
+      "dia": 3,
+      "slot": 4,
+      "asignatura": "Lenguaje",
+      "docente": "Daniela Islas",
+      "espacio": ""
+    },
+    {
+      "curso": "1° Básico",
+      "dia": 3,
+      "slot": 5,
+      "asignatura": "Lenguaje",
+      "docente": "Daniela Islas",
+      "espacio": ""
+    },
+    {
+      "curso": "1° Básico",
+      "dia": 3,
+      "slot": 7,
+      "asignatura": "Historia",
+      "docente": "Arlette aguilar",
+      "espacio": ""
+    },
+    {
+      "curso": "1° Básico",
+      "dia": 3,
+      "slot": 8,
+      "asignatura": "Historia",
+      "docente": "Arlette aguilar",
+      "espacio": ""
+    },
+    {
+      "curso": "1° Básico",
+      "dia": 3,
+      "slot": 10,
+      "asignatura": "lcm",
+      "docente": "Daniela Islas",
+      "espacio": ""
+    },
+    {
+      "curso": "1° Básico",
+      "dia": 3,
+      "slot": 11,
+      "asignatura": "lcm",
+      "docente": "Daniela Islas",
+      "espacio": ""
+    },
+    {
+      "curso": "1° Básico",
+      "dia": 4,
+      "slot": 1,
+      "asignatura": "Lenguaje",
+      "docente": "Daniela Islas",
+      "espacio": ""
+    },
+    {
+      "curso": "1° Básico",
+      "dia": 4,
+      "slot": 2,
+      "asignatura": "Lenguaje",
+      "docente": "Daniela Islas",
+      "espacio": ""
+    },
+    {
+      "curso": "1° Básico",
+      "dia": 4,
+      "slot": 4,
+      "asignatura": "Ciencias",
+      "docente": "Pamela Rosas",
+      "espacio": ""
+    },
+    {
+      "curso": "1° Básico",
+      "dia": 4,
+      "slot": 5,
+      "asignatura": "Ciencias",
+      "docente": "Pamela Rosas",
+      "espacio": ""
+    },
+    {
+      "curso": "1° Básico",
+      "dia": 4,
+      "slot": 7,
+      "asignatura": "Matemáticas",
+      "docente": "Daniela Islas",
+      "espacio": ""
+    },
+    {
+      "curso": "1° Básico",
+      "dia": 4,
+      "slot": 8,
+      "asignatura": "Matemáticas",
+      "docente": "Daniela Islas",
+      "espacio": ""
+    },
+    {
+      "curso": "3° Básico",
+      "dia": 0,
+      "slot": 1,
+      "asignatura": "Matemáticas",
+      "docente": "Jeanette Yefi",
+      "espacio": ""
+    },
+    {
+      "curso": "3° Básico",
+      "dia": 0,
+      "slot": 2,
+      "asignatura": "Matemáticas",
+      "docente": "Jeanette Yefi",
+      "espacio": ""
+    },
+    {
+      "curso": "3° Básico",
+      "dia": 0,
+      "slot": 4,
+      "asignatura": "Lenguaje",
+      "docente": "Jeanette Yefi",
+      "espacio": ""
+    },
+    {
+      "curso": "3° Básico",
+      "dia": 0,
+      "slot": 5,
+      "asignatura": "Lenguaje",
+      "docente": "Jeanette Yefi",
+      "espacio": ""
+    },
+    {
+      "curso": "3° Básico",
+      "dia": 0,
+      "slot": 10,
+      "asignatura": "lcm",
+      "docente": "Jeanette Yefi",
+      "espacio": ""
+    },
+    {
+      "curso": "3° Básico",
+      "dia": 0,
+      "slot": 11,
+      "asignatura": "lcm",
+      "docente": "Jeanette Yefi",
+      "espacio": ""
+    },
+    {
+      "curso": "3° Básico",
+      "dia": 1,
+      "slot": 1,
+      "asignatura": "Lenguaje",
+      "docente": "Jeanette Yefi",
+      "espacio": ""
+    },
+    {
+      "curso": "3° Básico",
+      "dia": 1,
+      "slot": 2,
+      "asignatura": "Lenguaje",
+      "docente": "Jeanette Yefi",
+      "espacio": ""
+    },
+    {
+      "curso": "3° Básico",
+      "dia": 1,
+      "slot": 4,
+      "asignatura": "Matemáticas",
+      "docente": "Jeanette Yefi",
+      "espacio": ""
+    },
+    {
+      "curso": "3° Básico",
+      "dia": 1,
+      "slot": 5,
+      "asignatura": "Matemáticas",
+      "docente": "Jeanette Yefi",
+      "espacio": ""
+    },
+    {
+      "curso": "3° Básico",
+      "dia": 1,
+      "slot": 7,
+      "asignatura": "Orientación",
+      "docente": "Jeanette Yefi",
+      "espacio": ""
+    },
+    {
+      "curso": "3° Básico",
+      "dia": 1,
+      "slot": 8,
+      "asignatura": "Tecnología",
+      "docente": "Jeanette Yefi",
+      "espacio": ""
+    },
+    {
+      "curso": "3° Básico",
+      "dia": 1,
+      "slot": 10,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "3° Básico",
+      "dia": 1,
+      "slot": 11,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "1° Básico",
+      "dia": 1,
+      "slot": 4,
+      "asignatura": "Ed. Física",
+      "docente": "Helmers santibañez",
+      "espacio": "Gimnasio"
+    },
+    {
+      "curso": "1° Básico",
+      "dia": 2,
+      "slot": 4,
+      "asignatura": "Ed. Física",
+      "docente": "Helmers santibañez",
+      "espacio": "Gimnasio"
+    },
+    {
+      "curso": "1° Básico",
+      "dia": 2,
+      "slot": 5,
+      "asignatura": "Ed. Física",
+      "docente": "Helmers santibañez",
+      "espacio": "Gimnasio"
+    },
+    {
+      "curso": "3° Básico",
+      "dia": 0,
+      "slot": 7,
+      "asignatura": "Ed. Física",
+      "docente": "Helmers santibañez",
+      "espacio": "Gimnasio"
+    },
+    {
+      "curso": "3° Básico",
+      "dia": 0,
+      "slot": 8,
+      "asignatura": "Ed. Física",
+      "docente": "Helmers santibañez",
+      "espacio": "Gimnasio"
+    },
+    {
+      "curso": "1° Básico",
+      "dia": 0,
+      "slot": 2,
+      "asignatura": "Tecnología",
+      "docente": "Daniela Islas",
+      "espacio": "Sala 1° Básico"
+    },
+    {
+      "curso": "3° Básico",
+      "dia": 2,
+      "slot": 1,
+      "asignatura": "Matemáticas",
+      "docente": "Jeanette Yefi",
+      "espacio": ""
+    },
+    {
+      "curso": "3° Básico",
+      "dia": 2,
+      "slot": 2,
+      "asignatura": "Matemáticas",
+      "docente": "Jeanette Yefi",
+      "espacio": ""
+    },
+    {
+      "curso": "3° Básico",
+      "dia": 2,
+      "slot": 3,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "3° Básico",
+      "dia": 2,
+      "slot": 4,
+      "asignatura": "Inglés",
+      "docente": "Fabian Arriagada",
+      "espacio": ""
+    },
+    {
+      "curso": "3° Básico",
+      "dia": 2,
+      "slot": 5,
+      "asignatura": "Inglés",
+      "docente": "Fabian Arriagada",
+      "espacio": ""
+    },
+    {
+      "curso": "3° Básico",
+      "dia": 2,
+      "slot": 10,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "3° Básico",
+      "dia": 2,
+      "slot": 11,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "3° Básico",
+      "dia": 3,
+      "slot": 1,
+      "asignatura": "Lenguaje",
+      "docente": "Jeanette Yefi",
+      "espacio": ""
+    },
+    {
+      "curso": "3° Básico",
+      "dia": 3,
+      "slot": 2,
+      "asignatura": "Lenguaje",
+      "docente": "Jeanette Yefi",
+      "espacio": ""
+    },
+    {
+      "curso": "3° Básico",
+      "dia": 3,
+      "slot": 4,
+      "asignatura": "Ciencias",
+      "docente": "Pamela Rosas",
+      "espacio": ""
+    },
+    {
+      "curso": "3° Básico",
+      "dia": 3,
+      "slot": 5,
+      "asignatura": "Ciencias",
+      "docente": "Pamela Rosas",
+      "espacio": ""
+    },
+    {
+      "curso": "3° Básico",
+      "dia": 3,
+      "slot": 7,
+      "asignatura": "Música",
+      "docente": "Luz Rivera",
+      "espacio": ""
+    },
+    {
+      "curso": "3° Básico",
+      "dia": 3,
+      "slot": 8,
+      "asignatura": "Música",
+      "docente": "Luz Rivera",
+      "espacio": ""
+    },
+    {
+      "curso": "3° Básico",
+      "dia": 3,
+      "slot": 10,
+      "asignatura": "Artes",
+      "docente": "Jeanette Yefi",
+      "espacio": ""
+    },
+    {
+      "curso": "3° Básico",
+      "dia": 3,
+      "slot": 11,
+      "asignatura": "Artes",
+      "docente": "Jeanette Yefi",
+      "espacio": ""
+    },
+    {
+      "curso": "3° Básico",
+      "dia": 4,
+      "slot": 1,
+      "asignatura": "Lenguaje",
+      "docente": "Jeanette Yefi",
+      "espacio": ""
+    },
+    {
+      "curso": "3° Básico",
+      "dia": 4,
+      "slot": 2,
+      "asignatura": "Lenguaje",
+      "docente": "Jeanette Yefi",
+      "espacio": ""
+    },
+    {
+      "curso": "3° Básico",
+      "dia": 4,
+      "slot": 4,
+      "asignatura": "Historia",
+      "docente": "Jeanette Yefi",
+      "espacio": ""
+    },
+    {
+      "curso": "3° Básico",
+      "dia": 4,
+      "slot": 5,
+      "asignatura": "Historia",
+      "docente": "Jeanette Yefi",
+      "espacio": ""
+    },
+    {
+      "curso": "3° Básico",
+      "dia": 4,
+      "slot": 7,
+      "asignatura": "lcm",
+      "docente": "Jeanette Yefi",
+      "espacio": ""
+    },
+    {
+      "curso": "3° Básico",
+      "dia": 4,
+      "slot": 8,
+      "asignatura": "lcm",
+      "docente": "Jeanette Yefi",
+      "espacio": ""
+    },
+    {
+      "curso": "3° Básico",
+      "dia": 4,
+      "slot": 9,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "6° Básico",
+      "dia": 0,
+      "slot": 1,
+      "asignatura": "Orientación",
+      "docente": "Pamela Rosas",
+      "espacio": ""
+    },
+    {
+      "curso": "6° Básico",
+      "dia": 0,
+      "slot": 2,
+      "asignatura": "Ciencias",
+      "docente": "Pamela Rosas",
+      "espacio": ""
+    },
+    {
+      "curso": "6° Básico",
+      "dia": 0,
+      "slot": 4,
+      "asignatura": "Ed. Física",
+      "docente": "Osvaldo Diaz",
+      "espacio": ""
+    },
+    {
+      "curso": "6° Básico",
+      "dia": 0,
+      "slot": 5,
+      "asignatura": "Ed. Física",
+      "docente": "Osvaldo Diaz",
+      "espacio": ""
+    },
+    {
+      "curso": "6° Básico",
+      "dia": 0,
+      "slot": 7,
+      "asignatura": "lcm",
+      "docente": "Ester Flores",
+      "espacio": ""
+    },
+    {
+      "curso": "6° Básico",
+      "dia": 0,
+      "slot": 8,
+      "asignatura": "lcm",
+      "docente": "Ester Flores",
+      "espacio": ""
+    },
+    {
+      "curso": "6° Básico",
+      "dia": 0,
+      "slot": 10,
+      "asignatura": "Artes",
+      "docente": "Karen Vargas",
+      "espacio": ""
+    },
+    {
+      "curso": "6° Básico",
+      "dia": 0,
+      "slot": 11,
+      "asignatura": "Artes",
+      "docente": "Karen Vargas",
+      "espacio": ""
+    },
+    {
+      "curso": "6° Básico",
+      "dia": 1,
+      "slot": 1,
+      "asignatura": "Matemáticas",
+      "docente": "Karen Vargas",
+      "espacio": ""
+    },
+    {
+      "curso": "6° Básico",
+      "dia": 1,
+      "slot": 2,
+      "asignatura": "Matemáticas",
+      "docente": "Karen Vargas",
+      "espacio": ""
+    },
+    {
+      "curso": "6° Básico",
+      "dia": 1,
+      "slot": 4,
+      "asignatura": "lcm",
+      "docente": "Ester Flores",
+      "espacio": ""
+    },
+    {
+      "curso": "6° Básico",
+      "dia": 1,
+      "slot": 5,
+      "asignatura": "lcm",
+      "docente": "Ester Flores",
+      "espacio": ""
+    },
+    {
+      "curso": "6° Básico",
+      "dia": 1,
+      "slot": 7,
+      "asignatura": "Lenguaje",
+      "docente": "Marjorie Polanco",
+      "espacio": ""
+    },
+    {
+      "curso": "6° Básico",
+      "dia": 1,
+      "slot": 8,
+      "asignatura": "Lenguaje",
+      "docente": "Marjorie Polanco",
+      "espacio": ""
+    },
+    {
+      "curso": "6° Básico",
+      "dia": 1,
+      "slot": 10,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "6° Básico",
+      "dia": 1,
+      "slot": 11,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "6° Básico",
+      "dia": 2,
+      "slot": 1,
+      "asignatura": "Historia",
+      "docente": "Arlette aguilar",
+      "espacio": ""
+    },
+    {
+      "curso": "6° Básico",
+      "dia": 2,
+      "slot": 2,
+      "asignatura": "Historia",
+      "docente": "Arlette aguilar",
+      "espacio": ""
+    },
+    {
+      "curso": "6° Básico",
+      "dia": 2,
+      "slot": 4,
+      "asignatura": "Historia",
+      "docente": "Arlette aguilar",
+      "espacio": ""
+    },
+    {
+      "curso": "6° Básico",
+      "dia": 2,
+      "slot": 5,
+      "asignatura": "Tecnología",
+      "docente": "Osvaldo Diaz",
+      "espacio": ""
+    },
+    {
+      "curso": "6° Básico",
+      "dia": 2,
+      "slot": 7,
+      "asignatura": "Matemáticas",
+      "docente": "Karen Vargas",
+      "espacio": ""
+    },
+    {
+      "curso": "6° Básico",
+      "dia": 2,
+      "slot": 8,
+      "asignatura": "Matemáticas",
+      "docente": "Karen Vargas",
+      "espacio": ""
+    },
+    {
+      "curso": "6° Básico",
+      "dia": 2,
+      "slot": 10,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "6° Básico",
+      "dia": 2,
+      "slot": 11,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "6° Básico",
+      "dia": 3,
+      "slot": 1,
+      "asignatura": "Lenguaje",
+      "docente": "Marjorie Polanco",
+      "espacio": ""
+    },
+    {
+      "curso": "6° Básico",
+      "dia": 3,
+      "slot": 2,
+      "asignatura": "Lenguaje",
+      "docente": "Marjorie Polanco",
+      "espacio": ""
+    },
+    {
+      "curso": "6° Básico",
+      "dia": 3,
+      "slot": 4,
+      "asignatura": "Matemáticas",
+      "docente": "Karen Vargas",
+      "espacio": ""
+    },
+    {
+      "curso": "6° Básico",
+      "dia": 3,
+      "slot": 5,
+      "asignatura": "Matemáticas",
+      "docente": "Karen Vargas",
+      "espacio": ""
+    },
+    {
+      "curso": "6° Básico",
+      "dia": 3,
+      "slot": 7,
+      "asignatura": "Ciencias",
+      "docente": "Pamela Rosas",
+      "espacio": ""
+    },
+    {
+      "curso": "6° Básico",
+      "dia": 3,
+      "slot": 8,
+      "asignatura": "Ciencias",
+      "docente": "Pamela Rosas",
+      "espacio": ""
+    },
+    {
+      "curso": "6° Básico",
+      "dia": 3,
+      "slot": 10,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "6° Básico",
+      "dia": 3,
+      "slot": 11,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "6° Básico",
+      "dia": 4,
+      "slot": 1,
+      "asignatura": "Lenguaje",
+      "docente": "Marjorie Polanco",
+      "espacio": ""
+    },
+    {
+      "curso": "6° Básico",
+      "dia": 4,
+      "slot": 2,
+      "asignatura": "Lenguaje",
+      "docente": "Marjorie Polanco",
+      "espacio": ""
+    },
+    {
+      "curso": "3° Básico",
+      "dia": 2,
+      "slot": 8,
+      "asignatura": "Ed. Física",
+      "docente": "Helmers santibañez",
+      "espacio": "Gimnasio"
+    },
+    {
+      "curso": "6° Básico",
+      "dia": 4,
+      "slot": 4,
+      "asignatura": "Música",
+      "docente": "Luz Rivera",
+      "espacio": ""
+    },
+    {
+      "curso": "6° Básico",
+      "dia": 4,
+      "slot": 5,
+      "asignatura": "Música",
+      "docente": "Luz Rivera",
+      "espacio": ""
+    },
+    {
+      "curso": "6° Básico",
+      "dia": 4,
+      "slot": 7,
+      "asignatura": "Inglés",
+      "docente": "Fabian Arriagada",
+      "espacio": ""
+    },
+    {
+      "curso": "6° Básico",
+      "dia": 4,
+      "slot": 8,
+      "asignatura": "Inglés",
+      "docente": "Fabian Arriagada",
+      "espacio": ""
+    },
+    {
+      "curso": "2° Básico",
+      "dia": 0,
+      "slot": 1,
+      "asignatura": "lcm",
+      "docente": "Luz Rivera",
+      "espacio": ""
+    },
+    {
+      "curso": "2° Básico",
+      "dia": 0,
+      "slot": 2,
+      "asignatura": "lcm",
+      "docente": "Luz Rivera",
+      "espacio": ""
+    },
+    {
+      "curso": "2° Básico",
+      "dia": 0,
+      "slot": 4,
+      "asignatura": "Lenguaje",
+      "docente": "Elena Urrutia",
+      "espacio": ""
+    },
+    {
+      "curso": "2° Básico",
+      "dia": 0,
+      "slot": 5,
+      "asignatura": "Lenguaje",
+      "docente": "Elena Urrutia",
+      "espacio": ""
+    },
+    {
+      "curso": "2° Básico",
+      "dia": 0,
+      "slot": 7,
+      "asignatura": "Música",
+      "docente": "Luz Rivera",
+      "espacio": ""
+    },
+    {
+      "curso": "2° Básico",
+      "dia": 0,
+      "slot": 8,
+      "asignatura": "Música",
+      "docente": "Luz Rivera",
+      "espacio": ""
+    },
+    {
+      "curso": "2° Básico",
+      "dia": 0,
+      "slot": 10,
+      "asignatura": "Orientación",
+      "docente": "Elena Urrutia",
+      "espacio": ""
+    },
+    {
+      "curso": "2° Básico",
+      "dia": 0,
+      "slot": 11,
+      "asignatura": "Tecnología",
+      "docente": "Elena Urrutia",
+      "espacio": ""
+    },
+    {
+      "curso": "2° Básico",
+      "dia": 1,
+      "slot": 4,
+      "asignatura": "Matemáticas",
+      "docente": "Daniela Islas",
+      "espacio": ""
+    },
+    {
+      "curso": "2° Básico",
+      "dia": 1,
+      "slot": 5,
+      "asignatura": "Matemáticas",
+      "docente": "Daniela Islas",
+      "espacio": ""
+    },
+    {
+      "curso": "2° Básico",
+      "dia": 1,
+      "slot": 6,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "2° Básico",
+      "dia": 1,
+      "slot": 7,
+      "asignatura": "Historia",
+      "docente": "Arlette aguilar",
+      "espacio": ""
+    },
+    {
+      "curso": "2° Básico",
+      "dia": 1,
+      "slot": 8,
+      "asignatura": "Historia",
+      "docente": "Arlette aguilar",
+      "espacio": ""
+    },
+    {
+      "curso": "2° Básico",
+      "dia": 1,
+      "slot": 9,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "2° Básico",
+      "dia": 1,
+      "slot": 10,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "2° Básico",
+      "dia": 1,
+      "slot": 11,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "2° Básico",
+      "dia": 2,
+      "slot": 1,
+      "asignatura": "Ciencias",
+      "docente": "Pamela Rosas",
+      "espacio": ""
+    },
+    {
+      "curso": "2° Básico",
+      "dia": 2,
+      "slot": 2,
+      "asignatura": "Ciencias",
+      "docente": "Pamela Rosas",
+      "espacio": ""
+    },
+    {
+      "curso": "2° Básico",
+      "dia": 2,
+      "slot": 4,
+      "asignatura": "Matemáticas",
+      "docente": "Daniela Islas",
+      "espacio": ""
+    },
+    {
+      "curso": "2° Básico",
+      "dia": 2,
+      "slot": 5,
+      "asignatura": "Matemáticas",
+      "docente": "Daniela Islas",
+      "espacio": ""
+    },
+    {
+      "curso": "2° Básico",
+      "dia": 2,
+      "slot": 7,
+      "asignatura": "Lenguaje",
+      "docente": "Elena Urrutia",
+      "espacio": ""
+    },
+    {
+      "curso": "2° Básico",
+      "dia": 2,
+      "slot": 8,
+      "asignatura": "Lenguaje",
+      "docente": "Elena Urrutia",
+      "espacio": ""
+    },
+    {
+      "curso": "2° Básico",
+      "dia": 2,
+      "slot": 9,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "2° Básico",
+      "dia": 2,
+      "slot": 10,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "2° Básico",
+      "dia": 2,
+      "slot": 11,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "2° Básico",
+      "dia": 3,
+      "slot": 4,
+      "asignatura": "lcm",
+      "docente": "Luz Rivera",
+      "espacio": ""
+    },
+    {
+      "curso": "2° Básico",
+      "dia": 3,
+      "slot": 5,
+      "asignatura": "lcm",
+      "docente": "Luz Rivera",
+      "espacio": ""
+    },
+    {
+      "curso": "2° Básico",
+      "dia": 3,
+      "slot": 7,
+      "asignatura": "Lenguaje",
+      "docente": "Elena Urrutia",
+      "espacio": ""
+    },
+    {
+      "curso": "2° Básico",
+      "dia": 3,
+      "slot": 8,
+      "asignatura": "Lenguaje",
+      "docente": "Elena Urrutia",
+      "espacio": ""
+    },
+    {
+      "curso": "2° Básico",
+      "dia": 3,
+      "slot": 10,
+      "asignatura": "Inglés",
+      "docente": "Fabian Arriagada",
+      "espacio": ""
+    },
+    {
+      "curso": "2° Básico",
+      "dia": 3,
+      "slot": 11,
+      "asignatura": "Inglés",
+      "docente": "Fabian Arriagada",
+      "espacio": ""
+    },
+    {
+      "curso": "2° Básico",
+      "dia": 4,
+      "slot": 1,
+      "asignatura": "Artes",
+      "docente": "Arlette aguilar",
+      "espacio": ""
+    },
+    {
+      "curso": "2° Básico",
+      "dia": 4,
+      "slot": 2,
+      "asignatura": "Artes",
+      "docente": "Arlette aguilar",
+      "espacio": ""
+    },
+    {
+      "curso": "2° Básico",
+      "dia": 4,
+      "slot": 3,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "2° Básico",
+      "dia": 4,
+      "slot": 4,
+      "asignatura": "Matemáticas",
+      "docente": "Daniela Islas",
+      "espacio": ""
+    },
+    {
+      "curso": "2° Básico",
+      "dia": 4,
+      "slot": 5,
+      "asignatura": "Matemáticas",
+      "docente": "Daniela Islas",
+      "espacio": ""
+    },
+    {
+      "curso": "2° Básico",
+      "dia": 4,
+      "slot": 7,
+      "asignatura": "Lenguaje",
+      "docente": "Elena Urrutia",
+      "espacio": ""
+    },
+    {
+      "curso": "2° Básico",
+      "dia": 4,
+      "slot": 8,
+      "asignatura": "Lenguaje",
+      "docente": "Elena Urrutia",
+      "espacio": ""
+    },
+    {
+      "curso": "7° Básico",
+      "dia": 0,
+      "slot": 1,
+      "asignatura": "Orientación",
+      "docente": "Marjorie Polanco",
+      "espacio": ""
+    },
+    {
+      "curso": "7° Básico",
+      "dia": 0,
+      "slot": 2,
+      "asignatura": "Historia",
+      "docente": "Arlette aguilar",
+      "espacio": ""
+    },
+    {
+      "curso": "7° Básico",
+      "dia": 0,
+      "slot": 4,
+      "asignatura": "Matemáticas",
+      "docente": "Karen Vargas",
+      "espacio": ""
+    },
+    {
+      "curso": "7° Básico",
+      "dia": 0,
+      "slot": 5,
+      "asignatura": "Matemáticas",
+      "docente": "Karen Vargas",
+      "espacio": ""
+    },
+    {
+      "curso": "7° Básico",
+      "dia": 0,
+      "slot": 7,
+      "asignatura": "Lenguaje",
+      "docente": "Marjorie Polanco",
+      "espacio": ""
+    },
+    {
+      "curso": "7° Básico",
+      "dia": 0,
+      "slot": 8,
+      "asignatura": "Lenguaje",
+      "docente": "Marjorie Polanco",
+      "espacio": ""
+    },
+    {
+      "curso": "7° Básico",
+      "dia": 0,
+      "slot": 10,
+      "asignatura": "Tecnología",
+      "docente": "Osvaldo Diaz",
+      "espacio": ""
+    },
+    {
+      "curso": "7° Básico",
+      "dia": 0,
+      "slot": 11,
+      "asignatura": "Ciencias",
+      "docente": "Pamela Rosas",
+      "espacio": ""
+    },
+    {
+      "curso": "7° Básico",
+      "dia": 1,
+      "slot": 1,
+      "asignatura": "Historia",
+      "docente": "Arlette aguilar",
+      "espacio": ""
+    },
+    {
+      "curso": "7° Básico",
+      "dia": 1,
+      "slot": 2,
+      "asignatura": "Historia",
+      "docente": "Arlette aguilar",
+      "espacio": ""
+    },
+    {
+      "curso": "7° Básico",
+      "dia": 1,
+      "slot": 4,
+      "asignatura": "Matemáticas",
+      "docente": "Karen Vargas",
+      "espacio": ""
+    },
+    {
+      "curso": "7° Básico",
+      "dia": 1,
+      "slot": 5,
+      "asignatura": "Matemáticas",
+      "docente": "Karen Vargas",
+      "espacio": ""
+    },
+    {
+      "curso": "2° Básico",
+      "dia": 1,
+      "slot": 1,
+      "asignatura": "Ed. Física",
+      "docente": "Helmers santibañez",
+      "espacio": "Gimnasio"
+    },
+    {
+      "curso": "2° Básico",
+      "dia": 3,
+      "slot": 2,
+      "asignatura": "Ed. Física",
+      "docente": "Helmers santibañez",
+      "espacio": "Gimnasio"
+    },
+    {
+      "curso": "2° Básico",
+      "dia": 3,
+      "slot": 1,
+      "asignatura": "Ed. Física",
+      "docente": "Helmers santibañez",
+      "espacio": "Gimnasio"
+    },
+    {
+      "curso": "7° Básico",
+      "dia": 1,
+      "slot": 7,
+      "asignatura": "Artes",
+      "docente": "Karen Vargas",
+      "espacio": ""
+    },
+    {
+      "curso": "7° Básico",
+      "dia": 1,
+      "slot": 8,
+      "asignatura": "Artes",
+      "docente": "Karen Vargas",
+      "espacio": ""
+    },
+    {
+      "curso": "7° Básico",
+      "dia": 1,
+      "slot": 10,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "7° Básico",
+      "dia": 1,
+      "slot": 11,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "7° Básico",
+      "dia": 2,
+      "slot": 1,
+      "asignatura": "Lenguaje",
+      "docente": "Marjorie Polanco",
+      "espacio": ""
+    },
+    {
+      "curso": "7° Básico",
+      "dia": 2,
+      "slot": 2,
+      "asignatura": "Lenguaje",
+      "docente": "Marjorie Polanco",
+      "espacio": ""
+    },
+    {
+      "curso": "7° Básico",
+      "dia": 2,
+      "slot": 4,
+      "asignatura": "Ciencias",
+      "docente": "Pamela Rosas",
+      "espacio": ""
+    },
+    {
+      "curso": "7° Básico",
+      "dia": 2,
+      "slot": 5,
+      "asignatura": "Ciencias",
+      "docente": "Pamela Rosas",
+      "espacio": ""
+    },
+    {
+      "curso": "7° Básico",
+      "dia": 2,
+      "slot": 7,
+      "asignatura": "lcm",
+      "docente": "Ester Flores",
+      "espacio": ""
+    },
+    {
+      "curso": "7° Básico",
+      "dia": 2,
+      "slot": 8,
+      "asignatura": "lcm",
+      "docente": "Ester Flores",
+      "espacio": ""
+    },
+    {
+      "curso": "7° Básico",
+      "dia": 2,
+      "slot": 10,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "7° Básico",
+      "dia": 2,
+      "slot": 11,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "7° Básico",
+      "dia": 3,
+      "slot": 1,
+      "asignatura": "lcm",
+      "docente": "Ester Flores",
+      "espacio": ""
+    },
+    {
+      "curso": "7° Básico",
+      "dia": 3,
+      "slot": 2,
+      "asignatura": "lcm",
+      "docente": "Ester Flores",
+      "espacio": ""
+    },
+    {
+      "curso": "7° Básico",
+      "dia": 3,
+      "slot": 4,
+      "asignatura": "Lenguaje",
+      "docente": "Marjorie Polanco",
+      "espacio": ""
+    },
+    {
+      "curso": "7° Básico",
+      "dia": 3,
+      "slot": 5,
+      "asignatura": "Lenguaje",
+      "docente": "Marjorie Polanco",
+      "espacio": ""
+    },
+    {
+      "curso": "7° Básico",
+      "dia": 3,
+      "slot": 7,
+      "asignatura": "Ed. Física",
+      "docente": "Osvaldo Diaz",
+      "espacio": ""
+    },
+    {
+      "curso": "7° Básico",
+      "dia": 3,
+      "slot": 8,
+      "asignatura": "Ed. Física",
+      "docente": "Osvaldo Diaz",
+      "espacio": ""
+    },
+    {
+      "curso": "7° Básico",
+      "dia": 3,
+      "slot": 10,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "7° Básico",
+      "dia": 3,
+      "slot": 11,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "7° Básico",
+      "dia": 4,
+      "slot": 1,
+      "asignatura": "Inglés",
+      "docente": "Fabian Arriagada",
+      "espacio": ""
+    },
+    {
+      "curso": "7° Básico",
+      "dia": 4,
+      "slot": 2,
+      "asignatura": "Inglés",
+      "docente": "Fabian Arriagada",
+      "espacio": ""
+    },
+    {
+      "curso": "7° Básico",
+      "dia": 4,
+      "slot": 4,
+      "asignatura": "Matemáticas",
+      "docente": "Karen Vargas",
+      "espacio": ""
+    },
+    {
+      "curso": "7° Básico",
+      "dia": 4,
+      "slot": 5,
+      "asignatura": "Matemáticas",
+      "docente": "Karen Vargas",
+      "espacio": ""
+    },
+    {
+      "curso": "7° Básico",
+      "dia": 4,
+      "slot": 7,
+      "asignatura": "Música",
+      "docente": "Luz Rivera",
+      "espacio": ""
+    },
+    {
+      "curso": "7° Básico",
+      "dia": 4,
+      "slot": 8,
+      "asignatura": "Música",
+      "docente": "Luz Rivera",
+      "espacio": ""
+    },
+    {
+      "curso": "4° Básico",
+      "dia": 0,
+      "slot": 4,
+      "asignatura": "Música",
+      "docente": "Luz Rivera",
+      "espacio": ""
+    },
+    {
+      "curso": "4° Básico",
+      "dia": 0,
+      "slot": 5,
+      "asignatura": "Música",
+      "docente": "Luz Rivera",
+      "espacio": ""
+    },
+    {
+      "curso": "4° Básico",
+      "dia": 0,
+      "slot": 6,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "4° Básico",
+      "dia": 0,
+      "slot": 7,
+      "asignatura": "Matemáticas",
+      "docente": "Jeanette Yefi",
+      "espacio": ""
+    },
+    {
+      "curso": "4° Básico",
+      "dia": 0,
+      "slot": 8,
+      "asignatura": "Matemáticas",
+      "docente": "Jeanette Yefi",
+      "espacio": ""
+    },
+    {
+      "curso": "4° Básico",
+      "dia": 1,
+      "slot": 1,
+      "asignatura": "Lenguaje",
+      "docente": "Elena Urrutia",
+      "espacio": ""
+    },
+    {
+      "curso": "4° Básico",
+      "dia": 1,
+      "slot": 2,
+      "asignatura": "Lenguaje",
+      "docente": "Elena Urrutia",
+      "espacio": ""
+    },
+    {
+      "curso": "4° Básico",
+      "dia": 1,
+      "slot": 3,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "4° Básico",
+      "dia": 1,
+      "slot": 4,
+      "asignatura": "Lenguaje",
+      "docente": "Elena Urrutia",
+      "espacio": ""
+    },
+    {
+      "curso": "4° Básico",
+      "dia": 1,
+      "slot": 5,
+      "asignatura": "Lenguaje",
+      "docente": "Elena Urrutia",
+      "espacio": ""
+    },
+    {
+      "curso": "4° Básico",
+      "dia": 1,
+      "slot": 10,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "4° Básico",
+      "dia": 1,
+      "slot": 11,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "4° Básico",
+      "dia": 2,
+      "slot": 1,
+      "asignatura": "Lenguaje",
+      "docente": "Elena Urrutia",
+      "espacio": ""
+    },
+    {
+      "curso": "4° Básico",
+      "dia": 2,
+      "slot": 2,
+      "asignatura": "Lenguaje",
+      "docente": "Elena Urrutia",
+      "espacio": ""
+    },
+    {
+      "curso": "4° Básico",
+      "dia": 2,
+      "slot": 4,
+      "asignatura": "Matemáticas",
+      "docente": "Jeanette Yefi",
+      "espacio": ""
+    },
+    {
+      "curso": "4° Básico",
+      "dia": 2,
+      "slot": 5,
+      "asignatura": "Matemáticas",
+      "docente": "Jeanette Yefi",
+      "espacio": ""
+    },
+    {
+      "curso": "4° Básico",
+      "dia": 2,
+      "slot": 7,
+      "asignatura": "Historia",
+      "docente": "Arlette aguilar",
+      "espacio": ""
+    },
+    {
+      "curso": "4° Básico",
+      "dia": 2,
+      "slot": 8,
+      "asignatura": "Historia",
+      "docente": "Arlette aguilar",
+      "espacio": ""
+    },
+    {
+      "curso": "4° Básico",
+      "dia": 2,
+      "slot": 10,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "4° Básico",
+      "dia": 2,
+      "slot": 11,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "4° Básico",
+      "dia": 3,
+      "slot": 1,
+      "asignatura": "Lenguaje",
+      "docente": "Elena Urrutia",
+      "espacio": ""
+    },
+    {
+      "curso": "4° Básico",
+      "dia": 3,
+      "slot": 2,
+      "asignatura": "Lenguaje",
+      "docente": "Elena Urrutia",
+      "espacio": ""
+    },
+    {
+      "curso": "4° Básico",
+      "dia": 3,
+      "slot": 4,
+      "asignatura": "Matemáticas",
+      "docente": "Jeanette Yefi",
+      "espacio": ""
+    },
+    {
+      "curso": "4° Básico",
+      "dia": 3,
+      "slot": 5,
+      "asignatura": "Matemáticas",
+      "docente": "Jeanette Yefi",
+      "espacio": ""
+    },
+    {
+      "curso": "4° Básico",
+      "dia": 3,
+      "slot": 6,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "4° Básico",
+      "dia": 0,
+      "slot": 10,
+      "asignatura": "Ed. Física",
+      "docente": "Helmers santibañez",
+      "espacio": "Gimnasio"
+    },
+    {
+      "curso": "4° Básico",
+      "dia": 0,
+      "slot": 11,
+      "asignatura": "Ed. Física",
+      "docente": "Helmers santibañez",
+      "espacio": "Gimnasio"
+    },
+    {
+      "curso": "4° Básico",
+      "dia": 1,
+      "slot": 7,
+      "asignatura": "Ed. Física",
+      "docente": "Helmers santibañez",
+      "espacio": "Gimnasio"
+    },
+    {
+      "curso": "4° Básico",
+      "dia": 1,
+      "slot": 8,
+      "asignatura": "Ed. Física",
+      "docente": "Helmers santibañez",
+      "espacio": "Gimnasio"
+    },
+    {
+      "curso": "4° Básico",
+      "dia": 0,
+      "slot": 1,
+      "asignatura": "Tecnología",
+      "docente": "Helmers santibañez",
+      "espacio": "Sala 4° Básico"
+    },
+    {
+      "curso": "4° Básico",
+      "dia": 0,
+      "slot": 2,
+      "asignatura": "Orientación",
+      "docente": "Helmers santibañez",
+      "espacio": "Sala 4° Básico"
+    },
+    {
+      "curso": "4° Básico",
+      "dia": 3,
+      "slot": 7,
+      "asignatura": "lcm",
+      "docente": "Ester Flores",
+      "espacio": ""
+    },
+    {
+      "curso": "4° Básico",
+      "dia": 3,
+      "slot": 8,
+      "asignatura": "lcm",
+      "docente": "Ester Flores",
+      "espacio": ""
+    },
+    {
+      "curso": "4° Básico",
+      "dia": 3,
+      "slot": 10,
+      "asignatura": "Artes",
+      "docente": "Luz Rivera",
+      "espacio": ""
+    },
+    {
+      "curso": "4° Básico",
+      "dia": 3,
+      "slot": 11,
+      "asignatura": "Artes",
+      "docente": "Luz Rivera",
+      "espacio": ""
+    },
+    {
+      "curso": "4° Básico",
+      "dia": 4,
+      "slot": 1,
+      "asignatura": "lcm",
+      "docente": "Ester Flores",
+      "espacio": ""
+    },
+    {
+      "curso": "4° Básico",
+      "dia": 4,
+      "slot": 2,
+      "asignatura": "lcm",
+      "docente": "Ester Flores",
+      "espacio": ""
+    },
+    {
+      "curso": "4° Básico",
+      "dia": 4,
+      "slot": 4,
+      "asignatura": "Inglés",
+      "docente": "Fabian Arriagada",
+      "espacio": ""
+    },
+    {
+      "curso": "4° Básico",
+      "dia": 4,
+      "slot": 5,
+      "asignatura": "Inglés",
+      "docente": "Fabian Arriagada",
+      "espacio": ""
+    },
+    {
+      "curso": "4° Básico",
+      "dia": 4,
+      "slot": 6,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "4° Básico",
+      "dia": 4,
+      "slot": 7,
+      "asignatura": "Ciencias",
+      "docente": "Pamela Rosas",
+      "espacio": ""
+    },
+    {
+      "curso": "4° Básico",
+      "dia": 4,
+      "slot": 8,
+      "asignatura": "Ciencias",
+      "docente": "Pamela Rosas",
+      "espacio": ""
+    },
+    {
+      "curso": "8° Básico",
+      "dia": 0,
+      "slot": 1,
+      "asignatura": "Orientación",
+      "docente": "Ester Flores",
+      "espacio": ""
+    },
+    {
+      "curso": "8° Básico",
+      "dia": 0,
+      "slot": 2,
+      "asignatura": "Lenguaje",
+      "docente": "Marjorie Polanco",
+      "espacio": ""
+    },
+    {
+      "curso": "8° Básico",
+      "dia": 0,
+      "slot": 4,
+      "asignatura": "Lenguaje",
+      "docente": "Marjorie Polanco",
+      "espacio": ""
+    },
+    {
+      "curso": "8° Básico",
+      "dia": 0,
+      "slot": 5,
+      "asignatura": "Historia",
+      "docente": "Arlette aguilar",
+      "espacio": ""
+    },
+    {
+      "curso": "8° Básico",
+      "dia": 0,
+      "slot": 7,
+      "asignatura": "Historia",
+      "docente": "Arlette aguilar",
+      "espacio": ""
+    },
+    {
+      "curso": "8° Básico",
+      "dia": 0,
+      "slot": 8,
+      "asignatura": "Historia",
+      "docente": "Arlette aguilar",
+      "espacio": ""
+    },
+    {
+      "curso": "8° Básico",
+      "dia": 0,
+      "slot": 10,
+      "asignatura": "Ciencias",
+      "docente": "Pamela Rosas",
+      "espacio": ""
+    },
+    {
+      "curso": "8° Básico",
+      "dia": 0,
+      "slot": 11,
+      "asignatura": "Tecnología",
+      "docente": "Osvaldo Diaz",
+      "espacio": ""
+    },
+    {
+      "curso": "8° Básico",
+      "dia": 1,
+      "slot": 1,
+      "asignatura": "lcm",
+      "docente": "Ester Flores",
+      "espacio": ""
+    },
+    {
+      "curso": "8° Básico",
+      "dia": 1,
+      "slot": 2,
+      "asignatura": "lcm",
+      "docente": "Ester Flores",
+      "espacio": ""
+    },
+    {
+      "curso": "8° Básico",
+      "dia": 1,
+      "slot": 4,
+      "asignatura": "Lenguaje",
+      "docente": "Marjorie Polanco",
+      "espacio": ""
+    },
+    {
+      "curso": "8° Básico",
+      "dia": 1,
+      "slot": 5,
+      "asignatura": "Lenguaje",
+      "docente": "Marjorie Polanco",
+      "espacio": ""
+    },
+    {
+      "curso": "8° Básico",
+      "dia": 1,
+      "slot": 7,
+      "asignatura": "Música",
+      "docente": "Luz Rivera",
+      "espacio": ""
+    },
+    {
+      "curso": "8° Básico",
+      "dia": 1,
+      "slot": 8,
+      "asignatura": "Música",
+      "docente": "Luz Rivera",
+      "espacio": ""
+    },
+    {
+      "curso": "8° Básico",
+      "dia": 1,
+      "slot": 10,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "8° Básico",
+      "dia": 1,
+      "slot": 11,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "8° Básico",
+      "dia": 2,
+      "slot": 1,
+      "asignatura": "lcm",
+      "docente": "Ester Flores",
+      "espacio": ""
+    },
+    {
+      "curso": "8° Básico",
+      "dia": 2,
+      "slot": 2,
+      "asignatura": "lcm",
+      "docente": "Ester Flores",
+      "espacio": ""
+    },
+    {
+      "curso": "8° Básico",
+      "dia": 2,
+      "slot": 4,
+      "asignatura": "Matemáticas",
+      "docente": "Karen Vargas",
+      "espacio": ""
+    },
+    {
+      "curso": "8° Básico",
+      "dia": 2,
+      "slot": 5,
+      "asignatura": "Matemáticas",
+      "docente": "Karen Vargas",
+      "espacio": ""
+    },
+    {
+      "curso": "8° Básico",
+      "dia": 2,
+      "slot": 7,
+      "asignatura": "Ciencias",
+      "docente": "Pamela Rosas",
+      "espacio": ""
+    },
+    {
+      "curso": "8° Básico",
+      "dia": 2,
+      "slot": 8,
+      "asignatura": "Ciencias",
+      "docente": "Pamela Rosas",
+      "espacio": ""
+    },
+    {
+      "curso": "8° Básico",
+      "dia": 2,
+      "slot": 10,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "8° Básico",
+      "dia": 2,
+      "slot": 11,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "8° Básico",
+      "dia": 3,
+      "slot": 1,
+      "asignatura": "Inglés",
+      "docente": "Fabian Arriagada",
+      "espacio": ""
+    },
+    {
+      "curso": "8° Básico",
+      "dia": 3,
+      "slot": 2,
+      "asignatura": "Inglés",
+      "docente": "Fabian Arriagada",
+      "espacio": ""
+    },
+    {
+      "curso": "8° Básico",
+      "dia": 3,
+      "slot": 4,
+      "asignatura": "Ed. Física",
+      "docente": "Osvaldo Diaz",
+      "espacio": ""
+    },
+    {
+      "curso": "8° Básico",
+      "dia": 3,
+      "slot": 5,
+      "asignatura": "Ed. Física",
+      "docente": "Osvaldo Diaz",
+      "espacio": ""
+    },
+    {
+      "curso": "8° Básico",
+      "dia": 3,
+      "slot": 7,
+      "asignatura": "Matemáticas",
+      "docente": "Karen Vargas",
+      "espacio": ""
+    },
+    {
+      "curso": "8° Básico",
+      "dia": 3,
+      "slot": 8,
+      "asignatura": "Matemáticas",
+      "docente": "Karen Vargas",
+      "espacio": ""
+    },
+    {
+      "curso": "8° Básico",
+      "dia": 3,
+      "slot": 10,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "8° Básico",
+      "dia": 3,
+      "slot": 11,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "8° Básico",
+      "dia": 4,
+      "slot": 1,
+      "asignatura": "Matemáticas",
+      "docente": "Karen Vargas",
+      "espacio": ""
+    },
+    {
+      "curso": "8° Básico",
+      "dia": 4,
+      "slot": 2,
+      "asignatura": "Matemáticas",
+      "docente": "Karen Vargas",
+      "espacio": ""
+    },
+    {
+      "curso": "8° Básico",
+      "dia": 4,
+      "slot": 4,
+      "asignatura": "Lenguaje",
+      "docente": "Marjorie Polanco",
+      "espacio": ""
+    },
+    {
+      "curso": "8° Básico",
+      "dia": 4,
+      "slot": 5,
+      "asignatura": "Lenguaje",
+      "docente": "Marjorie Polanco",
+      "espacio": ""
+    },
+    {
+      "curso": "8° Básico",
+      "dia": 4,
+      "slot": 7,
+      "asignatura": "Artes",
+      "docente": "Karen Vargas",
+      "espacio": ""
+    },
+    {
+      "curso": "8° Básico",
+      "dia": 4,
+      "slot": 8,
+      "asignatura": "Artes",
+      "docente": "Karen Vargas",
+      "espacio": ""
+    },
+    {
+      "curso": "5° Básico",
+      "dia": 0,
+      "slot": 1,
+      "asignatura": "Tecnología",
+      "docente": "Osvaldo Diaz",
+      "espacio": ""
+    },
+    {
+      "curso": "5° Básico",
+      "dia": 0,
+      "slot": 2,
+      "asignatura": "Orientación",
+      "docente": "Karen Vargas",
+      "espacio": ""
+    },
+    {
+      "curso": "5° Básico",
+      "dia": 0,
+      "slot": 4,
+      "asignatura": "Historia",
+      "docente": "Arlette aguilar",
+      "espacio": ""
+    },
+    {
+      "curso": "5° Básico",
+      "dia": 0,
+      "slot": 5,
+      "asignatura": "Ciencias",
+      "docente": "Pamela Rosas",
+      "espacio": ""
+    },
+    {
+      "curso": "5° Básico",
+      "dia": 0,
+      "slot": 7,
+      "asignatura": "Matemáticas",
+      "docente": "Karen Vargas",
+      "espacio": ""
+    },
+    {
+      "curso": "5° Básico",
+      "dia": 0,
+      "slot": 8,
+      "asignatura": "Matemáticas",
+      "docente": "Karen Vargas",
+      "espacio": ""
+    },
+    {
+      "curso": "5° Básico",
+      "dia": 0,
+      "slot": 10,
+      "asignatura": "Historia",
+      "docente": "Arlette aguilar",
+      "espacio": ""
+    },
+    {
+      "curso": "5° Básico",
+      "dia": 0,
+      "slot": 11,
+      "asignatura": "Historia",
+      "docente": "Arlette aguilar",
+      "espacio": ""
+    },
+    {
+      "curso": "5° Básico",
+      "dia": 1,
+      "slot": 1,
+      "asignatura": "Lenguaje",
+      "docente": "Marjorie Polanco",
+      "espacio": ""
+    },
+    {
+      "curso": "5° Básico",
+      "dia": 1,
+      "slot": 2,
+      "asignatura": "Lenguaje",
+      "docente": "Marjorie Polanco",
+      "espacio": ""
+    },
+    {
+      "curso": "5° Básico",
+      "dia": 1,
+      "slot": 4,
+      "asignatura": "Artes",
+      "docente": "Pamela Rosas",
+      "espacio": ""
+    },
+    {
+      "curso": "5° Básico",
+      "dia": 1,
+      "slot": 5,
+      "asignatura": "Artes",
+      "docente": "Pamela Rosas",
+      "espacio": ""
+    },
+    {
+      "curso": "5° Básico",
+      "dia": 1,
+      "slot": 7,
+      "asignatura": "lcm",
+      "docente": "Ester Flores",
+      "espacio": ""
+    },
+    {
+      "curso": "5° Básico",
+      "dia": 1,
+      "slot": 8,
+      "asignatura": "lcm",
+      "docente": "Ester Flores",
+      "espacio": ""
+    },
+    {
+      "curso": "5° Básico",
+      "dia": 1,
+      "slot": 10,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "5° Básico",
+      "dia": 1,
+      "slot": 11,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "5° Básico",
+      "dia": 2,
+      "slot": 1,
+      "asignatura": "Matemáticas",
+      "docente": "Karen Vargas",
+      "espacio": ""
+    },
+    {
+      "curso": "5° Básico",
+      "dia": 2,
+      "slot": 2,
+      "asignatura": "Matemáticas",
+      "docente": "Karen Vargas",
+      "espacio": ""
+    },
+    {
+      "curso": "5° Básico",
+      "dia": 2,
+      "slot": 4,
+      "asignatura": "Música",
+      "docente": "Luz Rivera",
+      "espacio": ""
+    },
+    {
+      "curso": "5° Básico",
+      "dia": 2,
+      "slot": 5,
+      "asignatura": "Música",
+      "docente": "Luz Rivera",
+      "espacio": ""
+    },
+    {
+      "curso": "5° Básico",
+      "dia": 2,
+      "slot": 7,
+      "asignatura": "Lenguaje",
+      "docente": "Marjorie Polanco",
+      "espacio": ""
+    },
+    {
+      "curso": "5° Básico",
+      "dia": 2,
+      "slot": 8,
+      "asignatura": "Lenguaje",
+      "docente": "Marjorie Polanco",
+      "espacio": ""
+    },
+    {
+      "curso": "5° Básico",
+      "dia": 2,
+      "slot": 10,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "5° Básico",
+      "dia": 2,
+      "slot": 11,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "5° Básico",
+      "dia": 3,
+      "slot": 1,
+      "asignatura": "Matemáticas",
+      "docente": "Karen Vargas",
+      "espacio": ""
+    },
+    {
+      "curso": "5° Básico",
+      "dia": 3,
+      "slot": 2,
+      "asignatura": "Matemáticas",
+      "docente": "Karen Vargas",
+      "espacio": ""
+    },
+    {
+      "curso": "5° Básico",
+      "dia": 3,
+      "slot": 4,
+      "asignatura": "Inglés",
+      "docente": "Fabian Arriagada",
+      "espacio": ""
+    },
+    {
+      "curso": "5° Básico",
+      "dia": 3,
+      "slot": 5,
+      "asignatura": "Inglés",
+      "docente": "Fabian Arriagada",
+      "espacio": ""
+    },
+    {
+      "curso": "5° Básico",
+      "dia": 3,
+      "slot": 7,
+      "asignatura": "Lenguaje",
+      "docente": "Marjorie Polanco",
+      "espacio": ""
+    },
+    {
+      "curso": "5° Básico",
+      "dia": 3,
+      "slot": 8,
+      "asignatura": "Lenguaje",
+      "docente": "Marjorie Polanco",
+      "espacio": ""
+    },
+    {
+      "curso": "5° Básico",
+      "dia": 3,
+      "slot": 10,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "5° Básico",
+      "dia": 3,
+      "slot": 11,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "5° Básico",
+      "dia": 4,
+      "slot": 1,
+      "asignatura": "Ciencias",
+      "docente": "Pamela Rosas",
+      "espacio": ""
+    },
+    {
+      "curso": "5° Básico",
+      "dia": 4,
+      "slot": 2,
+      "asignatura": "Ciencias",
+      "docente": "Pamela Rosas",
+      "espacio": ""
+    },
+    {
+      "curso": "5° Básico",
+      "dia": 4,
+      "slot": 4,
+      "asignatura": "lcm",
+      "docente": "Ester Flores",
+      "espacio": ""
+    },
+    {
+      "curso": "5° Básico",
+      "dia": 4,
+      "slot": 5,
+      "asignatura": "lcm",
+      "docente": "Ester Flores",
+      "espacio": ""
+    },
+    {
+      "curso": "Kinder NT2",
+      "dia": 2,
+      "slot": 1,
+      "asignatura": "Ed. Física",
+      "docente": "Osvaldo Diaz",
+      "espacio": ""
+    },
+    {
+      "curso": "Taller Laboral",
+      "dia": 0,
+      "slot": 1,
+      "asignatura": "Taller Mosaico",
+      "docente": "Mery Oyarzún",
+      "espacio": ""
+    },
+    {
+      "curso": "Taller Laboral",
+      "dia": 0,
+      "slot": 2,
+      "asignatura": "Taller Mosaico",
+      "docente": "Mery Oyarzún",
+      "espacio": ""
+    },
+    {
+      "curso": "Taller Laboral",
+      "dia": 0,
+      "slot": 4,
+      "asignatura": "Elaboración de maceteros",
+      "docente": "Mery Oyarzún",
+      "espacio": ""
+    },
+    {
+      "curso": "Taller Laboral",
+      "dia": 0,
+      "slot": 5,
+      "asignatura": "Elaboración de maceteros",
+      "docente": "Mery Oyarzún",
+      "espacio": ""
+    },
+    {
+      "curso": "Taller Laboral",
+      "dia": 0,
+      "slot": 7,
+      "asignatura": "Cognitivo Funcional",
+      "docente": "Mery Oyarzún",
+      "espacio": ""
+    },
+    {
+      "curso": "Taller Laboral",
+      "dia": 0,
+      "slot": 8,
+      "asignatura": "Matemáticas",
+      "docente": "Mery Oyarzún",
+      "espacio": ""
+    },
+    {
+      "curso": "Taller Laboral",
+      "dia": 1,
+      "slot": 1,
+      "asignatura": "Artístico cultural",
+      "docente": "Mery Oyarzún",
+      "espacio": ""
+    },
+    {
+      "curso": "Taller Laboral",
+      "dia": 1,
+      "slot": 2,
+      "asignatura": "Artístico cultural",
+      "docente": "Mery Oyarzún",
+      "espacio": ""
+    },
+    {
+      "curso": "Taller Laboral",
+      "dia": 1,
+      "slot": 4,
+      "asignatura": "Interculturalidad",
+      "docente": "Arlette aguilar",
+      "espacio": ""
+    },
+    {
+      "curso": "Taller Laboral",
+      "dia": 1,
+      "slot": 5,
+      "asignatura": "Interculturalidad",
+      "docente": "Arlette aguilar",
+      "espacio": ""
+    },
+    {
+      "curso": "Taller Laboral",
+      "dia": 1,
+      "slot": 7,
+      "asignatura": "Tecnología y uso de redes sociales",
+      "docente": "Mery Oyarzún",
+      "espacio": ""
+    },
+    {
+      "curso": "Taller Laboral",
+      "dia": 1,
+      "slot": 8,
+      "asignatura": "Tecnología y uso de redes sociales",
+      "docente": "Mery Oyarzún",
+      "espacio": ""
+    },
+    {
+      "curso": "Taller Laboral",
+      "dia": 2,
+      "slot": 1,
+      "asignatura": "Cognitivo Funcional",
+      "docente": "Mery Oyarzún",
+      "espacio": ""
+    },
+    {
+      "curso": "Taller Laboral",
+      "dia": 2,
+      "slot": 2,
+      "asignatura": "Lenguaje",
+      "docente": "Mery Oyarzún",
+      "espacio": ""
+    },
+    {
+      "curso": "Taller Laboral",
+      "dia": 2,
+      "slot": 4,
+      "asignatura": "Manejo de dinero",
+      "docente": "Mery Oyarzún",
+      "espacio": ""
+    },
+    {
+      "curso": "Taller Laboral",
+      "dia": 2,
+      "slot": 5,
+      "asignatura": "Manejo de dinero",
+      "docente": "Mery Oyarzún",
+      "espacio": ""
+    },
+    {
+      "curso": "Taller Laboral",
+      "dia": 2,
+      "slot": 7,
+      "asignatura": "Ventas",
+      "docente": "Mery Oyarzún",
+      "espacio": ""
+    },
+    {
+      "curso": "Taller Laboral",
+      "dia": 2,
+      "slot": 8,
+      "asignatura": "Ventas",
+      "docente": "Mery Oyarzún",
+      "espacio": ""
+    },
+    {
+      "curso": "Taller Laboral",
+      "dia": 3,
+      "slot": 1,
+      "asignatura": "Social",
+      "docente": "Mery Oyarzún",
+      "espacio": ""
+    },
+    {
+      "curso": "Taller Laboral",
+      "dia": 3,
+      "slot": 2,
+      "asignatura": "Social",
+      "docente": "Mery Oyarzún",
+      "espacio": ""
+    },
+    {
+      "curso": "Taller Laboral",
+      "dia": 3,
+      "slot": 4,
+      "asignatura": "Formación laboral",
+      "docente": "Mery Oyarzún",
+      "espacio": ""
+    },
+    {
+      "curso": "Taller Laboral",
+      "dia": 3,
+      "slot": 5,
+      "asignatura": "Formación laboral",
+      "docente": "Mery Oyarzún",
+      "espacio": ""
+    },
+    {
+      "curso": "Taller Laboral",
+      "dia": 3,
+      "slot": 7,
+      "asignatura": "Contexto y actualidad",
+      "docente": "Mery Oyarzún",
+      "espacio": ""
+    },
+    {
+      "curso": "Taller Laboral",
+      "dia": 3,
+      "slot": 8,
+      "asignatura": "Contexto y actualidad",
+      "docente": "Mery Oyarzún",
+      "espacio": ""
+    },
+    {
+      "curso": "Taller Laboral",
+      "dia": 4,
+      "slot": 1,
+      "asignatura": "Ed. Física",
+      "docente": "Miguel Fregni",
+      "espacio": ""
+    },
+    {
+      "curso": "5° Básico",
+      "dia": 4,
+      "slot": 7,
+      "asignatura": "Ed. Física",
+      "docente": "Miguel Fregni",
+      "espacio": ""
+    },
+    {
+      "curso": "5° Básico",
+      "dia": 4,
+      "slot": 8,
+      "asignatura": "Ed. Física",
+      "docente": "Miguel Fregni",
+      "espacio": ""
+    },
+    {
+      "curso": "Taller Laboral",
+      "dia": 4,
+      "slot": 4,
+      "asignatura": "Actividades para la vida diaria",
+      "docente": "Mery Oyarzún",
+      "espacio": ""
+    },
+    {
+      "curso": "Taller Laboral",
+      "dia": 4,
+      "slot": 5,
+      "asignatura": "Actividades para la vida diaria",
+      "docente": "Mery Oyarzún",
+      "espacio": ""
+    },
+    {
+      "curso": "Taller Laboral",
+      "dia": 4,
+      "slot": 7,
+      "asignatura": "Cultivo y jardineria",
+      "docente": "Mery Oyarzún",
+      "espacio": ""
+    },
+    {
+      "curso": "Taller Laboral",
+      "dia": 4,
+      "slot": 8,
+      "asignatura": "Cultivo y jardineria",
+      "docente": "Mery Oyarzún",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 1° Ciclo",
+      "dia": 0,
+      "slot": 1,
+      "asignatura": "Orientación",
+      "docente": "Stephany Mardones",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 1° Ciclo",
+      "dia": 0,
+      "slot": 2,
+      "asignatura": "Tecnología",
+      "docente": "Stephany Mardones",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 1° Ciclo",
+      "dia": 0,
+      "slot": 4,
+      "asignatura": "Lenguaje",
+      "docente": "Stephany Mardones",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 1° Ciclo",
+      "dia": 0,
+      "slot": 5,
+      "asignatura": "Lenguaje",
+      "docente": "Stephany Mardones",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 1° Ciclo",
+      "dia": 0,
+      "slot": 7,
+      "asignatura": "Matemáticas",
+      "docente": "Stephany Mardones",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 1° Ciclo",
+      "dia": 0,
+      "slot": 8,
+      "asignatura": "Matemáticas",
+      "docente": "Stephany Mardones",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 1° Ciclo",
+      "dia": 0,
+      "slot": 10,
+      "asignatura": "Taller Cine",
+      "docente": "Stephany Mardones",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 1° Ciclo",
+      "dia": 0,
+      "slot": 11,
+      "asignatura": "Taller Cine",
+      "docente": "Stephany Mardones",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 1° Ciclo",
+      "dia": 1,
+      "slot": 1,
+      "asignatura": "Música",
+      "docente": "Fabian Arriagada",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 1° Ciclo",
+      "dia": 1,
+      "slot": 2,
+      "asignatura": "Música",
+      "docente": "Fabian Arriagada",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 1° Ciclo",
+      "dia": 1,
+      "slot": 4,
+      "asignatura": "Ciencias",
+      "docente": "Stephany Mardones",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 1° Ciclo",
+      "dia": 1,
+      "slot": 5,
+      "asignatura": "Ciencias",
+      "docente": "Stephany Mardones",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 1° Ciclo",
+      "dia": 1,
+      "slot": 10,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 1° Ciclo",
+      "dia": 1,
+      "slot": 11,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 1° Ciclo",
+      "dia": 2,
+      "slot": 1,
+      "asignatura": "Matemáticas",
+      "docente": "Stephany Mardones",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 1° Ciclo",
+      "dia": 2,
+      "slot": 2,
+      "asignatura": "Matemáticas",
+      "docente": "Stephany Mardones",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 1° Ciclo",
+      "dia": 2,
+      "slot": 4,
+      "asignatura": "Historia",
+      "docente": "Stephany Mardones",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 1° Ciclo",
+      "dia": 2,
+      "slot": 5,
+      "asignatura": "Historia",
+      "docente": "Stephany Mardones",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 1° Ciclo",
+      "dia": 2,
+      "slot": 7,
+      "asignatura": "Inglés",
+      "docente": "Fabian Arriagada",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 1° Ciclo",
+      "dia": 2,
+      "slot": 8,
+      "asignatura": "Inglés",
+      "docente": "Fabian Arriagada",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 1° Ciclo",
+      "dia": 2,
+      "slot": 10,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 1° Ciclo",
+      "dia": 2,
+      "slot": 11,
+      "asignatura": "Taller jec",
+      "docente": "",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 1° Ciclo",
+      "dia": 3,
+      "slot": 4,
+      "asignatura": "Artes",
+      "docente": "Stephany Mardones",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 1° Ciclo",
+      "dia": 3,
+      "slot": 5,
+      "asignatura": "Artes",
+      "docente": "Stephany Mardones",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 1° Ciclo",
+      "dia": 3,
+      "slot": 7,
+      "asignatura": "Matemáticas",
+      "docente": "Stephany Mardones",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 1° Ciclo",
+      "dia": 3,
+      "slot": 8,
+      "asignatura": "Matemáticas",
+      "docente": "Stephany Mardones",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 1° Ciclo",
+      "dia": 3,
+      "slot": 10,
+      "asignatura": "lcm",
+      "docente": "Stephany Mardones",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 1° Ciclo",
+      "dia": 3,
+      "slot": 11,
+      "asignatura": "lcm",
+      "docente": "Stephany Mardones",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 1° Ciclo",
+      "dia": 4,
+      "slot": 1,
+      "asignatura": "Lenguaje",
+      "docente": "Stephany Mardones",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 1° Ciclo",
+      "dia": 4,
+      "slot": 2,
+      "asignatura": "Lenguaje",
+      "docente": "Stephany Mardones",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 1° Ciclo",
+      "dia": 4,
+      "slot": 7,
+      "asignatura": "Taller Artistico",
+      "docente": "Stephany Mardones",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 1° Ciclo",
+      "dia": 4,
+      "slot": 8,
+      "asignatura": "Taller Artistico",
+      "docente": "Stephany Mardones",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 2° Ciclo",
+      "dia": 0,
+      "slot": 1,
+      "asignatura": "Orientación",
+      "docente": "Karla Uribe",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 2° Ciclo",
+      "dia": 0,
+      "slot": 2,
+      "asignatura": "Historia",
+      "docente": "Karla Uribe",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 2° Ciclo",
+      "dia": 0,
+      "slot": 4,
+      "asignatura": "Lenguaje",
+      "docente": "Karla Uribe",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 2° Ciclo",
+      "dia": 0,
+      "slot": 5,
+      "asignatura": "Lenguaje",
+      "docente": "Karla Uribe",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 2° Ciclo",
+      "dia": 0,
+      "slot": 7,
+      "asignatura": "Matemáticas",
+      "docente": "Karla Uribe",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 2° Ciclo",
+      "dia": 0,
+      "slot": 8,
+      "asignatura": "Matemáticas",
+      "docente": "Karla Uribe",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 2° Ciclo",
+      "dia": 0,
+      "slot": 10,
+      "asignatura": "Taller Artistico",
+      "docente": "Karla Uribe",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 2° Ciclo",
+      "dia": 1,
+      "slot": 1,
+      "asignatura": "Lenguaje",
+      "docente": "Karla Uribe",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 2° Ciclo",
+      "dia": 1,
+      "slot": 2,
+      "asignatura": "Lenguaje",
+      "docente": "Karla Uribe",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 2° Ciclo",
+      "dia": 1,
+      "slot": 4,
+      "asignatura": "Música",
+      "docente": "Luz Rivera",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 2° Ciclo",
+      "dia": 1,
+      "slot": 5,
+      "asignatura": "Música",
+      "docente": "Luz Rivera",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 2° Ciclo",
+      "dia": 1,
+      "slot": 7,
+      "asignatura": "Ciencias",
+      "docente": "Karla Uribe",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 2° Ciclo",
+      "dia": 1,
+      "slot": 8,
+      "asignatura": "Ciencias",
+      "docente": "Karla Uribe",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 2° Ciclo",
+      "dia": 2,
+      "slot": 1,
+      "asignatura": "Artes",
+      "docente": "Karla Uribe",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 2° Ciclo",
+      "dia": 2,
+      "slot": 2,
+      "asignatura": "Artes",
+      "docente": "Karla Uribe",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 2° Ciclo",
+      "dia": 2,
+      "slot": 4,
+      "asignatura": "Matemáticas",
+      "docente": "Karla Uribe",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 2° Ciclo",
+      "dia": 2,
+      "slot": 5,
+      "asignatura": "Matemáticas",
+      "docente": "Karla Uribe",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 1° Ciclo",
+      "dia": 1,
+      "slot": 8,
+      "asignatura": "Ed. Física",
+      "docente": "Miguel Fregni",
+      "espacio": ""
+    },
+    {
+      "curso": "Taller Laboral",
+      "dia": 4,
+      "slot": 2,
+      "asignatura": "Ed. Física",
+      "docente": "Miguel Fregni",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 2° Ciclo",
+      "dia": 2,
+      "slot": 7,
+      "asignatura": "Historia",
+      "docente": "Karla Uribe",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 2° Ciclo",
+      "dia": 2,
+      "slot": 8,
+      "asignatura": "Historia",
+      "docente": "Karla Uribe",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 2° Ciclo",
+      "dia": 3,
+      "slot": 1,
+      "asignatura": "Lenguaje",
+      "docente": "Karla Uribe",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 2° Ciclo",
+      "dia": 3,
+      "slot": 2,
+      "asignatura": "Lenguaje",
+      "docente": "Karla Uribe",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 2° Ciclo",
+      "dia": 3,
+      "slot": 4,
+      "asignatura": "Matemáticas",
+      "docente": "Karla Uribe",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 2° Ciclo",
+      "dia": 3,
+      "slot": 5,
+      "asignatura": "Matemáticas",
+      "docente": "Karla Uribe",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 2° Ciclo",
+      "dia": 4,
+      "slot": 1,
+      "asignatura": "Ciencias",
+      "docente": "Karla Uribe",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 2° Ciclo",
+      "dia": 4,
+      "slot": 2,
+      "asignatura": "Tecnología",
+      "docente": "Karla Uribe",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 2° Ciclo",
+      "dia": 4,
+      "slot": 7,
+      "asignatura": "lcm",
+      "docente": "Karla Uribe",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 2° Ciclo",
+      "dia": 4,
+      "slot": 8,
+      "asignatura": "lcm",
+      "docente": "Karla Uribe",
+      "espacio": ""
+    },
+    {
+      "curso": "1° Básico",
+      "dia": 1,
+      "slot": 5,
+      "asignatura": "Ed. Física",
+      "docente": "Helmers santibañez",
+      "espacio": "Gimnasio"
+    },
+    {
+      "curso": "2° Básico",
+      "dia": 1,
+      "slot": 2,
+      "asignatura": "Ed. Física",
+      "docente": "Helmers santibañez",
+      "espacio": "Gimnasio"
+    },
+    {
+      "curso": "3° Básico",
+      "dia": 2,
+      "slot": 7,
+      "asignatura": "Ed. Física",
+      "docente": "Helmers santibañez",
+      "espacio": "Gimnasio"
+    },
+    {
+      "curso": "OPCIÓN 4 - 1° Ciclo",
+      "dia": 1,
+      "slot": 7,
+      "asignatura": "Ed. Física",
+      "docente": "Miguel Fregni",
+      "espacio": ""
+    },
+    {
+      "curso": "Pre - Kinder NT1",
+      "dia": 2,
+      "slot": 1,
+      "asignatura": "Ed. Física",
+      "docente": "Miguel Fregni",
+      "espacio": ""
+    },
+    {
+      "curso": "Kinder NT2",
+      "dia": 2,
+      "slot": 2,
+      "asignatura": "Ed. Física",
+      "docente": "Miguel Fregni",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 1° Ciclo",
+      "dia": 3,
+      "slot": 1,
+      "asignatura": "Ed. Física",
+      "docente": "Miguel Fregni",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 1° Ciclo",
+      "dia": 3,
+      "slot": 2,
+      "asignatura": "Ed. Física",
+      "docente": "Miguel Fregni",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 2° Ciclo",
+      "dia": 4,
+      "slot": 4,
+      "asignatura": "Ed. Física",
+      "docente": "Miguel Fregni",
+      "espacio": ""
+    },
+    {
+      "curso": "OPCIÓN 4 - 2° Ciclo",
+      "dia": 4,
+      "slot": 5,
+      "asignatura": "Ed. Física",
+      "docente": "Miguel Fregni",
+      "espacio": ""
+    },
+    {
+      "curso": "1° Básico",
+      "dia": 0,
+      "slot": 1,
+      "asignatura": "Orientación",
+      "docente": "Daniela Islas",
+      "espacio": "Sala 1° Básico"
+    }
+  ]
+}
