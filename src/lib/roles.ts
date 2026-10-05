@@ -144,7 +144,7 @@ export const MODULES: ModuleDef[] = [
     icon: ClipboardCheck,
     to: "/matricula",
     description: "Libro de matrícula, postulaciones y cupos oficiales",
-    roles: ["admin", "direccion", "utp", "inspectoria"],
+    roles: ["admin", "direccion", "utp", "inspectoria", "docente"],
   },
   {
     id: "docentes",

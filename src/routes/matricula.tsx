@@ -16,6 +16,7 @@ import {
   FileSpreadsheet,
   Check,
   X,
+  UserPlus,
 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -162,6 +163,122 @@ function MatriculaAdminPage() {
     },
   });
 
+  const [isNuevaModalOpen, setIsNuevaModalOpen] = useState(false);
+  const [nuevaForm, setNuevaForm] = useState({
+    estudiante_nombres: "",
+    estudiante_apellidos: "",
+    estudiante_rut: "",
+    estudiante_fecha_nacimiento: "",
+    estudiante_genero: "femenino",
+    estudiante_direccion: "",
+    estudiante_comuna: "",
+    curso_id: "",
+    es_pie: false,
+    diagnostico_pie: "",
+    prevision_salud: "FONASA",
+    apoderado_titular_nombres: "",
+    apoderado_titular_apellidos: "",
+    apoderado_titular_rut: "",
+    apoderado_titular_parentesco: "Madre",
+    apoderado_titular_telefono: "",
+    apoderado_titular_email: "",
+    aprobar_inmediato: true,
+  });
+
+  // Mutación: Crear Matrícula Presencial (Operadores/Secretaría/Docentes)
+  const nuevaMatriculaMutation = useMutation({
+    mutationFn: async () => {
+      if (!colegioId) throw new Error("Colegio no identificado");
+      if (!periodoActivo) throw new Error("No hay un período de matrícula activo configurado");
+      if (!nuevaForm.estudiante_nombres.trim() || !nuevaForm.estudiante_apellidos.trim()) {
+        throw new Error("Debe ingresar los nombres y apellidos del estudiante");
+      }
+      if (!nuevaForm.curso_id) {
+        throw new Error("Debe seleccionar el curso a inscribir");
+      }
+      if (!nuevaForm.apoderado_titular_nombres.trim() || !nuevaForm.apoderado_titular_rut.trim()) {
+        throw new Error("Debe ingresar el nombre y RUN del apoderado titular");
+      }
+
+      const { data: nuevaMat, error: insertError } = await supabase
+        .from("matriculas")
+        .insert({
+          colegio_id: colegioId,
+          periodo_id: periodoActivo.id,
+          curso_postula_id: nuevaForm.curso_id,
+          curso_asignado_id: nuevaForm.aprobar_inmediato ? nuevaForm.curso_id : null,
+          estado: nuevaForm.aprobar_inmediato ? ("en_revision" as MatriculaEstado) : ("solicitada" as MatriculaEstado),
+          estudiante_nombres: nuevaForm.estudiante_nombres.trim(),
+          estudiante_apellidos: nuevaForm.estudiante_apellidos.trim(),
+          estudiante_rut: nuevaForm.estudiante_rut.trim() || null,
+          estudiante_fecha_nacimiento: nuevaForm.estudiante_fecha_nacimiento || null,
+          estudiante_genero: nuevaForm.estudiante_genero,
+          estudiante_direccion: nuevaForm.estudiante_direccion.trim() || null,
+          estudiante_comuna: nuevaForm.estudiante_comuna.trim() || null,
+          es_pie: nuevaForm.es_pie,
+          diagnostico_pie: nuevaForm.es_pie ? nuevaForm.diagnostico_pie.trim() || null : null,
+          prevision_salud: nuevaForm.prevision_salud,
+          apoderado_titular_nombres: nuevaForm.apoderado_titular_nombres.trim(),
+          apoderado_titular_apellidos: nuevaForm.apoderado_titular_apellidos.trim(),
+          apoderado_titular_rut: nuevaForm.apoderado_titular_rut.trim(),
+          apoderado_titular_parentesco: nuevaForm.apoderado_titular_parentesco,
+          apoderado_titular_telefono: nuevaForm.apoderado_titular_telefono.trim(),
+          apoderado_titular_email: nuevaForm.apoderado_titular_email.trim() || null,
+        })
+        .select()
+        .single();
+
+      if (insertError) throw insertError;
+
+      if (nuevaForm.aprobar_inmediato) {
+        const { data: aprobado, error: rpcError } = await supabase.rpc("aprobar_matricula", {
+          p_matricula_id: nuevaMat.id,
+          p_curso_id: nuevaForm.curso_id,
+          p_revisor_id: user?.id,
+        });
+        if (rpcError) throw rpcError;
+        return { nuevaMat, aprobado };
+      }
+
+      return { nuevaMat, aprobado: null };
+    },
+    onSuccess: (data) => {
+      if (data.aprobado) {
+        toast.success(
+          `¡Matrícula aprobada exitosamente! Asignado N° ${data.aprobado.numero_matricula || ""}`
+        );
+      } else {
+        toast.success("Ficha de matrícula presencial guardada en el sistema");
+      }
+      setIsNuevaModalOpen(false);
+      setNuevaForm({
+        estudiante_nombres: "",
+        estudiante_apellidos: "",
+        estudiante_rut: "",
+        estudiante_fecha_nacimiento: "",
+        estudiante_genero: "femenino",
+        estudiante_direccion: "",
+        estudiante_comuna: "",
+        curso_id: "",
+        es_pie: false,
+        diagnostico_pie: "",
+        prevision_salud: "FONASA",
+        apoderado_titular_nombres: "",
+        apoderado_titular_apellidos: "",
+        apoderado_titular_rut: "",
+        apoderado_titular_parentesco: "Madre",
+        apoderado_titular_telefono: "",
+        apoderado_titular_email: "",
+        aprobar_inmediato: true,
+      });
+      queryClient.invalidateQueries({ queryKey: ["matriculas-list"] });
+      queryClient.invalidateQueries({ queryKey: ["alumnos-all"] });
+    },
+    onError: (err: any) => {
+      toast.error(err.message || "Error al registrar matrícula presencial");
+    },
+  });
+
   // Filtrado
   const filtered = useMemo(() => {
     return matriculas.filter((m) => {
@@ -273,6 +390,19 @@ function MatriculaAdminPage() {
         actions={
           <div className="flex items-center gap-2">
             <button
+              onClick={() => {
+                setNuevaForm((prev) => ({
+                  ...prev,
+                  curso_id: cursos[0]?.id || "",
+                }));
+                setIsNuevaModalOpen(true);
+              }}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-primary text-primary-foreground font-semibold rounded-lg text-xs shadow-elegant hover:bg-primary/90 transition-all"
+            >
+              <UserPlus className="w-4 h-4" />
+              Nueva Matrícula Presencial
+            </button>
+            <button
               onClick={exportarCSV}
               className="inline-flex items-center gap-1.5 px-3 py-2 bg-surface border border-border hover:bg-surface-2 rounded-lg text-xs font-semibold shadow-sm transition-colors"
             >
@@ -283,10 +413,10 @@ function MatriculaAdminPage() {
               to="/c/$slug/matricula"
               params={{ slug: "porvenir" }}
               target="_blank"
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-primary text-primary-foreground font-semibold rounded-lg text-xs shadow-elegant hover:bg-primary/90 transition-all"
+              className="inline-flex items-center gap-1.5 px-3 py-2 bg-surface border border-border hover:bg-surface-2 rounded-lg text-xs font-semibold shadow-sm text-muted-foreground hover:text-foreground transition-all"
             >
               <ExternalLink className="w-3.5 h-3.5" />
-              Portal de Apoderados
+              Portal Público
             </Link>
           </div>
         }
@@ -558,6 +688,398 @@ function MatriculaAdminPage() {
                 {aprobarMutation.isPending ? "Aprobando…" : "Confirmar y Matricular"}
               </button>
             </div>
+          </div>
+        </div>
+      )}
+      {/* MODAL: Nueva Matrícula Presencial (Operadores / Secretaría) */}
+      {isNuevaModalOpen && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-surface border border-border rounded-2xl max-w-2xl w-full p-6 shadow-2xl space-y-5 my-8 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-border pb-3">
+              <div>
+                <h3 className="font-bold text-base text-foreground flex items-center gap-2">
+                  <UserPlus className="w-5 h-5 text-primary" />
+                  Nueva Matrícula Presencial (Secretaría / Establecimiento)
+                </h3>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  Inscripción asistida para apoderados atendidos presencialmente en el colegio.
+                </p>
+              </div>
+              <button
+                onClick={() => setIsNuevaModalOpen(false)}
+                className="p-1 rounded-md text-muted-foreground hover:text-foreground"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                nuevaMatriculaMutation.mutate();
+              }}
+              className="space-y-5"
+            >
+              {/* Sección 1: Estudiante */}
+              <div className="space-y-3">
+                <span className="text-xs font-bold uppercase tracking-wider text-primary block">
+                  1. Antecedentes del Estudiante
+                </span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                  <div>
+                    <label className="block font-semibold text-foreground mb-1">
+                      Nombres del estudiante *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="Ej. Lucas Andrés"
+                      value={nuevaForm.estudiante_nombres}
+                      onChange={(e) =>
+                        setNuevaForm({ ...nuevaForm, estudiante_nombres: e.target.value })
+                      }
+                      className="w-full bg-surface-2 border border-border rounded-lg px-3 py-2 text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-semibold text-foreground mb-1">
+                      Apellidos *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="Ej. Silva Morales"
+                      value={nuevaForm.estudiante_apellidos}
+                      onChange={(e) =>
+                        setNuevaForm({ ...nuevaForm, estudiante_apellidos: e.target.value })
+                      }
+                      className="w-full bg-surface-2 border border-border rounded-lg px-3 py-2 text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-semibold text-foreground mb-1">
+                      RUN o IPE del estudiante
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Ej. 24.567.890-1"
+                      value={nuevaForm.estudiante_rut}
+                      onChange={(e) =>
+                        setNuevaForm({ ...nuevaForm, estudiante_rut: e.target.value })
+                      }
+                      className="w-full bg-surface-2 border border-border rounded-lg px-3 py-2 text-foreground font-mono focus:outline-none focus:ring-1 focus:ring-primary"
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-semibold text-foreground mb-1">
+                      Fecha de Nacimiento
+                    </label>
+                    <input
+                      type="date"
+                      value={nuevaForm.estudiante_fecha_nacimiento}
+                      onChange={(e) =>
+                        setNuevaForm({
+                          ...nuevaForm,
+                          estudiante_fecha_nacimiento: e.target.value,
+                        })
+                      }
+                      className="w-full bg-surface-2 border border-border rounded-lg px-3 py-2 text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-semibold text-foreground mb-1">
+                      Sexo / Género
+                    </label>
+                    <select
+                      value={nuevaForm.estudiante_genero}
+                      onChange={(e) =>
+                        setNuevaForm({ ...nuevaForm, estudiante_genero: e.target.value })
+                      }
+                      className="w-full bg-surface-2 border border-border rounded-lg px-3 py-2 text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                    >
+                      <option value="femenino">Femenino</option>
+                      <option value="masculino">Masculino</option>
+                      <option value="otro">Otro</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block font-semibold text-foreground mb-1">
+                      Comuna
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Ej. La Florida"
+                      value={nuevaForm.estudiante_comuna}
+                      onChange={(e) =>
+                        setNuevaForm({ ...nuevaForm, estudiante_comuna: e.target.value })
+                      }
+                      className="w-full bg-surface-2 border border-border rounded-lg px-3 py-2 text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                    />
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className="block font-semibold text-foreground mb-1">
+                      Dirección de Domicilio
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Ej. Pasaje Las Rosas 450"
+                      value={nuevaForm.estudiante_direccion}
+                      onChange={(e) =>
+                        setNuevaForm({ ...nuevaForm, estudiante_direccion: e.target.value })
+                      }
+                      className="w-full bg-surface-2 border border-border rounded-lg px-3 py-2 text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Sección 2: Curso y Salud */}
+              <div className="space-y-3 pt-2 border-t border-border">
+                <span className="text-xs font-bold uppercase tracking-wider text-primary block">
+                  2. Asignación de Curso y Salud
+                </span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                  <div>
+                    <label className="block font-semibold text-foreground mb-1">
+                      Curso a Inscribir *
+                    </label>
+                    <select
+                      required
+                      value={nuevaForm.curso_id}
+                      onChange={(e) =>
+                        setNuevaForm({ ...nuevaForm, curso_id: e.target.value })
+                      }
+                      className="w-full bg-surface-2 border border-border rounded-lg px-3 py-2 text-foreground font-medium focus:outline-none focus:ring-1 focus:ring-primary"
+                    >
+                      <option value="">Selecciona curso</option>
+                      {cursos.map((c) => (
+                        <option key={c.id} value={c.id}>
+                          {c.nombre} ({c.nivel || "General"})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block font-semibold text-foreground mb-1">
+                      Previsión de Salud
+                    </label>
+                    <select
+                      value={nuevaForm.prevision_salud}
+                      onChange={(e) =>
+                        setNuevaForm({ ...nuevaForm, prevision_salud: e.target.value })
+                      }
+                      className="w-full bg-surface-2 border border-border rounded-lg px-3 py-2 text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                    >
+                      <option value="FONASA">FONASA</option>
+                      <option value="ISAPRE">ISAPRE</option>
+                      <option value="DIPRECA / CAPREDENA">DIPRECA / CAPREDENA</option>
+                      <option value="Particular / Ninguna">Particular / Ninguna</option>
+                    </select>
+                  </div>
+
+                  <div className="sm:col-span-2 space-y-2">
+                    <label className="flex items-center gap-2 cursor-pointer p-2.5 bg-purple-500/5 border border-purple-500/20 rounded-lg">
+                      <input
+                        type="checkbox"
+                        checked={nuevaForm.es_pie}
+                        onChange={(e) =>
+                          setNuevaForm({ ...nuevaForm, es_pie: e.target.checked })
+                        }
+                        className="rounded border-purple-500 text-purple-600 focus:ring-purple-500"
+                      />
+                      <span className="text-xs font-semibold text-foreground">
+                        Pertenece a Programa de Integración Escolar (PIE)
+                      </span>
+                    </label>
+
+                    {nuevaForm.es_pie && (
+                      <input
+                        type="text"
+                        placeholder="Diagnóstico PIE (Ej. TEA, TDAH, TEL...)"
+                        value={nuevaForm.diagnostico_pie}
+                        onChange={(e) =>
+                          setNuevaForm({ ...nuevaForm, diagnostico_pie: e.target.value })
+                        }
+                        className="w-full bg-surface-2 border border-purple-500/30 rounded-lg px-3 py-2 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-purple-500"
+                      />
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Sección 3: Apoderado Titular */}
+              <div className="space-y-3 pt-2 border-t border-border">
+                <span className="text-xs font-bold uppercase tracking-wider text-primary block">
+                  3. Datos del Apoderado Titular
+                </span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                  <div>
+                    <label className="block font-semibold text-foreground mb-1">
+                      Nombres del Apoderado *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="Ej. Marcela Elena"
+                      value={nuevaForm.apoderado_titular_nombres}
+                      onChange={(e) =>
+                        setNuevaForm({
+                          ...nuevaForm,
+                          apoderado_titular_nombres: e.target.value,
+                        })
+                      }
+                      className="w-full bg-surface-2 border border-border rounded-lg px-3 py-2 text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-semibold text-foreground mb-1">
+                      Apellidos del Apoderado *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="Ej. Morales Vargas"
+                      value={nuevaForm.apoderado_titular_apellidos}
+                      onChange={(e) =>
+                        setNuevaForm({
+                          ...nuevaForm,
+                          apoderado_titular_apellidos: e.target.value,
+                        })
+                      }
+                      className="w-full bg-surface-2 border border-border rounded-lg px-3 py-2 text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-semibold text-foreground mb-1">
+                      RUN del Apoderado *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="Ej. 15.678.901-2"
+                      value={nuevaForm.apoderado_titular_rut}
+                      onChange={(e) =>
+                        setNuevaForm({
+                          ...nuevaForm,
+                          apoderado_titular_rut: e.target.value,
+                        })
+                      }
+                      className="w-full bg-surface-2 border border-border rounded-lg px-3 py-2 text-foreground font-mono focus:outline-none focus:ring-1 focus:ring-primary"
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-semibold text-foreground mb-1">
+                      Parentesco
+                    </label>
+                    <select
+                      value={nuevaForm.apoderado_titular_parentesco}
+                      onChange={(e) =>
+                        setNuevaForm({
+                          ...nuevaForm,
+                          apoderado_titular_parentesco: e.target.value,
+                        })
+                      }
+                      className="w-full bg-surface-2 border border-border rounded-lg px-3 py-2 text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                    >
+                      <option value="Madre">Madre</option>
+                      <option value="Padre">Padre</option>
+                      <option value="Abuelo/a">Abuelo/a</option>
+                      <option value="Tutor Legal">Tutor Legal</option>
+                      <option value="Otro">Otro</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block font-semibold text-foreground mb-1">
+                      Teléfono Móvil (WhatsApp) *
+                    </label>
+                    <input
+                      type="tel"
+                      required
+                      placeholder="Ej. +56 9 8765 4321"
+                      value={nuevaForm.apoderado_titular_telefono}
+                      onChange={(e) =>
+                        setNuevaForm({
+                          ...nuevaForm,
+                          apoderado_titular_telefono: e.target.value,
+                        })
+                      }
+                      className="w-full bg-surface-2 border border-border rounded-lg px-3 py-2 text-foreground font-mono focus:outline-none focus:ring-1 focus:ring-primary"
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-semibold text-foreground mb-1">
+                      Correo Electrónico
+                    </label>
+                    <input
+                      type="email"
+                      placeholder="Ej. apoderado@correo.com"
+                      value={nuevaForm.apoderado_titular_email}
+                      onChange={(e) =>
+                        setNuevaForm({
+                          ...nuevaForm,
+                          apoderado_titular_email: e.target.value,
+                        })
+                      }
+                      className="w-full bg-surface-2 border border-border rounded-lg px-3 py-2 text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Opción de Aprobación Inmediata */}
+              <div className="p-3.5 bg-emerald-500/10 border border-emerald-500/30 rounded-xl">
+                <label className="flex items-start gap-2.5 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={nuevaForm.aprobar_inmediato}
+                    onChange={(e) =>
+                      setNuevaForm({
+                        ...nuevaForm,
+                        aprobar_inmediato: e.target.checked,
+                      })
+                    }
+                    className="mt-0.5 rounded border-emerald-500 text-emerald-600 focus:ring-emerald-500 w-4 h-4"
+                  />
+                  <div>
+                    <span className="text-xs font-bold text-emerald-700 dark:text-emerald-400 block">
+                      Aprobar e Inscribir de Inmediato en el Libro Oficial
+                    </span>
+                    <span className="text-[11px] text-muted-foreground block mt-0.5">
+                      Asigna automáticamente el siguiente N° correlativo de matrícula y
+                      sincroniza al estudiante en la nómina de alumnos del curso.
+                    </span>
+                  </div>
+                </label>
+              </div>
+
+              {/* Botones de Acción */}
+              <div className="pt-2 border-t border-border flex justify-end gap-2.5">
+                <button
+                  type="button"
+                  onClick={() => setIsNuevaModalOpen(false)}
+                  className="px-4 py-2 bg-surface-2 hover:bg-surface-3 rounded-lg text-xs font-semibold"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  disabled={nuevaMatriculaMutation.isPending}
+                  className="px-5 py-2.5 bg-primary hover:bg-primary/90 text-primary-foreground font-bold rounded-lg text-xs shadow-md transition-all disabled:opacity-50 flex items-center gap-2"
+                >
+                  {nuevaMatriculaMutation.isPending ? (
+                    "Guardando matrícula…"
+                  ) : (
+                    <>
+                      <CheckCircle2 className="w-4 h-4" />
+                      {nuevaForm.aprobar_inmediato
+                        ? "Matricular y Oficializar"
+                        : "Guardar Solicitud"}
+                    </>
+                  )}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
