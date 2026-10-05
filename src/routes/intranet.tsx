@@ -17,13 +17,13 @@ import {
   BookOpen,
   Users,
   GraduationCap,
-  MessageSquare,
   Trash2,
   Paperclip,
   Check,
-  Building2,
-  HelpCircle,
   Briefcase,
+  CheckSquare,
+  Square,
+  Sparkles,
 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -99,7 +99,6 @@ function IntranetPage() {
   const queryClient = useQueryClient();
 
   const isDocente = roles.includes("docente");
-  const isSuper = roles.includes("superadmin");
   const isStaff = roles.some((r) =>
     ["admin", "direccion", "utp", "inspectoria", "superadmin"].includes(r)
   );
@@ -129,6 +128,7 @@ function IntranetPage() {
   const [nuevoAmbito, setNuevoAmbito] = useState<AmbitoDocente>("consejo");
   const [nuevoTipoApoderado, setNuevoTipoApoderado] = useState<"todos" | "especificos">("todos");
   const [cursosSeleccionados, setCursosSeleccionados] = useState<string[]>([]);
+  const [filtroCursosModal, setFiltroCursosModal] = useState("");
   const [autorNombreInput, setAutorNombreInput] = useState("");
   const [autorCargoInput, setAutorCargoInput] = useState("");
   const [archivoAdjuntoFile, setArchivoAdjuntoFile] = useState<File | null>(null);
@@ -161,11 +161,11 @@ function IntranetPage() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("cursos")
-        .select("id, nombre, nivel")
+        .select("id, nombre, nivel, prof_jefe_id")
         .eq("colegio_id", colegioId!)
         .order("nombre");
       if (error) throw error;
-      return (data || []) as { id: string; nombre: string; nivel: string }[];
+      return (data || []) as { id: string; nombre: string; nivel: string; prof_jefe_id?: string | null }[];
     },
   });
 
@@ -173,6 +173,21 @@ function IntranetPage() {
     () => new Map(cursos.map((c) => [c.id, c.nombre])),
     [cursos]
   );
+
+  // Identificar si el docente conectado es profesor jefe de algún curso
+  const miCursoJefe = useMemo(
+    () => cursos.find((c) => c.prof_jefe_id && c.prof_jefe_id === docente?.id),
+    [cursos, docente]
+  );
+
+  // Cursos filtrados para la selección en el modal
+  const modalCursosFiltrados = useMemo(() => {
+    if (!filtroCursosModal.trim()) return cursos;
+    const q = filtroCursosModal.toLowerCase();
+    return cursos.filter(
+      (c) => c.nombre.toLowerCase().includes(q) || (c.nivel && c.nivel.toLowerCase().includes(q))
+    );
+  }, [cursos, filtroCursosModal]);
 
   // Consulta de publicaciones
   const { data: publicaciones = [], isLoading: pubsLoading } = useQuery({
@@ -287,14 +302,16 @@ function IntranetPage() {
         // Filtro por curso específico dentro de canal Apoderados
         if (cursoFilter !== "todos") {
           const cursosP = p.cursos_destinatarios || [];
+          // Si el comunicado está dirigido a cursos específicos, debe incluir el curso filtrado.
+          // Si no tiene cursos especificados, es masivo para todos los apoderados y también se muestra.
           if (cursosP.length > 0 && !cursosP.includes(cursoFilter)) {
             return false;
           }
         }
       } else if (tab === "docente") {
-        const isDocente =
+        const isDocentePub =
           dests.includes("docentes") || (p.ambito_docente && p.ambito_docente !== "general");
-        if (!isDocente) return false;
+        if (!isDocentePub) return false;
 
         // Filtro por ámbito docente específico
         if (ambitoFilter !== "todos") {
@@ -305,25 +322,37 @@ function IntranetPage() {
       // Filtro por categoría general (urgente, circular, etc.)
       if (catFilter !== "todas" && p.categoria !== catFilter) return false;
 
-      // Filtro por término de búsqueda
+      // Filtro por término de búsqueda (título, contenido, extracto, autor, o nombres de cursos)
       if (searchTerm) {
         const term = searchTerm.toLowerCase();
         const matchTitle = p.titulo.toLowerCase().includes(term);
         const matchContent = p.contenido.toLowerCase().includes(term);
         const matchExtract = (p.extracto || "").toLowerCase().includes(term);
         const matchAutor = (p.autor_nombre || "").toLowerCase().includes(term);
-        if (!matchTitle && !matchContent && !matchExtract && !matchAutor) return false;
+        const matchCursos = (p.cursos_destinatarios || []).some((cid) => {
+          const cName = cursoMap.get(cid)?.toLowerCase();
+          return cName && cName.includes(term);
+        });
+        if (!matchTitle && !matchContent && !matchExtract && !matchAutor && !matchCursos) {
+          return false;
+        }
       }
 
       return true;
     });
-  }, [publicaciones, tab, catFilter, cursoFilter, ambitoFilter, searchTerm]);
+  }, [publicaciones, tab, catFilter, cursoFilter, ambitoFilter, searchTerm, cursoMap]);
 
   // Manejar creación de publicación
   const handleCreatePub = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!nuevoTitulo.trim() || !nuevoContenido.trim() || !colegioId) {
       toast.error("Por favor completa el título y contenido de la publicación");
+      return;
+    }
+
+    // Validación de cursos para apoderados
+    if (nuevoCanal === "apoderados" && nuevoTipoApoderado === "especificos" && cursosSeleccionados.length === 0) {
+      toast.error("Por favor selecciona al menos un curso o marca 'Todos los apoderados del colegio'");
       return;
     }
 
@@ -351,7 +380,6 @@ function IntranetPage() {
       let finalAdjuntoNombre = archivoAdjuntoFile ? archivoAdjuntoFile.name : null;
 
       if (archivoAdjuntoFile) {
-        const ext = archivoAdjuntoFile.name.split(".").pop();
         const cleanName = archivoAdjuntoFile.name.replace(/[^a-zA-Z0-9.-]/g, "_");
         const filePath = `${colegioId}/${Date.now()}_${cleanName}`;
 
@@ -389,7 +417,11 @@ function IntranetPage() {
 
       if (error) throw error;
 
-      toast.success("Publicación emitida exitosamente en Intranet");
+      toast.success(
+        finalCursos.length > 0
+          ? `Publicación enviada a apoderados de ${finalCursos.length} curso(s)`
+          : "Publicación emitida exitosamente en Intranet"
+      );
       setIsNewModalOpen(false);
       resetNewPubForm();
       queryClient.invalidateQueries({ queryKey: ["intranet-publicaciones"] });
@@ -410,6 +442,7 @@ function IntranetPage() {
     setNuevoAmbito("consejo");
     setNuevoTipoApoderado("todos");
     setCursosSeleccionados([]);
+    setFiltroCursosModal("");
     setAutorNombreInput("");
     setAutorCargoInput("");
     setArchivoAdjuntoFile(null);
@@ -483,6 +516,10 @@ function IntranetPage() {
               <button
                 onClick={() => {
                   setNuevoCanal(tab === "apoderados" ? "apoderados" : tab === "docente" ? "docentes" : "general");
+                  if (tab === "apoderados" && miCursoJefe) {
+                    setNuevoTipoApoderado("especificos");
+                    setCursosSeleccionados([miCursoJefe.id]);
+                  }
                   setIsNewModalOpen(true);
                 }}
                 className="inline-flex items-center gap-2 px-3.5 py-2 bg-primary text-primary-foreground font-semibold rounded-lg text-sm shadow-elegant hover:bg-primary/90 transition-all cursor-pointer"
@@ -619,17 +656,24 @@ function IntranetPage() {
             <div className="p-4 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/50 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-amber-900 dark:text-amber-200">
               <div className="flex items-center gap-2">
                 <Users className="w-4 h-4 text-amber-600 shrink-0" />
-                <span>
-                  <strong>Canal de Familias y Apoderados:</strong> Comunicados oficiales, circulares de jefatura de curso, citaciones a reunión de apoderados y salidas a terreno.
-                </span>
+                <div>
+                  <span>
+                    <strong>Canal de Familias y Apoderados:</strong> Comunicados oficiales, circulares de jefatura de curso, citaciones a reunión de apoderados y salidas pedagógicas.
+                  </span>
+                  {cursoFilter !== "todos" && (
+                    <div className="text-[11px] text-amber-700 dark:text-amber-300 font-medium mt-0.5">
+                      Mostrando publicaciones para <strong>{cursoMap.get(cursoFilter)}</strong> y circulares generales dirigidas a todos los apoderados.
+                    </div>
+                  )}
+                </div>
               </div>
               {/* Filtro por curso */}
               <div className="flex items-center gap-2 shrink-0">
-                <span className="font-semibold text-amber-800 dark:text-amber-300">Curso:</span>
+                <span className="font-semibold text-amber-800 dark:text-amber-300">Filtrar por curso:</span>
                 <select
                   value={cursoFilter}
                   onChange={(e) => setCursoFilter(e.target.value)}
-                  className="px-2.5 py-1 bg-surface border border-amber-300 dark:border-amber-800 rounded-lg text-xs font-semibold text-foreground focus:outline-none"
+                  className="px-2.5 py-1.5 bg-surface border border-amber-300 dark:border-amber-800 rounded-lg text-xs font-semibold text-foreground focus:outline-none"
                 >
                   <option value="todos">Todos los cursos</option>
                   {cursos.map((c) => (
@@ -675,7 +719,7 @@ function IntranetPage() {
               <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
               <input
                 type="text"
-                placeholder="Buscar por título, contenido, autor o curso…"
+                placeholder="Buscar por título, contenido, autor o curso (ej: 1° Básico)…"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-9 pr-3 py-2 bg-surface border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-ring"
@@ -752,14 +796,14 @@ function IntranetPage() {
                             {catStyle.label}
                           </span>
 
-                          {/* Badge de Destinatario / Ámbito */}
+                          {/* Badge de Destinatario / Cursos */}
                           {isForApoderados && (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-amber-500/10 text-amber-600 border border-amber-500/20">
-                              <Users className="w-3 h-3" />
-                              {cursosDestinoNombres.length > 0
-                                ? `Apoderados: ${cursosDestinoNombres.slice(0, 2).join(", ")}${
-                                    cursosDestinoNombres.length > 2 ? "..." : ""
-                                  }`
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/30">
+                              <Users className="w-3 h-3 text-amber-600" />
+                              {cursosDestinoNombres.length === 1
+                                ? `Apoderados: ${cursosDestinoNombres[0]}`
+                                : cursosDestinoNombres.length > 1
+                                ? `Apoderados (${cursosDestinoNombres.length} cursos): ${cursosDestinoNombres.slice(0, 2).join(", ")}${cursosDestinoNombres.length > 2 ? "..." : ""}`
                                 : "Todos los Apoderados"}
                             </span>
                           )}
@@ -1028,15 +1072,30 @@ function IntranetPage() {
             </div>
 
             {/* Cursos destinatarios si aplica */}
-            {(selectedPub.cursos_destinatarios || []).length > 0 && (
-              <div className="bg-amber-500/10 border border-amber-500/20 px-3 py-2 rounded-lg text-xs text-amber-800 dark:text-amber-200">
-                <strong>Dirigido a los cursos:</strong>{" "}
-                {selectedPub.cursos_destinatarios
-                  .map((id) => cursoMap.get(id))
-                  .filter(Boolean)
-                  .join(", ")}
+            {(selectedPub.cursos_destinatarios || []).length > 0 ? (
+              <div className="bg-amber-500/10 border border-amber-500/20 px-3.5 py-2.5 rounded-xl text-xs text-amber-900 dark:text-amber-200 space-y-1.5">
+                <div className="font-bold flex items-center gap-1.5">
+                  <Users className="w-3.5 h-3.5 text-amber-600" />
+                  Dirigido específicamente a apoderados de {selectedPub.cursos_destinatarios.length}{" "}
+                  {selectedPub.cursos_destinatarios.length === 1 ? "curso" : "cursos"}:
+                </div>
+                <div className="flex flex-wrap gap-1.5 pt-0.5">
+                  {selectedPub.cursos_destinatarios.map((id) => (
+                    <span
+                      key={id}
+                      className="px-2.5 py-0.5 rounded-md font-semibold bg-surface border border-amber-300 dark:border-amber-800 text-amber-800 dark:text-amber-200 shadow-2xs"
+                    >
+                      {cursoMap.get(id) || "Curso"}
+                    </span>
+                  ))}
+                </div>
               </div>
-            )}
+            ) : (selectedPub.destinatarios || []).includes("apoderados") ? (
+              <div className="bg-amber-500/10 border border-amber-500/20 px-3 py-2 rounded-xl text-xs text-amber-800 dark:text-amber-200 font-medium flex items-center gap-2">
+                <Users className="w-3.5 h-3.5 text-amber-600" />
+                Dirigido a <strong>todos los apoderados y familias</strong> del establecimiento escolar.
+              </div>
+            ) : null}
 
             <div className="flex-1 overflow-y-auto whitespace-pre-wrap text-sm text-foreground/90 leading-relaxed py-2 pr-1">
               {selectedPub.contenido}
@@ -1132,7 +1191,7 @@ function IntranetPage() {
                     }`}
                   >
                     <div className="text-xs font-bold mb-0.5">👨‍👩‍👧‍👦 Apoderados</div>
-                    <div className="text-[10px] opacity-80 leading-tight">Familias y cursos</div>
+                    <div className="text-[10px] opacity-80 leading-tight">1 o más cursos / Todos</div>
                   </button>
 
                   <button
@@ -1152,46 +1211,118 @@ function IntranetPage() {
 
               {/* Sub-configuración si es Apoderados */}
               {nuevoCanal === "apoderados" && (
-                <div className="p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl space-y-2.5">
-                  <div className="text-xs font-bold text-amber-800 dark:text-amber-300">
-                    Alcance del Comunicado a Familias:
+                <div className="p-3.5 bg-amber-500/10 border border-amber-500/25 rounded-xl space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-amber-900 dark:text-amber-200 flex items-center gap-1.5">
+                      <Users className="w-3.5 h-3.5 text-amber-600" />
+                      Destinatarios en Familias y Apoderados:
+                    </span>
+                    {cursosSeleccionados.length > 0 && (
+                      <span className="text-[11px] font-bold text-amber-800 dark:text-amber-300 bg-amber-500/20 px-2 py-0.5 rounded-full">
+                        {cursosSeleccionados.length} {cursosSeleccionados.length === 1 ? "curso seleccionado" : "cursos seleccionados"}
+                      </span>
+                    )}
                   </div>
-                  <div className="flex items-center gap-4 text-xs">
-                    <label className="flex items-center gap-2 cursor-pointer font-medium">
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                    <label
+                      className={`flex items-start gap-2.5 p-2 rounded-lg border cursor-pointer transition-all ${
+                        nuevoTipoApoderado === "todos"
+                          ? "bg-amber-500/15 border-amber-500/40 text-amber-900 dark:text-amber-200 font-semibold"
+                          : "bg-surface border-border text-muted-foreground"
+                      }`}
+                    >
                       <input
                         type="radio"
                         name="tipoApoderado"
                         checked={nuevoTipoApoderado === "todos"}
                         onChange={() => setNuevoTipoApoderado("todos")}
-                        className="text-amber-600 focus:ring-amber-500"
+                        className="mt-0.5 text-amber-600 focus:ring-amber-500"
                       />
-                      Todos los apoderados del colegio
+                      <div>
+                        <div className="font-semibold text-foreground">Todos los apoderados</div>
+                        <div className="text-[10px] text-muted-foreground leading-tight">
+                          Comunicado masivo para toda la comunidad de apoderados
+                        </div>
+                      </div>
                     </label>
-                    <label className="flex items-center gap-2 cursor-pointer font-medium">
+
+                    <label
+                      className={`flex items-start gap-2.5 p-2 rounded-lg border cursor-pointer transition-all ${
+                        nuevoTipoApoderado === "especificos"
+                          ? "bg-amber-500/15 border-amber-500/40 text-amber-900 dark:text-amber-200 font-semibold"
+                          : "bg-surface border-border text-muted-foreground"
+                      }`}
+                    >
                       <input
                         type="radio"
                         name="tipoApoderado"
                         checked={nuevoTipoApoderado === "especificos"}
                         onChange={() => setNuevoTipoApoderado("especificos")}
-                        className="text-amber-600 focus:ring-amber-500"
+                        className="mt-0.5 text-amber-600 focus:ring-amber-500"
                       />
-                      Cursos específicos
+                      <div>
+                        <div className="font-semibold text-foreground">Uno o más cursos específicos</div>
+                        <div className="text-[10px] text-muted-foreground leading-tight">
+                          Selecciona los cursos específicos que recibirán el aviso
+                        </div>
+                      </div>
                     </label>
                   </div>
 
                   {nuevoTipoApoderado === "especificos" && (
-                    <div className="pt-1">
-                      <div className="text-[11px] text-muted-foreground mb-1.5 font-medium">
-                        Selecciona uno o más cursos:
+                    <div className="space-y-2 pt-1 border-t border-amber-500/20">
+                      {/* Botones de acción rápida */}
+                      <div className="flex items-center justify-between flex-wrap gap-1.5">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <button
+                            type="button"
+                            onClick={() => setCursosSeleccionados(cursos.map((c) => c.id))}
+                            className="inline-flex items-center gap-1 px-2 py-1 text-[11px] font-semibold bg-surface border border-border hover:bg-surface-2 rounded-md cursor-pointer text-foreground"
+                          >
+                            <CheckSquare className="w-3 h-3 text-emerald-600" /> Seleccionar todos
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setCursosSeleccionados([])}
+                            className="inline-flex items-center gap-1 px-2 py-1 text-[11px] font-semibold bg-surface border border-border hover:bg-surface-2 rounded-md cursor-pointer text-muted-foreground hover:text-foreground"
+                          >
+                            <Square className="w-3 h-3" /> Limpiar
+                          </button>
+                          {miCursoJefe && (
+                            <button
+                              type="button"
+                              onClick={() => setCursosSeleccionados([miCursoJefe.id])}
+                              className="inline-flex items-center gap-1 px-2 py-1 text-[11px] font-bold bg-amber-500/20 border border-amber-500/30 text-amber-800 dark:text-amber-200 hover:bg-amber-500/30 rounded-md cursor-pointer"
+                            >
+                              <Sparkles className="w-3 h-3 text-amber-600" /> Mi jefatura ({miCursoJefe.nombre})
+                            </button>
+                          )}
+                        </div>
+
+                        {/* Buscador dentro del selector de cursos */}
+                        <div className="w-full sm:w-auto sm:max-w-[180px]">
+                          <input
+                            type="text"
+                            placeholder="Buscar curso…"
+                            value={filtroCursosModal}
+                            onChange={(e) => setFiltroCursosModal(e.target.value)}
+                            className="w-full px-2 py-1 bg-surface border border-border rounded-md text-[11px] focus:outline-none"
+                          />
+                        </div>
                       </div>
-                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5 max-h-36 overflow-y-auto p-2 bg-surface border border-border rounded-lg">
-                        {cursos.map((c) => {
+
+                      {/* Lista de cursos en casillas */}
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5 max-h-40 overflow-y-auto p-2 bg-surface border border-border rounded-lg">
+                        {modalCursosFiltrados.map((c) => {
                           const checked = cursosSeleccionados.includes(c.id);
                           return (
                             <label
                               key={c.id}
-                              className={`flex items-center gap-1.5 px-2 py-1 rounded text-xs cursor-pointer ${
-                                checked ? "bg-amber-500/20 font-bold text-amber-700 dark:text-amber-300" : "hover:bg-surface-2"
+                              className={`flex items-center gap-2 px-2.5 py-1.5 rounded-md text-xs cursor-pointer border transition-all ${
+                                checked
+                                  ? "bg-amber-500/15 border-amber-500/40 font-bold text-amber-800 dark:text-amber-200"
+                                  : "border-transparent hover:bg-surface-2 text-foreground"
                               }`}
                             >
                               <input
@@ -1204,13 +1335,37 @@ function IntranetPage() {
                                     setCursosSeleccionados(cursosSeleccionados.filter((id) => id !== c.id));
                                   }
                                 }}
-                                className="rounded text-amber-600 focus:ring-amber-500 w-3.5 h-3.5"
+                                className="rounded text-amber-600 focus:ring-amber-500 w-3.5 h-3.5 shrink-0"
                               />
                               <span className="truncate">{c.nombre}</span>
                             </label>
                           );
                         })}
                       </div>
+
+                      {/* Chips de cursos seleccionados */}
+                      {cursosSeleccionados.length > 0 && (
+                        <div className="flex flex-wrap items-center gap-1 pt-1">
+                          <span className="text-[10px] text-muted-foreground font-semibold mr-1">
+                            Seleccionados:
+                          </span>
+                          {cursosSeleccionados.map((id) => (
+                            <span
+                              key={id}
+                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-800 dark:text-amber-200"
+                            >
+                              {cursoMap.get(id) || "Curso"}
+                              <button
+                                type="button"
+                                onClick={() => setCursosSeleccionados(cursosSeleccionados.filter((cid) => cid !== id))}
+                                className="hover:text-destructive cursor-pointer"
+                              >
+                                <X className="w-2.5 h-2.5" />
+                              </button>
+                            </span>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
