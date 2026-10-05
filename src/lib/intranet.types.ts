@@ -5,10 +5,20 @@ export type IntranetCategoria =
   | 'urgente'
   | 'evento';
 
+export type AmbitoDocente =
+  | 'general'
+  | 'consejo'
+  | 'utp'
+  | 'departamento'
+  | 'convivencia';
+
 export interface IntranetPublicacion {
   id: string;
   colegio_id: string;
   autor_id: string | null;
+  autor_nombre?: string | null;
+  autor_cargo?: string | null;
+  ambito_docente?: AmbitoDocente | null;
   titulo: string;
   extracto: string | null;
   contenido: string;
@@ -23,13 +33,14 @@ export interface IntranetPublicacion {
   created_at: string;
   updated_at: string;
 
-  // Joined metadata
+  // Metadata agregada
   autor?: {
     display_name: string | null;
     email: string | null;
     avatar_url: string | null;
   } | null;
   leido?: boolean;
+  total_lecturas?: number;
 }
 
 export interface IntranetDocumento {
