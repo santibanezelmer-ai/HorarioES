@@ -6,8 +6,8 @@ export const TENANT_ROLES = ["admin", "utp", "editor", "viewer", "docente"] as c
 export type TenantRole = (typeof TENANT_ROLES)[number];
 
 export async function uidFromToken(accessToken: string): Promise<string> {
-  const url = process.env.SUPABASE_URL!;
-  const key = process.env.SUPABASE_PUBLISHABLE_KEY!;
+  const url = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || 'https://sxadthmnijgitmxpdjbu.supabase.co';
+  const key = process.env.SUPABASE_PUBLISHABLE_KEY || process.env.VITE_SUPABASE_PUBLISHABLE_KEY || 'sb_publishable_MDd9pxsQKfVCB0j2nUcFtQ_2V7QYOo-';
   const c = createClient<Database>(url, key, {
     auth: { storage: undefined, persistSession: false, autoRefreshToken: false },
   });

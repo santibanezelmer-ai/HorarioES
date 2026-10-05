@@ -7,12 +7,8 @@ async function verifyAccessToken(accessToken: string): Promise<string> {
     throw new Error("Invalid session");
   }
 
-  const SUPABASE_URL = process.env.SUPABASE_URL;
-  const SUPABASE_PUBLISHABLE_KEY = process.env.SUPABASE_PUBLISHABLE_KEY;
-
-  if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
-    throw new Error("Server misconfiguration");
-  }
+  const SUPABASE_URL = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || 'https://sxadthmnijgitmxpdjbu.supabase.co';
+  const SUPABASE_PUBLISHABLE_KEY = process.env.SUPABASE_PUBLISHABLE_KEY || process.env.VITE_SUPABASE_PUBLISHABLE_KEY || 'sb_publishable_MDd9pxsQKfVCB0j2nUcFtQ_2V7QYOo-';
 
   const client = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
     auth: { storage: undefined, persistSession: false, autoRefreshToken: false },
