@@ -22,6 +22,8 @@ dist-ssr
 .env.*
 !.env.example
 *.sql
+supabase/
+.temp/
 
 # Wrangler / Cloudflare
 .wrangler/

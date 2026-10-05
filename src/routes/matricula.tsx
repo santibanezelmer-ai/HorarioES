@@ -23,6 +23,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { PageHeader } from "@/components/PageHeader";
 import { EmptyState } from "@/components/EmptyState";
+import { validateRut, formatRut } from "@/lib/rut";
 import type { Matricula, MatriculaEstado } from "@/lib/matricula.types";
 
 export const Route = createFileRoute("/matricula")({
@@ -200,6 +201,11 @@ function MatriculaAdminPage() {
         throw new Error("Debe ingresar el nombre y RUN del apoderado titular");
       }
 
+      const cleanRutEst = nuevaForm.estudiante_rut.trim()
+        ? formatRut(nuevaForm.estudiante_rut.trim())
+        : null;
+      const cleanRutApo = formatRut(nuevaForm.apoderado_titular_rut.trim());
+
       const { data: nuevaMat, error: insertError } = await supabase
         .from("matriculas")
         .insert({
@@ -210,7 +216,7 @@ function MatriculaAdminPage() {
           estado: nuevaForm.aprobar_inmediato ? ("en_revision" as MatriculaEstado) : ("solicitada" as MatriculaEstado),
           estudiante_nombres: nuevaForm.estudiante_nombres.trim(),
           estudiante_apellidos: nuevaForm.estudiante_apellidos.trim(),
-          estudiante_rut: nuevaForm.estudiante_rut.trim() || null,
+          estudiante_rut: cleanRutEst,
           estudiante_fecha_nacimiento: nuevaForm.estudiante_fecha_nacimiento || null,
           estudiante_genero: nuevaForm.estudiante_genero,
           estudiante_direccion: nuevaForm.estudiante_direccion.trim() || null,
@@ -220,7 +226,7 @@ function MatriculaAdminPage() {
           prevision_salud: nuevaForm.prevision_salud,
           apoderado_titular_nombres: nuevaForm.apoderado_titular_nombres.trim(),
           apoderado_titular_apellidos: nuevaForm.apoderado_titular_apellidos.trim(),
-          apoderado_titular_rut: nuevaForm.apoderado_titular_rut.trim(),
+          apoderado_titular_rut: cleanRutApo,
           apoderado_titular_parentesco: nuevaForm.apoderado_titular_parentesco,
           apoderado_titular_telefono: nuevaForm.apoderado_titular_telefono.trim(),
           apoderado_titular_email: nuevaForm.apoderado_titular_email.trim() || null,
@@ -275,7 +281,11 @@ function MatriculaAdminPage() {
       queryClient.invalidateQueries({ queryKey: ["alumnos-all"] });
     },
     onError: (err: any) => {
-      toast.error(err.message || "Error al registrar matrícula presencial");
+      if (err.message?.includes("uq_matricula_estudiante_periodo") || err.code === "23505") {
+        toast.error("Este estudiante ya cuenta con una matrícula activa en este período escolar");
+      } else {
+        toast.error(err.message || "Error al registrar matrícula presencial");
+      }
     },
   });
 
@@ -757,8 +767,14 @@ function MatriculaAdminPage() {
                     />
                   </div>
                   <div>
-                    <label className="block font-semibold text-foreground mb-1">
-                      RUN o IPE del estudiante
+                    <label className="block font-semibold text-foreground mb-1 flex items-center justify-between">
+                      <span>RUN o IPE del estudiante</span>
+                      {nuevaForm.estudiante_rut && validateRut(nuevaForm.estudiante_rut) && (
+                        <span className="text-[10px] text-emerald-500 font-bold">RUT Válido ✓</span>
+                      )}
+                      {nuevaForm.estudiante_rut && !validateRut(nuevaForm.estudiante_rut) && nuevaForm.estudiante_rut.length >= 7 && (
+                        <span className="text-[10px] text-amber-500 font-medium">RUN no verificado / IPE</span>
+                      )}
                     </label>
                     <input
                       type="text"
@@ -767,6 +783,14 @@ function MatriculaAdminPage() {
                       onChange={(e) =>
                         setNuevaForm({ ...nuevaForm, estudiante_rut: e.target.value })
                       }
+                      onBlur={() => {
+                        if (nuevaForm.estudiante_rut.trim()) {
+                          setNuevaForm((prev) => ({
+                            ...prev,
+                            estudiante_rut: formatRut(prev.estudiante_rut),
+                          }));
+                        }
+                      }}
                       className="w-full bg-surface-2 border border-border rounded-lg px-3 py-2 text-foreground font-mono focus:outline-none focus:ring-1 focus:ring-primary"
                     />
                   </div>
@@ -951,8 +975,14 @@ function MatriculaAdminPage() {
                     />
                   </div>
                   <div>
-                    <label className="block font-semibold text-foreground mb-1">
-                      RUN del Apoderado *
+                    <label className="block font-semibold text-foreground mb-1 flex items-center justify-between">
+                      <span>RUN del Apoderado *</span>
+                      {nuevaForm.apoderado_titular_rut && validateRut(nuevaForm.apoderado_titular_rut) && (
+                        <span className="text-[10px] text-emerald-500 font-bold">RUT Válido ✓</span>
+                      )}
+                      {nuevaForm.apoderado_titular_rut && !validateRut(nuevaForm.apoderado_titular_rut) && nuevaForm.apoderado_titular_rut.length >= 7 && (
+                        <span className="text-[10px] text-rose-500 font-bold">RUN Inválido</span>
+                      )}
                     </label>
                     <input
                       type="text"
@@ -965,6 +995,14 @@ function MatriculaAdminPage() {
                           apoderado_titular_rut: e.target.value,
                         })
                       }
+                      onBlur={() => {
+                        if (nuevaForm.apoderado_titular_rut.trim()) {
+                          setNuevaForm((prev) => ({
+                            ...prev,
+                            apoderado_titular_rut: formatRut(prev.apoderado_titular_rut),
+                          }));
+                        }
+                      }}
                       className="w-full bg-surface-2 border border-border rounded-lg px-3 py-2 text-foreground font-mono focus:outline-none focus:ring-1 focus:ring-primary"
                     />
                   </div>

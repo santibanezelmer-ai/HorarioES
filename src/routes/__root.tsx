@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Toaster } from "sonner";
 import { AuthProvider, useAuth } from "@/lib/auth-context";
 import { AppSidebar } from "@/components/AppSidebar";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 import appCss from "../styles.css?url";
 
@@ -113,9 +114,12 @@ function AuthGate() {
     path.startsWith("/invitacion/");
 
   if (isPublic) {
-    return <Outlet />;
+    return (
+      <ErrorBoundary>
+        <Outlet />
+      </ErrorBoundary>
+    );
   }
-
 
   if (!user) {
     if (typeof window !== "undefined") window.location.href = "/login";
@@ -127,7 +131,9 @@ function AuthGate() {
       <AppSidebar />
       <main className="flex-1 overflow-y-auto">
         <div className="max-w-7xl mx-auto p-8">
-          <Outlet />
+          <ErrorBoundary>
+            <Outlet />
+          </ErrorBoundary>
         </div>
       </main>
     </div>

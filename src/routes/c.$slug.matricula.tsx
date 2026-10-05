@@ -29,6 +29,7 @@ import {
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { getColegioBySlug } from "@/lib/tenant.functions";
+import { validateRut, formatRut } from "@/lib/rut";
 import type { MatriculaEstado, Matricula } from "@/lib/matricula.types";
 
 export const Route = createFileRoute("/c/$slug/matricula")({
@@ -109,6 +110,7 @@ function PublicMatriculaPortal() {
   // Formulario multi-pasos (1 a 4)
   const [paso, setPaso] = useState<1 | 2 | 3 | 4>(1);
   const [successMatricula, setSuccessMatricula] = useState<any | null>(null);
+  const [hpField, setHpField] = useState("");
 
   // Datos del Formulario
   const [formData, setFormData] = useState({
@@ -215,7 +217,39 @@ function PublicMatriculaPortal() {
     enabled: !!searchTriggeredCode,
     queryFn: async () => {
       const code = searchTriggeredCode!.trim();
-      // Buscar primero por código de seguimiento exacto
+
+      // 1. Intentar consulta RPC protegida (sin exponer la tabla completa)
+      try {
+        const { data: rpcData, error: rpcError } = await supabase.rpc(
+          "consultar_seguimiento_matricula",
+          {
+            p_codigo: code,
+            p_rut: code,
+          }
+        );
+
+        if (!rpcError && rpcData) {
+          return {
+            id: rpcData.id,
+            codigo_seguimiento: rpcData.codigo_seguimiento,
+            estado: rpcData.estado,
+            numero_matricula: rpcData.numero_matricula,
+            estudiante_nombres: rpcData.estudiante_nombres,
+            estudiante_apellidos: rpcData.estudiante_apellidos,
+            estudiante_rut: rpcData.estudiante_rut,
+            cursos_postula: rpcData.curso_postula_nombre ? { nombre: rpcData.curso_postula_nombre } : null,
+            cursos_asignado: rpcData.curso_asignado_nombre ? { nombre: rpcData.curso_asignado_nombre } : null,
+            apoderado_titular_nombres: rpcData.apoderado_titular_nombre,
+            apoderado_titular_apellidos: "",
+            observaciones_internas: rpcData.observaciones_colegio,
+            created_at: rpcData.created_at,
+          } as any;
+        }
+      } catch (e) {
+        // Fallback si la función aún no fue creada
+      }
+
+      // 2. Consulta de respaldo con filtrado específico
       let query = supabase
         .from("matriculas")
         .select(
@@ -240,18 +274,38 @@ function PublicMatriculaPortal() {
   // Mutación: Enviar solicitud de matrícula
   const mutationSubmit = useMutation({
     mutationFn: async () => {
+      // Bloqueo silencioso de bots mediante honeypot
+      if (hpField.trim() !== "") {
+        console.warn("Spam bot request deflected");
+        return {
+          id: "bot",
+          estudiante_nombres: formData.estudiante_nombres,
+          estudiante_apellidos: formData.estudiante_apellidos,
+          codigo_seguimiento: "MAT-2026-OK",
+        };
+      }
+
       if (!colegioId) throw new Error("Colegio no encontrado");
       if (!periodoActivo) {
         throw new Error(
           "El período de matrícula no se encuentra habilitado en este establecimiento actualmente."
         );
       }
-      if (!formData.estudiante_nombres || !formData.estudiante_apellidos) {
+      if (!formData.estudiante_nombres.trim() || !formData.estudiante_apellidos.trim()) {
         throw new Error("Por favor completa los nombres y apellidos del estudiante.");
       }
-      if (!formData.apoderado_titular_nombres || !formData.apoderado_titular_telefono) {
+      if (!formData.apoderado_titular_nombres.trim() || !formData.apoderado_titular_telefono.trim()) {
         throw new Error("Por favor completa los datos de contacto del apoderado titular.");
       }
+
+      // Formateo y limpieza de RUTs
+      const cleanRutEst = formData.estudiante_rut.trim()
+        ? formatRut(formData.estudiante_rut.trim())
+        : null;
+      const cleanRutApo = formatRut(formData.apoderado_titular_rut.trim());
+      const cleanRutSup = formData.apoderado_suplente_rut.trim()
+        ? formatRut(formData.apoderado_suplente_rut.trim())
+        : null;
 
       // 1. Insertar registro en matriculas
       const insertData = {
@@ -262,7 +316,7 @@ function PublicMatriculaPortal() {
 
         estudiante_nombres: formData.estudiante_nombres.trim(),
         estudiante_apellidos: formData.estudiante_apellidos.trim(),
-        estudiante_rut: formData.estudiante_rut.trim() || null,
+        estudiante_rut: cleanRutEst,
         estudiante_fecha_nacimiento: formData.estudiante_fecha_nacimiento || null,
         estudiante_genero: formData.estudiante_genero,
         estudiante_nacionalidad: formData.estudiante_nacionalidad,
@@ -279,7 +333,7 @@ function PublicMatriculaPortal() {
 
         apoderado_titular_nombres: formData.apoderado_titular_nombres.trim(),
         apoderado_titular_apellidos: formData.apoderado_titular_apellidos.trim(),
-        apoderado_titular_rut: formData.apoderado_titular_rut.trim(),
+        apoderado_titular_rut: cleanRutApo,
         apoderado_titular_parentesco: formData.apoderado_titular_parentesco,
         apoderado_titular_telefono: formData.apoderado_titular_telefono.trim(),
         apoderado_titular_email: formData.apoderado_titular_email.trim() || null,
@@ -288,7 +342,7 @@ function PublicMatriculaPortal() {
         apoderado_titular_ocupacion: formData.apoderado_titular_ocupacion.trim() || null,
 
         apoderado_suplente_nombres: formData.apoderado_suplente_nombres.trim() || null,
-        apoderado_suplente_rut: formData.apoderado_suplente_rut.trim() || null,
+        apoderado_suplente_rut: cleanRutSup,
         apoderado_suplente_telefono: formData.apoderado_suplente_telefono.trim() || null,
         apoderado_suplente_parentesco: formData.apoderado_suplente_parentesco || null,
         apoderado_suplente_email: formData.apoderado_suplente_email.trim() || null,
@@ -569,7 +623,18 @@ function PublicMatriculaPortal() {
                 </div>
 
                 {/* Contenedor del Formulario */}
-                <div className="bg-surface border border-border rounded-2xl p-6 sm:p-8 shadow-sm">
+                <div className="bg-surface border border-border rounded-2xl p-6 sm:p-8 shadow-sm relative">
+                  {/* Honeypot invisible para protección contra bots */}
+                  <input
+                    type="text"
+                    name="website_protection_hp"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    value={hpField}
+                    onChange={(e) => setHpField(e.target.value)}
+                    style={{ position: "absolute", left: "-9999px", opacity: 0, height: 0, width: 0 }}
+                    aria-hidden="true"
+                  />
                   {/* PASO 1: ESTUDIANTE */}
                   {paso === 1 && (
                     <div className="space-y-6 animate-in fade-in-50">
@@ -617,8 +682,14 @@ function PublicMatriculaPortal() {
                         </div>
 
                         <div>
-                          <label className="block text-xs font-semibold text-foreground mb-1.5">
-                            RUN del estudiante (o IPE) *
+                          <label className="block text-xs font-semibold text-foreground mb-1.5 flex items-center justify-between">
+                            <span>RUN del estudiante (o IPE) *</span>
+                            {formData.estudiante_rut && validateRut(formData.estudiante_rut) && (
+                              <span className="text-[10px] text-emerald-500 font-bold">RUT Válido ✓</span>
+                            )}
+                            {formData.estudiante_rut && !validateRut(formData.estudiante_rut) && formData.estudiante_rut.length >= 7 && (
+                              <span className="text-[10px] text-amber-500 font-medium">RUN no verificado / IPE</span>
+                            )}
                           </label>
                           <input
                             type="text"
@@ -627,6 +698,14 @@ function PublicMatriculaPortal() {
                             onChange={(e) =>
                               setFormData({ ...formData, estudiante_rut: e.target.value })
                             }
+                            onBlur={() => {
+                              if (formData.estudiante_rut.trim()) {
+                                setFormData((prev) => ({
+                                  ...prev,
+                                  estudiante_rut: formatRut(prev.estudiante_rut),
+                                }));
+                              }
+                            }}
                             className="w-full bg-surface-2 border border-border rounded-lg px-3.5 py-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary font-mono"
                           />
                         </div>
@@ -817,8 +896,14 @@ function PublicMatriculaPortal() {
                           </div>
 
                           <div>
-                            <label className="block text-xs font-semibold text-foreground mb-1.5">
-                              RUN Apoderado Titular *
+                            <label className="block text-xs font-semibold text-foreground mb-1.5 flex items-center justify-between">
+                              <span>RUN Apoderado Titular *</span>
+                              {formData.apoderado_titular_rut && validateRut(formData.apoderado_titular_rut) && (
+                                <span className="text-[10px] text-emerald-500 font-bold">RUT Válido ✓</span>
+                              )}
+                              {formData.apoderado_titular_rut && !validateRut(formData.apoderado_titular_rut) && formData.apoderado_titular_rut.length >= 7 && (
+                                <span className="text-[10px] text-rose-500 font-bold">RUN Inválido</span>
+                              )}
                             </label>
                             <input
                               type="text"
@@ -831,6 +916,14 @@ function PublicMatriculaPortal() {
                                   apoderado_titular_rut: e.target.value,
                                 })
                               }
+                              onBlur={() => {
+                                if (formData.apoderado_titular_rut.trim()) {
+                                  setFormData((prev) => ({
+                                    ...prev,
+                                    apoderado_titular_rut: formatRut(prev.apoderado_titular_rut),
+                                  }));
+                                }
+                              }}
                               className="w-full bg-surface-2 border border-border rounded-lg px-3.5 py-2.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary font-mono"
                             />
                           </div>
