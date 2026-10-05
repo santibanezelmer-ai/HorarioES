@@ -3,7 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
-import { AlertTriangle, Trash2, Printer } from "lucide-react";
+import { AlertTriangle, Trash2, Printer, CalendarDays, Wand2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { withRetry } from "@/lib/db-retry";
 import { useAuth } from "@/lib/auth-context";
@@ -18,7 +18,8 @@ import {
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
 } from "@/components/ui/dialog";
-import { CalendarDays } from "lucide-react";
+import { GeneradorHorarioModal } from "@/components/GeneradorHorarioModal";
+import type { DocenteBlockInfo } from "@/lib/horario-generator";
 
 export const Route = createFileRoute("/horarios")({
   head: () => ({ meta: [{ title: "Horarios — HorarioES" }] }),
@@ -32,8 +33,21 @@ interface Bloque {
   id: string; nombre: string; hora: string; orden: number;
   tipo: "clase" | "recreo" | "almuerzo";
 }
-interface Curso { id: string; nombre: string; nivel: string; prof_jefe_id: string | null; }
-interface Docente { id: string; nombre: string; color: string; }
+interface Curso {
+  id: string;
+  nombre: string;
+  nivel: string;
+  prof_jefe_id: string | null;
+  asignaturas?: Record<string, number> | null;
+  titulares?: Record<string, string> | null;
+}
+interface Docente {
+  id: string;
+  nombre: string;
+  color: string;
+  dias?: number[];
+  horas_utp?: number | null;
+}
 interface Asignatura { id: string; nombre: string; color: string; }
 interface Espacio { id: string; nombre: string; color: string; }
 interface Slot {
@@ -55,16 +69,17 @@ function HorariosPage() {
   const [docenteViewId, setDocenteViewId] = useState<string>("");
   const [editing, setEditing] = useState<{ dia: number; slot: number; current?: Slot } | null>(null);
   const [printScope, setPrintScope] = useState<"current" | "all">("current");
+  const [isGenModalOpen, setIsGenModalOpen] = useState(false);
 
   const { data: colegio } = useQuery({
     queryKey: ["colegio-print", colegioId],
     enabled: !!colegioId,
     queryFn: async () => {
       const { data, error } = await withRetry(() =>
-        supabase.from("colegios").select("id, nombre, logo_url").eq("id", colegioId!).maybeSingle()
+        supabase.from("colegios").select("id, nombre, logo_url, viernes_max_slot").eq("id", colegioId!).maybeSingle()
       );
       if (error) throw error;
-      return data as { id: string; nombre: string; logo_url: string | null } | null;
+      return data as { id: string; nombre: string; logo_url: string | null; viernes_max_slot: number | null } | null;
     },
   });
 
@@ -74,7 +89,7 @@ function HorariosPage() {
     queryFn: async () => {
       const { data, error } = await withRetry(() =>
         supabase.from("cursos")
-          .select("id, nombre, nivel, prof_jefe_id").eq("colegio_id", colegioId!).order("nombre")
+          .select("id, nombre, nivel, prof_jefe_id, asignaturas, titulares").eq("colegio_id", colegioId!).order("nombre")
       );
       if (error) throw error;
       return data as Curso[];
@@ -100,10 +115,24 @@ function HorariosPage() {
     queryFn: async () => {
       const { data, error } = await withRetry(() =>
         supabase.from("docentes")
-          .select("id, nombre, color").eq("colegio_id", colegioId!).order("nombre")
+          .select("id, nombre, color, dias, horas_utp").eq("colegio_id", colegioId!).order("nombre")
       );
       if (error) throw error;
       return data as Docente[];
+    },
+  });
+
+  const { data: docenteBlocks = [] } = useQuery({
+    queryKey: ["docente-blocks", colegioId],
+    enabled: !!colegioId,
+    queryFn: async () => {
+      const { data, error } = await withRetry(() =>
+        supabase.from("docente_blocks")
+          .select("docente_id, dia, slot, motivo")
+          .eq("colegio_id", colegioId!)
+      );
+      if (error) throw error;
+      return data as DocenteBlockInfo[];
     },
   });
 
@@ -294,6 +323,13 @@ function HorariosPage() {
             )}
             <Button variant="outline" size="sm" onClick={() => printFit("print-area", "landscape")}>
               <Printer className="w-4 h-4 mr-2" /> Imprimir
+            </Button>
+            <Button
+              size="sm"
+              onClick={() => setIsGenModalOpen(true)}
+              className="bg-indigo-600 hover:bg-indigo-700 text-white gap-1.5 shadow-sm font-medium"
+            >
+              <Wand2 className="w-4 h-4" /> Generar Horario
             </Button>
             <div className="inline-flex rounded-md border border-border overflow-hidden">
               <button
@@ -527,6 +563,26 @@ function HorariosPage() {
           })}
           onDelete={editing.current ? () => removeSlot.mutate(editing.current!.id) : undefined}
           loading={upsertSlot.isPending || removeSlot.isPending}
+        />
+      )}
+
+      {isGenModalOpen && (
+        <GeneradorHorarioModal
+          open={isGenModalOpen}
+          onOpenChange={setIsGenModalOpen}
+          colegioId={colegioId!}
+          cursoActualId={cursoId}
+          cursos={cursos}
+          bloques={bloques}
+          docentes={docentes}
+          asignaturas={asignaturas}
+          allSlots={allSlots}
+          docenteBlocks={docenteBlocks}
+          viernesMaxSlot={colegio?.viernes_max_slot ?? null}
+          onApplySuccess={() => {
+            qc.invalidateQueries({ queryKey: ["schedule-slots", colegioId] });
+            qc.invalidateQueries({ queryKey: ["cursos-min", colegioId] });
+          }}
         />
       )}
     </div>
