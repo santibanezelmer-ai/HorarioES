@@ -26,6 +26,7 @@ import { Route as DocentesRouteImport } from './routes/docentes'
 import { Route as EspaciosRouteImport } from './routes/espacios'
 import { Route as EstadisticasRouteImport } from './routes/estadisticas'
 import { Route as EstudiantesRouteImport } from './routes/estudiantes'
+import { Route as GenerarHorariosRouteImport } from './routes/generar-horarios'
 import { Route as HorariosRouteImport } from './routes/horarios'
 import { Route as ImportarRouteImport } from './routes/importar'
 import { Route as IntranetRouteImport } from './routes/intranet'
@@ -140,6 +141,11 @@ const EstadisticasRoute = EstadisticasRouteImport.update({
 const EstudiantesRoute = EstudiantesRouteImport.update({
   id: '/estudiantes',
   path: '/estudiantes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GenerarHorariosRoute = GenerarHorariosRouteImport.update({
+  id: '/generar-horarios',
+  path: '/generar-horarios',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HorariosRoute = HorariosRouteImport.update({
@@ -311,6 +317,7 @@ export interface FileRoutesByFullPath {
   '/espacios': typeof EspaciosRoute
   '/estadisticas': typeof EstadisticasRoute
   '/estudiantes': typeof EstudiantesRouteWithChildren
+  '/generar-horarios': typeof GenerarHorariosRoute
   '/horarios': typeof HorariosRoute
   '/importar': typeof ImportarRoute
   '/intranet': typeof IntranetRoute
@@ -360,6 +367,7 @@ export interface FileRoutesByTo {
   '/espacios': typeof EspaciosRoute
   '/estadisticas': typeof EstadisticasRoute
   '/estudiantes': typeof EstudiantesRouteWithChildren
+  '/generar-horarios': typeof GenerarHorariosRoute
   '/horarios': typeof HorariosRoute
   '/importar': typeof ImportarRoute
   '/intranet': typeof IntranetRoute
@@ -410,6 +418,7 @@ export interface FileRoutesById {
   '/espacios': typeof EspaciosRoute
   '/estadisticas': typeof EstadisticasRoute
   '/estudiantes': typeof EstudiantesRouteWithChildren
+  '/generar-horarios': typeof GenerarHorariosRoute
   '/horarios': typeof HorariosRoute
   '/importar': typeof ImportarRoute
   '/intranet': typeof IntranetRoute
@@ -461,6 +470,7 @@ export interface FileRouteTypes {
     | '/espacios'
     | '/estadisticas'
     | '/estudiantes'
+    | '/generar-horarios'
     | '/horarios'
     | '/importar'
     | '/intranet'
@@ -510,6 +520,7 @@ export interface FileRouteTypes {
     | '/espacios'
     | '/estadisticas'
     | '/estudiantes'
+    | '/generar-horarios'
     | '/horarios'
     | '/importar'
     | '/intranet'
@@ -559,6 +570,7 @@ export interface FileRouteTypes {
     | '/espacios'
     | '/estadisticas'
     | '/estudiantes'
+    | '/generar-horarios'
     | '/horarios'
     | '/importar'
     | '/intranet'
@@ -609,6 +621,7 @@ export interface RootRouteChildren {
   EspaciosRoute: typeof EspaciosRoute
   EstadisticasRoute: typeof EstadisticasRoute
   EstudiantesRoute: typeof EstudiantesRouteWithChildren
+  GenerarHorariosRoute: typeof GenerarHorariosRoute
   HorariosRoute: typeof HorariosRoute
   ImportarRoute: typeof ImportarRoute
   IntranetRoute: typeof IntranetRoute
@@ -757,6 +770,13 @@ declare module '@tanstack/react-router' {
       path: '/estudiantes'
       fullPath: '/estudiantes'
       preLoaderRoute: typeof EstudiantesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/generar-horarios': {
+      id: '/generar-horarios'
+      path: '/generar-horarios'
+      fullPath: '/generar-horarios'
+      preLoaderRoute: typeof GenerarHorariosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/horarios': {
@@ -1026,6 +1046,7 @@ const rootRouteChildren: RootRouteChildren = {
   EspaciosRoute: EspaciosRoute,
   EstadisticasRoute: EstadisticasRoute,
   EstudiantesRoute: EstudiantesRouteWithChildren,
+  GenerarHorariosRoute: GenerarHorariosRoute,
   HorariosRoute: HorariosRoute,
   ImportarRoute: ImportarRoute,
   IntranetRoute: IntranetRoute,
