@@ -28,8 +28,10 @@ import { Route as EstadisticasRouteImport } from './routes/estadisticas'
 import { Route as EstudiantesRouteImport } from './routes/estudiantes'
 import { Route as HorariosRouteImport } from './routes/horarios'
 import { Route as ImportarRouteImport } from './routes/importar'
+import { Route as IntranetRouteImport } from './routes/intranet'
 import { Route as LibroClasesRouteImport } from './routes/libro-clases'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as MatriculaRouteImport } from './routes/matricula'
 import { Route as MiHorarioRouteImport } from './routes/mi-horario'
 import { Route as MisClasesRouteImport } from './routes/mis-clases'
 import { Route as MisCursosRouteImport } from './routes/mis-cursos'
@@ -50,8 +52,10 @@ import { Route as InspectoriaIndexRouteImport } from './routes/inspectoria.index
 import { Route as InspectoriaAtrasosRouteImport } from './routes/inspectoria.atrasos'
 import { Route as InspectoriaConvivenciaRouteImport } from './routes/inspectoria.convivencia'
 import { Route as InvitacionTokenRouteImport } from './routes/invitacion.$token'
+import { Route as MatriculaIdRouteImport } from './routes/matricula.$id'
 import { Route as SuperadminIdRouteImport } from './routes/superadmin.$id'
 import { Route as CSlugLoginRouteImport } from './routes/c.$slug.login'
+import { Route as CSlugMatriculaRouteImport } from './routes/c.$slug.matricula'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -148,6 +152,11 @@ const ImportarRoute = ImportarRouteImport.update({
   path: '/importar',
   getParentRoute: () => rootRouteImport,
 } as any)
+const IntranetRoute = IntranetRouteImport.update({
+  id: '/intranet',
+  path: '/intranet',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LibroClasesRoute = LibroClasesRouteImport.update({
   id: '/libro-clases',
   path: '/libro-clases',
@@ -156,6 +165,11 @@ const LibroClasesRoute = LibroClasesRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MatriculaRoute = MatriculaRouteImport.update({
+  id: '/matricula',
+  path: '/matricula',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MiHorarioRoute = MiHorarioRouteImport.update({
@@ -258,6 +272,11 @@ const InvitacionTokenRoute = InvitacionTokenRouteImport.update({
   path: '/invitacion/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MatriculaIdRoute = MatriculaIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => MatriculaRoute,
+} as any)
 const SuperadminIdRoute = SuperadminIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -266,6 +285,11 @@ const SuperadminIdRoute = SuperadminIdRouteImport.update({
 const CSlugLoginRoute = CSlugLoginRouteImport.update({
   id: '/c/$slug/login',
   path: '/c/$slug/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CSlugMatriculaRoute = CSlugMatriculaRouteImport.update({
+  id: '/c/$slug/matricula',
+  path: '/c/$slug/matricula',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -289,8 +313,10 @@ export interface FileRoutesByFullPath {
   '/estudiantes': typeof EstudiantesRouteWithChildren
   '/horarios': typeof HorariosRoute
   '/importar': typeof ImportarRoute
+  '/intranet': typeof IntranetRoute
   '/libro-clases': typeof LibroClasesRoute
   '/login': typeof LoginRoute
+  '/matricula': typeof MatriculaRouteWithChildren
   '/mi-horario': typeof MiHorarioRoute
   '/mis-clases': typeof MisClasesRoute
   '/mis-cursos': typeof MisCursosRoute
@@ -310,9 +336,11 @@ export interface FileRoutesByFullPath {
   '/inspectoria/atrasos': typeof InspectoriaAtrasosRoute
   '/inspectoria/convivencia': typeof InspectoriaConvivenciaRoute
   '/invitacion/$token': typeof InvitacionTokenRoute
+  '/matricula/$id': typeof MatriculaIdRoute
   '/superadmin/$id': typeof SuperadminIdRoute
   '/inspectoria/': typeof InspectoriaIndexRoute
   '/c/$slug/login': typeof CSlugLoginRoute
+  '/c/$slug/matricula': typeof CSlugMatriculaRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -334,8 +362,10 @@ export interface FileRoutesByTo {
   '/estudiantes': typeof EstudiantesRouteWithChildren
   '/horarios': typeof HorariosRoute
   '/importar': typeof ImportarRoute
+  '/intranet': typeof IntranetRoute
   '/libro-clases': typeof LibroClasesRoute
   '/login': typeof LoginRoute
+  '/matricula': typeof MatriculaRouteWithChildren
   '/mi-horario': typeof MiHorarioRoute
   '/mis-clases': typeof MisClasesRoute
   '/mis-cursos': typeof MisCursosRoute
@@ -355,9 +385,11 @@ export interface FileRoutesByTo {
   '/inspectoria/atrasos': typeof InspectoriaAtrasosRoute
   '/inspectoria/convivencia': typeof InspectoriaConvivenciaRoute
   '/invitacion/$token': typeof InvitacionTokenRoute
+  '/matricula/$id': typeof MatriculaIdRoute
   '/superadmin/$id': typeof SuperadminIdRoute
   '/inspectoria': typeof InspectoriaIndexRoute
   '/c/$slug/login': typeof CSlugLoginRoute
+  '/c/$slug/matricula': typeof CSlugMatriculaRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -380,8 +412,10 @@ export interface FileRoutesById {
   '/estudiantes': typeof EstudiantesRouteWithChildren
   '/horarios': typeof HorariosRoute
   '/importar': typeof ImportarRoute
+  '/intranet': typeof IntranetRoute
   '/libro-clases': typeof LibroClasesRoute
   '/login': typeof LoginRoute
+  '/matricula': typeof MatriculaRouteWithChildren
   '/mi-horario': typeof MiHorarioRoute
   '/mis-clases': typeof MisClasesRoute
   '/mis-cursos': typeof MisCursosRoute
@@ -401,9 +435,11 @@ export interface FileRoutesById {
   '/inspectoria/atrasos': typeof InspectoriaAtrasosRoute
   '/inspectoria/convivencia': typeof InspectoriaConvivenciaRoute
   '/invitacion/$token': typeof InvitacionTokenRoute
+  '/matricula/$id': typeof MatriculaIdRoute
   '/superadmin/$id': typeof SuperadminIdRoute
   '/inspectoria/': typeof InspectoriaIndexRoute
   '/c/$slug/login': typeof CSlugLoginRoute
+  '/c/$slug/matricula': typeof CSlugMatriculaRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -427,8 +463,10 @@ export interface FileRouteTypes {
     | '/estudiantes'
     | '/horarios'
     | '/importar'
+    | '/intranet'
     | '/libro-clases'
     | '/login'
+    | '/matricula'
     | '/mi-horario'
     | '/mis-clases'
     | '/mis-cursos'
@@ -448,9 +486,11 @@ export interface FileRouteTypes {
     | '/inspectoria/atrasos'
     | '/inspectoria/convivencia'
     | '/invitacion/$token'
+    | '/matricula/$id'
     | '/superadmin/$id'
     | '/inspectoria/'
     | '/c/$slug/login'
+    | '/c/$slug/matricula'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -472,8 +512,10 @@ export interface FileRouteTypes {
     | '/estudiantes'
     | '/horarios'
     | '/importar'
+    | '/intranet'
     | '/libro-clases'
     | '/login'
+    | '/matricula'
     | '/mi-horario'
     | '/mis-clases'
     | '/mis-cursos'
@@ -493,9 +535,11 @@ export interface FileRouteTypes {
     | '/inspectoria/atrasos'
     | '/inspectoria/convivencia'
     | '/invitacion/$token'
+    | '/matricula/$id'
     | '/superadmin/$id'
     | '/inspectoria'
     | '/c/$slug/login'
+    | '/c/$slug/matricula'
   id:
     | '__root__'
     | '/'
@@ -517,8 +561,10 @@ export interface FileRouteTypes {
     | '/estudiantes'
     | '/horarios'
     | '/importar'
+    | '/intranet'
     | '/libro-clases'
     | '/login'
+    | '/matricula'
     | '/mi-horario'
     | '/mis-clases'
     | '/mis-cursos'
@@ -538,9 +584,11 @@ export interface FileRouteTypes {
     | '/inspectoria/atrasos'
     | '/inspectoria/convivencia'
     | '/invitacion/$token'
+    | '/matricula/$id'
     | '/superadmin/$id'
     | '/inspectoria/'
     | '/c/$slug/login'
+    | '/c/$slug/matricula'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -563,8 +611,10 @@ export interface RootRouteChildren {
   EstudiantesRoute: typeof EstudiantesRouteWithChildren
   HorariosRoute: typeof HorariosRoute
   ImportarRoute: typeof ImportarRoute
+  IntranetRoute: typeof IntranetRoute
   LibroClasesRoute: typeof LibroClasesRoute
   LoginRoute: typeof LoginRoute
+  MatriculaRoute: typeof MatriculaRouteWithChildren
   MiHorarioRoute: typeof MiHorarioRoute
   MisClasesRoute: typeof MisClasesRoute
   MisCursosRoute: typeof MisCursosRoute
@@ -585,6 +635,7 @@ export interface RootRouteChildren {
   InvitacionTokenRoute: typeof InvitacionTokenRoute
   InspectoriaIndexRoute: typeof InspectoriaIndexRoute
   CSlugLoginRoute: typeof CSlugLoginRoute
+  CSlugMatriculaRoute: typeof CSlugMatriculaRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -722,6 +773,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ImportarRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/intranet': {
+      id: '/intranet'
+      path: '/intranet'
+      fullPath: '/intranet'
+      preLoaderRoute: typeof IntranetRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/libro-clases': {
       id: '/libro-clases'
       path: '/libro-clases'
@@ -734,6 +792,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/matricula': {
+      id: '/matricula'
+      path: '/matricula'
+      fullPath: '/matricula'
+      preLoaderRoute: typeof MatriculaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/mi-horario': {
@@ -876,6 +941,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InvitacionTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/matricula/$id': {
+      id: '/matricula/$id'
+      path: '/$id'
+      fullPath: '/matricula/$id'
+      preLoaderRoute: typeof MatriculaIdRouteImport
+      parentRoute: typeof MatriculaRoute
+    }
     '/superadmin/$id': {
       id: '/superadmin/$id'
       path: '/$id'
@@ -888,6 +960,13 @@ declare module '@tanstack/react-router' {
       path: '/c/$slug/login'
       fullPath: '/c/$slug/login'
       preLoaderRoute: typeof CSlugLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/c/$slug/matricula': {
+      id: '/c/$slug/matricula'
+      path: '/c/$slug/matricula'
+      fullPath: '/c/$slug/matricula'
+      preLoaderRoute: typeof CSlugMatriculaRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -903,6 +982,18 @@ const EstudiantesRouteChildren: EstudiantesRouteChildren = {
 
 const EstudiantesRouteWithChildren = EstudiantesRoute._addFileChildren(
   EstudiantesRouteChildren,
+)
+
+interface MatriculaRouteChildren {
+  MatriculaIdRoute: typeof MatriculaIdRoute
+}
+
+const MatriculaRouteChildren: MatriculaRouteChildren = {
+  MatriculaIdRoute: MatriculaIdRoute,
+}
+
+const MatriculaRouteWithChildren = MatriculaRoute._addFileChildren(
+  MatriculaRouteChildren,
 )
 
 interface SuperadminRouteChildren {
@@ -937,8 +1028,10 @@ const rootRouteChildren: RootRouteChildren = {
   EstudiantesRoute: EstudiantesRouteWithChildren,
   HorariosRoute: HorariosRoute,
   ImportarRoute: ImportarRoute,
+  IntranetRoute: IntranetRoute,
   LibroClasesRoute: LibroClasesRoute,
   LoginRoute: LoginRoute,
+  MatriculaRoute: MatriculaRouteWithChildren,
   MiHorarioRoute: MiHorarioRoute,
   MisClasesRoute: MisClasesRoute,
   MisCursosRoute: MisCursosRoute,
@@ -959,6 +1052,7 @@ const rootRouteChildren: RootRouteChildren = {
   InvitacionTokenRoute: InvitacionTokenRoute,
   InspectoriaIndexRoute: InspectoriaIndexRoute,
   CSlugLoginRoute: CSlugLoginRoute,
+  CSlugMatriculaRoute: CSlugMatriculaRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

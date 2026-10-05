@@ -14,6 +14,8 @@ import {
   ShieldCheck,
   BookOpen,
   ClipboardList,
+  Newspaper,
+  ClipboardCheck,
 } from "lucide-react";
 
 export type AppRole =
@@ -39,6 +41,8 @@ export const ROLE_LABEL: Record<AppRole, string> = {
 
 export type ModuleId =
   | "dashboard"
+  | "intranet"
+  | "matricula"
   | "mi-trabajo"
   | "academico"
   | "curriculum"
@@ -74,6 +78,14 @@ export const MODULES: ModuleDef[] = [
     icon: LayoutDashboard,
     to: "/dashboard",
     description: "Resumen contextual según tu rol",
+    roles: ["admin", "direccion", "utp", "inspectoria", "docente", "editor", "viewer"],
+  },
+  {
+    id: "intranet",
+    label: "Intranet",
+    icon: Newspaper,
+    to: "/intranet",
+    description: "Muro institucional, circulares y documentos oficiales",
     roles: ["admin", "direccion", "utp", "inspectoria", "docente", "editor", "viewer"],
   },
   {
@@ -125,6 +137,14 @@ export const MODULES: ModuleDef[] = [
     to: "/estudiantes",
     description: "Ficha, historial y matrícula",
     roles: ["admin", "direccion", "utp", "inspectoria", "docente"],
+  },
+  {
+    id: "matricula",
+    label: "Matrícula",
+    icon: ClipboardCheck,
+    to: "/matricula",
+    description: "Libro de matrícula, postulaciones y cupos oficiales",
+    roles: ["admin", "direccion", "utp", "inspectoria"],
   },
   {
     id: "docentes",
