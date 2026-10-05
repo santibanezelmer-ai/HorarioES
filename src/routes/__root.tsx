@@ -1,7 +1,15 @@
-import { Outlet, Link, createRootRoute, HeadContent, Scripts, useLocation } from "@tanstack/react-router";
+import {
+  Outlet,
+  Link,
+  createRootRoute,
+  HeadContent,
+  Scripts,
+  useLocation,
+} from "@tanstack/react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState } from "react";
 import { Toaster } from "sonner";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import { AuthProvider, useAuth } from "@/lib/auth-context";
 import { AppSidebar } from "@/components/AppSidebar";
 
@@ -35,13 +43,33 @@ export const Route = createRootRoute({
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "HorarioES — Sistema de Horarios Escolares" },
-      { name: "description", content: "Plataforma para crear y gestionar horarios escolares, docentes, cursos, espacios y planificaciones." },
+      {
+        name: "description",
+        content:
+          "Plataforma para crear y gestionar horarios escolares, docentes, cursos, espacios y planificaciones.",
+      },
       { property: "og:title", content: "HorarioES — Sistema de Horarios Escolares" },
       { name: "twitter:title", content: "HorarioES — Sistema de Horarios Escolares" },
-      { property: "og:description", content: "Plataforma para crear y gestionar horarios escolares, docentes, cursos, espacios y planificaciones." },
-      { name: "twitter:description", content: "Plataforma para crear y gestionar horarios escolares, docentes, cursos, espacios y planificaciones." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/1ad7bbbb-6ef5-4123-9ac2-ea79b95a0e14/id-preview-6e09ef6e--be9d25c1-5a4b-40eb-8a13-57bad44bfc13.lovable.app-1777511076278.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/1ad7bbbb-6ef5-4123-9ac2-ea79b95a0e14/id-preview-6e09ef6e--be9d25c1-5a4b-40eb-8a13-57bad44bfc13.lovable.app-1777511076278.png" },
+      {
+        property: "og:description",
+        content:
+          "Plataforma para crear y gestionar horarios escolares, docentes, cursos, espacios y planificaciones.",
+      },
+      {
+        name: "twitter:description",
+        content:
+          "Plataforma para crear y gestionar horarios escolares, docentes, cursos, espacios y planificaciones.",
+      },
+      {
+        property: "og:image",
+        content:
+          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/1ad7bbbb-6ef5-4123-9ac2-ea79b95a0e14/id-preview-6e09ef6e--be9d25c1-5a4b-40eb-8a13-57bad44bfc13.lovable.app-1777511076278.png",
+      },
+      {
+        name: "twitter:image",
+        content:
+          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/1ad7bbbb-6ef5-4123-9ac2-ea79b95a0e14/id-preview-6e09ef6e--be9d25c1-5a4b-40eb-8a13-57bad44bfc13.lovable.app-1777511076278.png",
+      },
       { name: "twitter:card", content: "summary_large_image" },
       { property: "og:type", content: "website" },
     ],
@@ -50,7 +78,10 @@ export const Route = createRootRoute({
       { rel: "icon", href: "/favicon.ico" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap",
+      },
     ],
   }),
   shellComponent: RootShell,
@@ -67,15 +98,19 @@ function RootShell({ children }: { children: React.ReactNode }) {
       <body>
         {children}
         <Scripts />
+        <SpeedInsights />
       </body>
     </html>
   );
 }
 
 function RootComponent() {
-  const [queryClient] = useState(() => new QueryClient({
-    defaultOptions: { queries: { staleTime: 30_000, retry: 1 } },
-  }));
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: { queries: { staleTime: 30_000, retry: 1 } },
+      }),
+  );
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -115,7 +150,6 @@ function AuthGate() {
   if (isPublic) {
     return <Outlet />;
   }
-
 
   if (!user) {
     if (typeof window !== "undefined") window.location.href = "/login";
