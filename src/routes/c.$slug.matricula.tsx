@@ -1558,7 +1558,7 @@ function PublicMatriculaPortal() {
                 ) : (
                   (() => {
                     const info =
-                      ESTADO_INFO[trackingResult.estado] || ESTADO_INFO.solicitada;
+                      ESTADO_INFO[trackingResult.estado as MatriculaEstado] || ESTADO_INFO.solicitada;
                     const InfoIcon = info.icon;
 
                     return (

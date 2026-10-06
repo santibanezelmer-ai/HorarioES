@@ -777,6 +777,439 @@ export type Database = {
         }
         Relationships: []
       }
+      intranet_publicaciones: {
+        Row: {
+          activo: boolean
+          ambito_docente: string | null
+          archivo_adjunto_url: string | null
+          autor_cargo: string | null
+          autor_id: string | null
+          autor_nombre: string | null
+          categoria: Database["public"]["Enums"]["intranet_categoria"]
+          colegio_id: string
+          contenido: string
+          created_at: string
+          cursos_destinatarios: string[] | null
+          destinatarios: string[]
+          extracto: string | null
+          fecha_publicacion: string
+          fijado: boolean
+          id: string
+          nombre_adjunto: string | null
+          titulo: string
+          updated_at: string
+        }
+        Insert: {
+          activo?: boolean
+          ambito_docente?: string | null
+          archivo_adjunto_url?: string | null
+          autor_cargo?: string | null
+          autor_id?: string | null
+          autor_nombre?: string | null
+          categoria?: Database["public"]["Enums"]["intranet_categoria"]
+          colegio_id: string
+          contenido: string
+          created_at?: string
+          cursos_destinatarios?: string[] | null
+          destinatarios?: string[]
+          extracto?: string | null
+          fecha_publicacion?: string
+          fijado?: boolean
+          id?: string
+          nombre_adjunto?: string | null
+          titulo: string
+          updated_at?: string
+        }
+        Update: {
+          activo?: boolean
+          ambito_docente?: string | null
+          archivo_adjunto_url?: string | null
+          autor_cargo?: string | null
+          autor_id?: string | null
+          autor_nombre?: string | null
+          categoria?: Database["public"]["Enums"]["intranet_categoria"]
+          colegio_id?: string
+          contenido?: string
+          created_at?: string
+          cursos_destinatarios?: string[] | null
+          destinatarios?: string[]
+          extracto?: string | null
+          fecha_publicacion?: string
+          fijado?: boolean
+          id?: string
+          nombre_adjunto?: string | null
+          titulo?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "intranet_publicaciones_colegio_id_fkey"
+            columns: ["colegio_id"]
+            isOneToOne: false
+            referencedRelation: "colegios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      intranet_documentos: {
+        Row: {
+          archivo_url: string
+          categoria: string
+          colegio_id: string
+          created_at: string
+          descripcion: string | null
+          id: string
+          subido_por: string | null
+          tamano_bytes: number | null
+          titulo: string
+          updated_at: string
+          visible_para: string[]
+        }
+        Insert: {
+          archivo_url: string
+          categoria?: string
+          colegio_id: string
+          created_at?: string
+          descripcion?: string | null
+          id?: string
+          subido_por?: string | null
+          tamano_bytes?: number | null
+          titulo: string
+          updated_at?: string
+          visible_para?: string[]
+        }
+        Update: {
+          archivo_url?: string
+          categoria?: string
+          colegio_id?: string
+          created_at?: string
+          descripcion?: string | null
+          id?: string
+          subido_por?: string | null
+          tamano_bytes?: number | null
+          titulo?: string
+          updated_at?: string
+          visible_para?: string[]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "intranet_documentos_colegio_id_fkey"
+            columns: ["colegio_id"]
+            isOneToOne: false
+            referencedRelation: "colegios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      intranet_lecturas: {
+        Row: {
+          id: string
+          leido_en: string
+          publicacion_id: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          leido_en?: string
+          publicacion_id: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          leido_en?: string
+          publicacion_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "intranet_lecturas_publicacion_id_fkey"
+            columns: ["publicacion_id"]
+            isOneToOne: false
+            referencedRelation: "intranet_publicaciones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      periodos_matricula: {
+        Row: {
+          activo: boolean
+          anio: number
+          colegio_id: string
+          created_at: string
+          cupos_por_curso: Json
+          fecha_fin: string | null
+          fecha_inicio: string
+          id: string
+          instrucciones: string | null
+          nombre: string
+          requiere_documentos: boolean
+          updated_at: string
+        }
+        Insert: {
+          activo?: boolean
+          anio: number
+          colegio_id: string
+          created_at?: string
+          cupos_por_curso?: Json
+          fecha_fin?: string | null
+          fecha_inicio?: string
+          id?: string
+          instrucciones?: string | null
+          nombre: string
+          requiere_documentos?: boolean
+          updated_at?: string
+        }
+        Update: {
+          activo?: boolean
+          anio?: number
+          colegio_id?: string
+          created_at?: string
+          cupos_por_curso?: Json
+          fecha_fin?: string | null
+          fecha_inicio?: string
+          id?: string
+          instrucciones?: string | null
+          nombre?: string
+          requiere_documentos?: boolean
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "periodos_matricula_colegio_id_fkey"
+            columns: ["colegio_id"]
+            isOneToOne: false
+            referencedRelation: "colegios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      matriculas: {
+        Row: {
+          alergias_enfermedades: string | null
+          alumno_id: string | null
+          apoderado_suplente_email: string | null
+          apoderado_suplente_nombres: string | null
+          apoderado_suplente_parentesco: string | null
+          apoderado_suplente_rut: string | null
+          apoderado_suplente_telefono: string | null
+          apoderado_titular_apellidos: string
+          apoderado_titular_direccion: string | null
+          apoderado_titular_email: string | null
+          apoderado_titular_nivel_estudios: string | null
+          apoderado_titular_nombres: string
+          apoderado_titular_ocupacion: string | null
+          apoderado_titular_parentesco: string
+          apoderado_titular_rut: string
+          apoderado_titular_telefono: string
+          codigo_seguimiento: string
+          colegio_id: string
+          colegio_procedencia: string | null
+          created_at: string
+          curso_asignado_id: string | null
+          curso_postula_id: string | null
+          diagnostico_pie: string | null
+          es_pie: boolean
+          estado: Database["public"]["Enums"]["matricula_estado"]
+          estudiante_apellidos: string
+          estudiante_comuna: string | null
+          estudiante_direccion: string | null
+          estudiante_fecha_nacimiento: string | null
+          estudiante_genero: string | null
+          estudiante_nacionalidad: string | null
+          estudiante_nombres: string
+          estudiante_region: string | null
+          estudiante_rut: string | null
+          estudiante_vive_con: string | null
+          fecha_aprobacion: string | null
+          id: string
+          medicamentos: string | null
+          numero_matricula: number | null
+          observaciones_apoderado: string | null
+          observaciones_internas: string | null
+          periodo_id: string
+          prevision_salud: string | null
+          prioritario_preferente: boolean
+          repite_grado: boolean
+          revisado_por: string | null
+          updated_at: string
+        }
+        Insert: {
+          alergias_enfermedades?: string | null
+          alumno_id?: string | null
+          apoderado_suplente_email?: string | null
+          apoderado_suplente_nombres?: string | null
+          apoderado_suplente_parentesco?: string | null
+          apoderado_suplente_rut?: string | null
+          apoderado_suplente_telefono?: string | null
+          apoderado_titular_apellidos: string
+          apoderado_titular_direccion?: string | null
+          apoderado_titular_email?: string | null
+          apoderado_titular_nivel_estudios?: string | null
+          apoderado_titular_nombres: string
+          apoderado_titular_ocupacion?: string | null
+          apoderado_titular_parentesco?: string
+          apoderado_titular_rut: string
+          apoderado_titular_telefono: string
+          codigo_seguimiento?: string
+          colegio_id: string
+          colegio_procedencia?: string | null
+          created_at?: string
+          curso_asignado_id?: string | null
+          curso_postula_id?: string | null
+          diagnostico_pie?: string | null
+          es_pie?: boolean
+          estado?: Database["public"]["Enums"]["matricula_estado"]
+          estudiante_apellidos: string
+          estudiante_comuna?: string | null
+          estudiante_direccion?: string | null
+          estudiante_fecha_nacimiento?: string | null
+          estudiante_genero?: string | null
+          estudiante_nacionalidad?: string | null
+          estudiante_nombres: string
+          estudiante_region?: string | null
+          estudiante_rut?: string | null
+          estudiante_vive_con?: string | null
+          fecha_aprobacion?: string | null
+          id?: string
+          medicamentos?: string | null
+          numero_matricula?: number | null
+          observaciones_apoderado?: string | null
+          observaciones_internas?: string | null
+          periodo_id: string
+          prevision_salud?: string | null
+          prioritario_preferente?: boolean
+          repite_grado?: boolean
+          revisado_por?: string | null
+          updated_at?: string
+        }
+        Update: {
+          alergias_enfermedades?: string | null
+          alumno_id?: string | null
+          apoderado_suplente_email?: string | null
+          apoderado_suplente_nombres?: string | null
+          apoderado_suplente_parentesco?: string | null
+          apoderado_suplente_rut?: string | null
+          apoderado_suplente_telefono?: string | null
+          apoderado_titular_apellidos?: string
+          apoderado_titular_direccion?: string | null
+          apoderado_titular_email?: string | null
+          apoderado_titular_nivel_estudios?: string | null
+          apoderado_titular_nombres?: string
+          apoderado_titular_ocupacion?: string | null
+          apoderado_titular_parentesco?: string
+          apoderado_titular_rut?: string
+          apoderado_titular_telefono?: string
+          codigo_seguimiento?: string
+          colegio_id?: string
+          colegio_procedencia?: string | null
+          created_at?: string
+          curso_asignado_id?: string | null
+          curso_postula_id?: string | null
+          diagnostico_pie?: string | null
+          es_pie?: boolean
+          estado?: Database["public"]["Enums"]["matricula_estado"]
+          estudiante_apellidos?: string
+          estudiante_comuna?: string | null
+          estudiante_direccion?: string | null
+          estudiante_fecha_nacimiento?: string | null
+          estudiante_genero?: string | null
+          estudiante_nacionalidad?: string | null
+          estudiante_nombres?: string
+          estudiante_region?: string | null
+          estudiante_rut?: string | null
+          estudiante_vive_con?: string | null
+          fecha_aprobacion?: string | null
+          id?: string
+          medicamentos?: string | null
+          numero_matricula?: number | null
+          observaciones_apoderado?: string | null
+          observaciones_internas?: string | null
+          periodo_id?: string
+          prevision_salud?: string | null
+          prioritario_preferente?: boolean
+          repite_grado?: boolean
+          revisado_por?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "matriculas_colegio_id_fkey"
+            columns: ["colegio_id"]
+            isOneToOne: false
+            referencedRelation: "colegios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "matriculas_periodo_id_fkey"
+            columns: ["periodo_id"]
+            isOneToOne: false
+            referencedRelation: "periodos_matricula"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "matriculas_alumno_id_fkey"
+            columns: ["alumno_id"]
+            isOneToOne: false
+            referencedRelation: "alumnos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "matriculas_curso_postula_id_fkey"
+            columns: ["curso_postula_id"]
+            isOneToOne: false
+            referencedRelation: "cursos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "matriculas_curso_asignado_id_fkey"
+            columns: ["curso_asignado_id"]
+            isOneToOne: false
+            referencedRelation: "cursos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      matricula_documentos: {
+        Row: {
+          archivo_url: string
+          created_at: string
+          estado: string
+          id: string
+          matricula_id: string
+          nombre_archivo: string
+          observacion: string | null
+          tipo_documento: string
+        }
+        Insert: {
+          archivo_url: string
+          created_at?: string
+          estado?: string
+          id?: string
+          matricula_id: string
+          nombre_archivo: string
+          observacion?: string | null
+          tipo_documento: string
+        }
+        Update: {
+          archivo_url?: string
+          created_at?: string
+          estado?: string
+          id?: string
+          matricula_id?: string
+          nombre_archivo?: string
+          observacion?: string | null
+          tipo_documento?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "matricula_documentos_matricula_id_fkey"
+            columns: ["matricula_id"]
+            isOneToOne: false
+            referencedRelation: "matriculas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       objetivos_aprendizaje: {
         Row: {
           asignatura_id: string
@@ -1327,6 +1760,31 @@ export type Database = {
         Returns: boolean
       }
       colegio_id_by_slug: { Args: { _slug: string }; Returns: string }
+      consultar_seguimiento_matricula: {
+        Args: { p_codigo?: string; p_rut?: string }
+        Returns: {
+          id: string
+          codigo_seguimiento: string
+          estado: string
+          numero_matricula: number | null
+          estudiante_nombres: string
+          estudiante_apellidos: string
+          estudiante_rut: string | null
+          curso_postula_nombre: string | null
+          curso_asignado_nombre: string | null
+          apoderado_titular_nombre: string
+          observaciones_colegio: string | null
+          created_at: string
+        }
+      }
+      aprobar_matricula: {
+        Args: {
+          p_matricula_id: string
+          p_curso_id: string
+          p_revisor_id?: string | null
+        }
+        Returns: Json
+      }
       has_any_role: {
         Args: { _colegio_id: string; _user_id: string }
         Returns: boolean
@@ -1373,6 +1831,20 @@ export type Database = {
         | "retiro"
         | "atraso"
         | "salida_temprana"
+      matricula_estado:
+        | "borrador"
+        | "solicitada"
+        | "en_revision"
+        | "observada"
+        | "aprobada"
+        | "rechazada"
+        | "retirada"
+      intranet_categoria:
+        | "comunicado"
+        | "circular"
+        | "noticia"
+        | "urgente"
+        | "evento"
         | "observacion"
         | "ausencia_parcial"
       nivel_curso: "prebásica" | "1er ciclo" | "2do ciclo"

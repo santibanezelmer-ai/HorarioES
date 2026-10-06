@@ -138,7 +138,7 @@ function MatriculaAdminPage() {
         .order("numero_matricula", { nullsFirst: false })
         .order("created_at", { ascending: false });
       if (error) throw error;
-      return (data || []) as Matricula[];
+      return ((data || []) as unknown) as Matricula[];
     },
   });
 
@@ -251,7 +251,7 @@ function MatriculaAdminPage() {
     onSuccess: (data) => {
       if (data.aprobado) {
         toast.success(
-          `¡Matrícula aprobada exitosamente! Asignado N° ${data.aprobado.numero_matricula || ""}`
+          `¡Matrícula aprobada exitosamente! Asignado N° ${(data.aprobado as any).numero_matricula || ""}`
         );
       } else {
         toast.success("Ficha de matrícula presencial guardada en el sistema");

@@ -9,7 +9,7 @@ export const lovable = {
   auth: {
     signInWithOAuth: async (provider: "google" | "apple" | "microsoft", opts?: SignInOptions) => {
       const { data, error } = await supabase.auth.signInWithOAuth({
-        provider,
+        provider: provider as any,
         options: {
           redirectTo: opts?.redirect_uri,
           queryParams: opts?.extraParams,
