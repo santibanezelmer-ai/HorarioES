@@ -168,7 +168,7 @@ export const MODULES: ModuleDef[] = [
     roles: ["admin", "direccion", "utp", "docente"],
     items: [
       { to: "/horarios", label: "Ver horarios" },
-      { to: "/generar-horarios", label: "Generar horarios" },
+      { to: "/generar-horarios", label: "Generar horarios", roles: ["admin", "direccion", "utp"] },
       { to: "/conflictos", label: "Conflictos" },
       { to: "/bloques", label: "Bloques horarios" },
       { to: "/espacios", label: "Espacios" },

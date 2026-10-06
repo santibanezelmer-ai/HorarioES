@@ -366,66 +366,91 @@ function GenerarHorariosPage() {
     onError: (e) => toast.error(handleDbError(e)),
   });
 
+  // Construye la carga académica en el formato que espera el generador
+  const buildCarga = (
+    asgObj: Record<string, number>,
+    titObj: Record<string, string>
+  ): CargaAsignatura[] =>
+    Object.entries(asgObj)
+      .filter(([, h]) => Number(h) > 0)
+      .map(([asgId, h]) => {
+        const asg = asgMap.get(asgId);
+        const docId = titObj[asgId] && titObj[asgId] !== NONE ? titObj[asgId] : null;
+        return {
+          asignaturaId: asgId,
+          asignaturaNombre: asg?.nombre ?? "Asignatura",
+          asignaturaColor: asg?.color ?? "#888888",
+          docenteId: docId,
+          docenteNombre: docId ? docMap.get(docId)?.nombre : undefined,
+          horasSemanales: Number(h),
+        };
+      });
+
+  const docentesInfo: DocenteInfo[] = useMemo(
+    () =>
+      docentes.map((d) => ({
+        id: d.id,
+        nombre: d.nombre,
+        dias: d.dias && d.dias.length > 0 ? d.dias : [0, 1, 2, 3, 4],
+        horas_utp: d.horas_utp ?? null,
+      })),
+    [docentes]
+  );
+
   // Handler for running generator
   const ejecutarGenerador = () => {
+    if (!colegioId) return;
     setIsGenerating(true);
     setTimeout(() => {
       try {
         if (scope === "curso") {
           if (!cursoActual) return;
-          const carga: CargaAsignatura[] = Object.entries(horasPorAsignatura)
-            .filter(([, h]) => Number(h) > 0)
-            .map(([asgId, h]) => ({
-              asignatura_id: asgId,
-              docente_id: docentesPorAsignatura[asgId] && docentesPorAsignatura[asgId] !== NONE ? docentesPorAsignatura[asgId] : null,
-              horas_semanales: Number(h),
-            }));
-
           const res = generarHorarioCurso({
             cursoId: cursoActual.id,
-            carga,
+            cursoNombre: cursoActual.nombre,
+            colegioId,
+            carga: buildCarga(horasPorAsignatura, docentesPorAsignatura),
             bloques,
-            docentes,
+            docentes: docentesInfo,
             docenteBlocks,
-            allSlots,
+            existingSlotsOtherCourses: allSlots.filter((s) => s.curso_id !== cursoActual.id),
             viernesMaxSlot: colegio?.viernes_max_slot ?? null,
-            priorizarBloquesDobles: true,
+            preferBloquesDobles: true,
           });
 
+          setMultiResultado(null);
           setResultado(res);
           setActiveTab("preview");
-          if (res.conflictos.length === 0) {
-            toast.success(`Horario generado con éxito (0 colisiones)`);
+          if (res.advertencias.length === 0) {
+            toast.success(`Horario generado: ${res.horasAsignadas}/${res.horasRequeridas} horas, sin choques`);
           } else {
-            toast.warning(`Horario generado con advertencias (${res.conflictos.length} restricciones no cumplidas)`);
+            toast.warning(`Horario generado con ${res.advertencias.length} advertencia(s)`);
           }
         } else {
           // Multi-course
-          const resMap = generarHorariosMultiCurso({
-            cursos: cursos.map((c) => {
+          const resMap = generarHorariosMultiCurso(
+            cursos.map((c) => {
               const asgObj = c.id === cursoActual?.id ? horasPorAsignatura : ((c.asignaturas as Record<string, number> | null) ?? {});
               const titObj = c.id === cursoActual?.id ? docentesPorAsignatura : ((c.titulares as Record<string, string> | null) ?? {});
-              const carga: CargaAsignatura[] = Object.entries(asgObj)
-                .filter(([, h]) => Number(h) > 0)
-                .map(([asgId, h]) => ({
-                  asignatura_id: asgId,
-                  docente_id: titObj[asgId] && titObj[asgId] !== NONE ? titObj[asgId] : null,
-                  horas_semanales: Number(h),
-                }));
-              return { cursoId: c.id, carga };
+              return { cursoId: c.id, cursoNombre: c.nombre, carga: buildCarga(asgObj, titObj) };
             }),
-            bloques,
-            docentes,
-            docenteBlocks,
-            viernesMaxSlot: colegio?.viernes_max_slot ?? null,
-            priorizarBloquesDobles: true,
-          });
+            {
+              colegioId,
+              bloques,
+              docentes: docentesInfo,
+              docenteBlocks,
+              viernesMaxSlot: colegio?.viernes_max_slot ?? null,
+              preferBloquesDobles: true,
+            }
+          );
 
           setMultiResultado(resMap);
           const currentRes = resMap.get(cursoActual?.id ?? "");
           if (currentRes) setResultado(currentRes);
           setActiveTab("preview");
-          toast.success(`Generación multi-curso coordinada finalizada`);
+          const totalAdv = Array.from(resMap.values()).reduce((n, r) => n + r.advertencias.length, 0);
+          if (totalAdv === 0) toast.success(`Horarios de ${resMap.size} cursos generados sin choques`);
+          else toast.warning(`Generación multi-curso con ${totalAdv} advertencia(s). Revisa curso por curso.`);
         }
       } catch (err: unknown) {
         toast.error(`Error al generar horario: ${err instanceof Error ? err.message : String(err)}`);
@@ -759,27 +784,27 @@ function GenerarHorariosPage() {
               {/* Estado de Colisiones & Alertas */}
               <div
                 className={`p-4 rounded-xl border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 ${
-                  resultado.conflictos.length === 0
+                  resultado.advertencias.length === 0
                     ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-950 dark:text-emerald-100"
                     : "bg-amber-500/10 border-amber-500/20 text-amber-950 dark:text-amber-100"
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  {resultado.conflictos.length === 0 ? (
+                  {resultado.advertencias.length === 0 ? (
                     <CheckCircle2 className="w-6 h-6 text-emerald-600 shrink-0" />
                   ) : (
                     <AlertTriangle className="w-6 h-6 text-amber-600 shrink-0" />
                   )}
                   <div>
                     <h4 className="font-semibold text-sm">
-                      {resultado.conflictos.length === 0
-                        ? "Horario Optimizado · 0 Colisiones Detectadas"
-                        : `Atención: ${resultado.conflictos.length} restricciones no se pudieron satisfacer`}
+                      {resultado.advertencias.length === 0
+                        ? `Horario completo · ${resultado.horasAsignadas}/${resultado.horasRequeridas} horas · sin choques de docentes`
+                        : `Atención: ${resultado.horasAsignadas}/${resultado.horasRequeridas} horas ubicadas · ${resultado.advertencias.length} advertencia(s)`}
                     </h4>
                     <p className="text-xs opacity-90">
-                      {resultado.conflictos.length === 0
-                        ? `Se ubicaron correctamente las ${resultado.slots.length} horas respetando días laborables y bloques continuos.`
-                        : resultado.conflictos.join(". ")}
+                      {resultado.advertencias.length === 0
+                        ? `Se respetaron días laborables, bloqueos de docentes y bloques dobles.`
+                        : resultado.advertencias.join(" · ")}
                     </p>
                   </div>
                 </div>
