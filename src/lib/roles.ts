@@ -57,12 +57,27 @@ export type ModuleId =
   | "admin";
 
 
+export type MenuGroup = "principal" | "gestion" | "pedagogia" | "sistema";
+
+export interface MenuGroupMeta {
+  id: MenuGroup;
+  label: string;
+}
+
+export const MENU_GROUPS: MenuGroupMeta[] = [
+  { id: "principal", label: "Inicio" },
+  { id: "gestion", label: "Gestión Escolar" },
+  { id: "pedagogia", label: "Pedagogía y Apoyo" },
+  { id: "sistema", label: "Sistema" },
+];
+
 export interface ModuleDef {
   id: ModuleId;
   label: string;
   icon: LucideIcon;
   to: string;
   description: string;
+  group?: MenuGroup;
   /** Roles que pueden ver el módulo. `superadmin` siempre puede. */
   roles: AppRole[];
   /** Aún no implementado: aparece en sidebar con badge "Pronto". */
@@ -78,6 +93,7 @@ export const MODULES: ModuleDef[] = [
     icon: LayoutDashboard,
     to: "/dashboard",
     description: "Resumen contextual según tu rol",
+    group: "principal",
     roles: ["admin", "direccion", "utp", "inspectoria", "docente", "editor", "viewer"],
   },
   {
@@ -86,7 +102,57 @@ export const MODULES: ModuleDef[] = [
     icon: Newspaper,
     to: "/intranet",
     description: "Muro institucional, circulares y documentos oficiales",
+    group: "principal",
     roles: ["admin", "direccion", "utp", "inspectoria", "docente", "editor", "viewer"],
+  },
+  {
+    id: "academico",
+    label: "Gestión Académica",
+    icon: GraduationCap,
+    to: "/academico",
+    description: "Cursos, asignaturas, estudiantes y docentes",
+    group: "gestion",
+    roles: ["admin", "direccion", "utp", "inspectoria", "docente"],
+    items: [
+      { to: "/academico", label: "Resumen académico", roles: ["admin", "direccion", "utp"] },
+      { to: "/estudiantes", label: "Estudiantes" },
+      { to: "/matricula", label: "Matrícula" },
+      { to: "/cursos", label: "Cursos", roles: ["admin", "direccion", "utp"] },
+      { to: "/asignaturas", label: "Asignaturas", roles: ["admin", "direccion", "utp"] },
+      { to: "/docentes", label: "Docentes", roles: ["admin", "direccion", "utp"] },
+      { to: "/contratos", label: "Contratos docentes", roles: ["admin", "direccion", "utp"] },
+      { to: "/reemplazos", label: "Reemplazos", roles: ["admin", "direccion", "utp"] },
+    ],
+  },
+  {
+    id: "horarios",
+    label: "Horarios",
+    icon: CalendarRange,
+    to: "/horarios",
+    description: "Generación, conflictos y espacios",
+    group: "gestion",
+    roles: ["admin", "direccion", "utp", "docente"],
+    items: [
+      { to: "/horarios", label: "Ver horarios" },
+      { to: "/generar-horarios", label: "Generar horarios", roles: ["admin", "direccion", "utp"] },
+      { to: "/conflictos", label: "Conflictos" },
+      { to: "/bloques", label: "Bloques horarios" },
+      { to: "/espacios", label: "Espacios" },
+    ],
+  },
+  {
+    id: "inspectoria",
+    label: "Inspectoría",
+    icon: ShieldCheck,
+    to: "/inspectoria",
+    description: "Asistencia, atrasos, retiros y convivencia",
+    group: "gestion",
+    roles: ["admin", "direccion", "inspectoria"],
+    items: [
+      { to: "/inspectoria", label: "Panel general" },
+      { to: "/inspectoria/atrasos", label: "Atrasos y retiros" },
+      { to: "/inspectoria/convivencia", label: "Convivencia" },
+    ],
   },
   {
     id: "mi-trabajo",
@@ -94,6 +160,7 @@ export const MODULES: ModuleDef[] = [
     icon: BookOpen,
     to: "/mis-clases",
     description: "Vista del docente: cursos, horario y aula",
+    group: "pedagogia",
     roles: ["docente", "admin", "utp", "direccion"],
     items: [
       { to: "/mis-clases", label: "Mi horario" },
@@ -105,24 +172,12 @@ export const MODULES: ModuleDef[] = [
     ],
   },
   {
-    id: "academico",
-    label: "Gestión Académica",
-    icon: GraduationCap,
-    to: "/academico",
-    description: "Cursos, asignaturas y resultados",
-    roles: ["admin", "direccion", "utp"],
-    items: [
-      { to: "/academico", label: "Resumen académico" },
-      { to: "/cursos", label: "Cursos" },
-      { to: "/asignaturas", label: "Asignaturas" },
-    ],
-  },
-  {
     id: "curriculum",
     label: "Currículum y Planificación",
     icon: BookMarked,
     to: "/planificaciones",
     description: "Planificaciones, OA y cobertura",
+    group: "pedagogia",
     roles: ["admin", "direccion", "utp", "docente"],
     items: [
       { to: "/planificaciones", label: "Planificaciones" },
@@ -131,69 +186,13 @@ export const MODULES: ModuleDef[] = [
     ],
   },
   {
-    id: "estudiantes",
-    label: "Estudiantes",
-    icon: Users,
-    to: "/estudiantes",
-    description: "Ficha, historial y matrícula",
-    roles: ["admin", "direccion", "utp", "inspectoria", "docente"],
-  },
-  {
-    id: "matricula",
-    label: "Matrícula",
-    icon: ClipboardCheck,
-    to: "/matricula",
-    description: "Libro de matrícula, postulaciones y cupos oficiales",
-    roles: ["admin", "direccion", "utp", "inspectoria", "docente"],
-  },
-  {
-    id: "docentes",
-    label: "Docentes",
-    icon: UserCog,
-    to: "/docentes",
-    description: "Equipo, contratos y carga",
-    roles: ["admin", "direccion", "utp"],
-    items: [
-      { to: "/docentes", label: "Listado" },
-      { to: "/contratos", label: "Contratos" },
-      { to: "/reemplazos", label: "Reemplazos" },
-    ],
-  },
-  {
-    id: "horarios",
-    label: "Horarios",
-    icon: CalendarRange,
-    to: "/horarios",
-    description: "Generación, conflictos y espacios",
-    roles: ["admin", "direccion", "utp", "docente"],
-    items: [
-      { to: "/horarios", label: "Ver horarios" },
-      { to: "/generar-horarios", label: "Generar horarios", roles: ["admin", "direccion", "utp"] },
-      { to: "/conflictos", label: "Conflictos" },
-      { to: "/bloques", label: "Bloques horarios" },
-      { to: "/espacios", label: "Espacios" },
-    ],
-  },
-  {
     id: "pie",
     label: "PIE",
     icon: Sparkles,
     to: "/pie",
     description: "Programa de Integración Escolar",
+    group: "pedagogia",
     roles: ["admin", "direccion", "utp", "docente"],
-  },
-  {
-    id: "inspectoria",
-    label: "Inspectoría",
-    icon: ShieldCheck,
-    to: "/inspectoria",
-    description: "Asistencia, atrasos, retiros y convivencia",
-    roles: ["admin", "direccion", "inspectoria"],
-    items: [
-      { to: "/inspectoria", label: "Panel general" },
-      { to: "/inspectoria/atrasos", label: "Atrasos y retiros" },
-      { to: "/inspectoria/convivencia", label: "Convivencia" },
-    ],
   },
   {
     id: "recursos",
@@ -201,6 +200,7 @@ export const MODULES: ModuleDef[] = [
     icon: Boxes,
     to: "/recursos",
     description: "Activos, salas y materiales",
+    group: "pedagogia",
     roles: ["admin", "direccion", "inspectoria"],
     comingSoon: true,
   },
@@ -210,6 +210,7 @@ export const MODULES: ModuleDef[] = [
     icon: BarChart3,
     to: "/estadisticas",
     description: "Indicadores UTP, dirección e inspectoría",
+    group: "sistema",
     roles: ["admin", "direccion", "utp", "inspectoria"],
     items: [
       { to: "/direccion", label: "Panel Dirección", roles: ["admin", "direccion"] },
@@ -222,6 +223,7 @@ export const MODULES: ModuleDef[] = [
     icon: ShieldCheck,
     to: "/superadmin",
     description: "Gestión global de organizaciones",
+    group: "sistema",
     roles: ["superadmin"],
   },
   {
@@ -230,6 +232,7 @@ export const MODULES: ModuleDef[] = [
     icon: Settings,
     to: "/ajustes",
     description: "Usuarios, ajustes y auditoría",
+    group: "sistema",
     roles: ["admin"],
     items: [
       { to: "/ajustes", label: "Ajustes y usuarios" },
