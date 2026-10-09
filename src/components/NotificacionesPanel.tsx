@@ -19,26 +19,66 @@ export function NotificacionesPanel() {
         )}
       </div>
       {notifs.length === 0 ? (
-        <div className="flex items-center gap-2 text-xs text-muted-foreground">
-          <CheckCircle2 className="w-4 h-4 text-emerald-500" /> Todo al día, sin alertas pendientes.
+        <div className="flex items-center gap-2 text-xs text-muted-foreground py-1">
+          <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" /> Todo al día, sin alertas operativas pendientes.
         </div>
       ) : (
-        <div className="space-y-1.5">
+        <div className="space-y-2">
           {notifs.map((n) => {
             const Icon = n.severity === "critical" ? AlertCircle : n.severity === "warning" ? AlertTriangle : Info;
-            const color = n.severity === "critical" ? "text-rose-500 bg-rose-500/10 border-rose-500/30"
-              : n.severity === "warning" ? "text-amber-600 bg-amber-500/10 border-amber-500/30"
-              : "text-blue-500 bg-blue-500/10 border-blue-500/30";
-            const inner = (
-              <div className={`flex items-start gap-2 p-2.5 rounded-lg border ${color} text-xs`}>
-                <Icon className="w-4 h-4 flex-shrink-0 mt-0.5" />
-                <div className="flex-1 min-w-0">
-                  <div className="font-medium text-foreground">{n.title}</div>
-                  {n.detail && <div className="text-muted-foreground text-[11px] mt-0.5">{n.detail}</div>}
+            const containerStyles =
+              n.severity === "critical"
+                ? "bg-rose-500/5 border-rose-500/30 text-rose-500"
+                : n.severity === "warning"
+                ? "bg-amber-500/5 border-amber-500/30 text-amber-600 dark:text-amber-400"
+                : "bg-blue-500/5 border-blue-500/30 text-blue-500";
+
+            const btnPrimaryStyles =
+              n.severity === "critical"
+                ? "bg-rose-600 hover:bg-rose-700 text-white"
+                : n.severity === "warning"
+                ? "bg-amber-600 hover:bg-amber-700 text-white"
+                : "bg-primary hover:bg-primary/90 text-primary-foreground";
+
+            return (
+              <div
+                key={n.id}
+                className={`flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-lg border ${containerStyles} transition-colors`}
+              >
+                <div className="flex items-start gap-2.5 min-w-0">
+                  <Icon className="w-4 h-4 shrink-0 mt-0.5" />
+                  <div className="min-w-0">
+                    <div className="font-semibold text-xs text-foreground leading-tight">
+                      {n.title}
+                    </div>
+                    {n.detail && (
+                      <div className="text-muted-foreground text-[11px] mt-0.5 leading-snug">
+                        {n.detail}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-1.5 self-end sm:self-auto shrink-0">
+                  {n.secondaryTo && n.secondaryActionLabel && (
+                    <Link
+                      to={n.secondaryTo}
+                      className="inline-flex items-center justify-center px-2.5 py-1 text-[11px] font-medium rounded-md border border-border bg-surface hover:bg-muted text-foreground transition-colors"
+                    >
+                      {n.secondaryActionLabel}
+                    </Link>
+                  )}
+                  {n.to && (
+                    <Link
+                      to={n.to}
+                      className={`inline-flex items-center justify-center px-2.5 py-1 text-[11px] font-medium rounded-md shadow-xs transition-colors ${btnPrimaryStyles}`}
+                    >
+                      {n.actionLabel || "Ver detalle"}
+                    </Link>
+                  )}
                 </div>
               </div>
             );
-            return n.to ? <Link key={n.id} to={n.to} className="block hover:opacity-80">{inner}</Link> : <div key={n.id}>{inner}</div>;
           })}
         </div>
       )}

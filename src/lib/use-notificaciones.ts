@@ -11,6 +11,9 @@ export interface Notif {
   detail?: string;
   severity: NotifSeverity;
   to?: string;
+  actionLabel?: string;
+  secondaryTo?: string;
+  secondaryActionLabel?: string;
   count?: number;
 }
 
@@ -29,10 +32,12 @@ export function useNotificaciones() {
       const sinceISO = since30.toISOString().slice(0, 10);
       const today = new Date().toISOString().slice(0, 10);
 
-      const [docentes, libro, asisToday, asisAll, atr, ret] = await Promise.all([
+      const [docentes, libroReciente, ultimoRegistroLibro, asisToday, asisAll, atr, ret] = await Promise.all([
         supabase.from("docentes").select("id,nombre").eq("colegio_id", colegioId!),
         supabase.from("libro_clases").select("docente_id,fecha").eq("colegio_id", colegioId!)
           .gte("fecha", sinceLibro.toISOString().slice(0, 10)),
+        supabase.from("libro_clases").select("fecha").eq("colegio_id", colegioId!)
+          .order("fecha", { ascending: false }).limit(1).maybeSingle(),
         supabase.from("asistencias").select("curso_id").eq("colegio_id", colegioId!).eq("fecha", today),
         supabase.from("asistencias").select("alumno_id,estado").eq("colegio_id", colegioId!).gte("fecha", sinceISO),
         supabase.from("atrasos").select("alumno_id").eq("colegio_id", colegioId!).gte("fecha", sinceISO),
@@ -40,23 +45,56 @@ export function useNotificaciones() {
       ]);
 
       const out: Notif[] = [];
-      const recentDoc = new Set((libro.data ?? []).map((l) => l.docente_id).filter(Boolean));
+      const totalDocentes = (docentes.data ?? []).length;
+      const recentDoc = new Set((libroReciente.data ?? []).map((l) => l.docente_id).filter(Boolean));
       const sinRegistro = (docentes.data ?? []).filter((d) => !recentDoc.has(d.id));
-      if (sinRegistro.length > 0) {
-        out.push({
-          id: "libro-pendiente",
-          title: `${sinRegistro.length} docente(s) sin registros recientes`,
-          detail: `Sin libro de clases en los últimos ${cfg!.alerta_libro_dias} días`,
-          severity: "warning", to: "/planificaciones", count: sinRegistro.length,
-        });
+
+      if (sinRegistro.length > 0 && totalDocentes > 0) {
+        // Analizar si el establecimiento entero no registra libro desde hace tiempo (>30 días o nunca)
+        const fechaUltimo = ultimoRegistroLibro.data?.fecha;
+        const diasDesdeUltimo = fechaUltimo
+          ? Math.floor((new Date().getTime() - new Date(fechaUltimo).getTime()) / (1000 * 60 * 60 * 24))
+          : null;
+
+        if (sinRegistro.length === totalDocentes && (diasDesdeUltimo === null || diasDesdeUltimo > 30)) {
+          // Inactividad global prolongada en libro de clases: contextualizar sin alarmismo falso
+          out.push({
+            id: "libro-inactivo-global",
+            title: `Sin actividad reciente de Libro de Clases (${totalDocentes} docentes)`,
+            detail: diasDesdeUltimo !== null
+              ? `Último registro del establecimiento: ${fechaUltimo} (hace ${diasDesdeUltimo} días). Reanuda los registros cuando inicie el ciclo de clases.`
+              : `Aún no se han ingresado clases en el libro digital este período.`,
+            severity: "info",
+            to: "/libro-clases",
+            actionLabel: "Abrir Libro de Clases",
+            secondaryTo: "/docentes",
+            secondaryActionLabel: "Ver Equipo Docente",
+            count: sinRegistro.length,
+          });
+        } else {
+          // Incidencia operativa real: algunos o todos no registraron dentro de los días de tolerancia
+          out.push({
+            id: "libro-pendiente",
+            title: `${sinRegistro.length} de ${totalDocentes} docentes sin libro de clases reciente`,
+            detail: `Sin registros en los últimos ${cfg!.alerta_libro_dias} días hábiles configurados`,
+            severity: "warning",
+            to: "/libro-clases",
+            actionLabel: "Ir a Libro de Clases",
+            secondaryTo: "/docentes",
+            secondaryActionLabel: "Ver Docentes",
+            count: sinRegistro.length,
+          });
+        }
       }
 
       if ((asisToday.data ?? []).length === 0) {
         out.push({
           id: "asis-hoy",
           title: "Sin asistencia registrada hoy",
-          detail: "Ningún curso ha pasado lista hoy",
-          severity: "warning", to: "/asistencia",
+          detail: "Ningún curso ha registrado asistencia para la fecha actual",
+          severity: "warning",
+          to: "/asistencia",
+          actionLabel: "Pasar Asistencia",
         });
       }
 
