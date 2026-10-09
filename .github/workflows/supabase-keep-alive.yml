@@ -1,0 +1,33 @@
+name: Supabase Keep-Alive Ping
+
+on:
+  schedule:
+    # Se ejecuta todos los días a las 06:00 UTC y a las 18:00 UTC (2 veces al día)
+    - cron: '0 6,18 * * *'
+  # Permite disparar manualmente el ping desde la pestaña "Actions" de GitHub
+  workflow_dispatch:
+
+jobs:
+  ping-supabase:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Ping Supabase Database (Keep-Alive)
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL || 'https://sxadthmnijgitmxpdjbu.supabase.co' }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY || secrets.VITE_SUPABASE_PUBLISHABLE_KEY || 'sb_publishable_MDd9pxsQKfVCB0j2nUcFtQ_2V7QYOo-' }}
+        run: |
+          echo "Enviando ping ligero a Supabase para mantener activa la base de datos..."
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            -H "apikey: ${SUPABASE_ANON_KEY}" \
+            -H "Authorization: Bearer ${SUPABASE_ANON_KEY}" \
+            "${SUPABASE_URL}/rest/v1/colegios?select=id&limit=1")
+
+          echo "Respuesta HTTP recibida: ${HTTP_STATUS}"
+          if [ "$HTTP_STATUS" -ge 200 ] && [ "$HTTP_STATUS" -lt 400 ]; then
+            echo "Ping exitoso. Supabase permanece activo."
+          else
+            echo "Advertencia: Código HTTP inesperado (${HTTP_STATUS}). Reintentando con endpoint de salud..."
+            curl -f -s -o /dev/null -H "apikey: ${SUPABASE_ANON_KEY}" "${SUPABASE_URL}/rest/v1/" || exit 1
+          fi
