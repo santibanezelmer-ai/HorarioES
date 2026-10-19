@@ -43,9 +43,11 @@ import { Route as PlanificacionesRouteImport } from './routes/planificaciones'
 import { Route as RecursosRouteImport } from './routes/recursos'
 import { Route as ReemplazosRouteImport } from './routes/reemplazos'
 import { Route as RegisterRouteImport } from './routes/register'
+import { Route as RestablecerClaveRouteImport } from './routes/restablecer-clave'
 import { Route as SuperadminRouteImport } from './routes/superadmin'
 import { Route as AdminAuditoriaRouteImport } from './routes/admin.auditoria'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
+import { Route as ApoderadosLoginRouteImport } from './routes/apoderados.login'
 import { Route as CurriculumCoberturaRouteImport } from './routes/curriculum.cobertura'
 import { Route as CurriculumUnidadesRouteImport } from './routes/curriculum.unidades'
 import { Route as EstudiantesIdRouteImport } from './routes/estudiantes.$id'
@@ -228,6 +230,11 @@ const RegisterRoute = RegisterRouteImport.update({
   path: '/register',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RestablecerClaveRoute = RestablecerClaveRouteImport.update({
+  id: '/restablecer-clave',
+  path: '/restablecer-clave',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SuperadminRoute = SuperadminRouteImport.update({
   id: '/superadmin',
   path: '/superadmin',
@@ -241,6 +248,11 @@ const AdminAuditoriaRoute = AdminAuditoriaRouteImport.update({
 const AdminLoginRoute = AdminLoginRouteImport.update({
   id: '/admin/login',
   path: '/admin/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApoderadosLoginRoute = ApoderadosLoginRouteImport.update({
+  id: '/apoderados/login',
+  path: '/apoderados/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CurriculumCoberturaRoute = CurriculumCoberturaRouteImport.update({
@@ -334,9 +346,11 @@ export interface FileRoutesByFullPath {
   '/recursos': typeof RecursosRoute
   '/reemplazos': typeof ReemplazosRoute
   '/register': typeof RegisterRoute
+  '/restablecer-clave': typeof RestablecerClaveRoute
   '/superadmin': typeof SuperadminRouteWithChildren
   '/admin/auditoria': typeof AdminAuditoriaRoute
   '/admin/login': typeof AdminLoginRoute
+  '/apoderados/login': typeof ApoderadosLoginRoute
   '/curriculum/cobertura': typeof CurriculumCoberturaRoute
   '/curriculum/unidades': typeof CurriculumUnidadesRoute
   '/estudiantes/$id': typeof EstudiantesIdRoute
@@ -384,9 +398,11 @@ export interface FileRoutesByTo {
   '/recursos': typeof RecursosRoute
   '/reemplazos': typeof ReemplazosRoute
   '/register': typeof RegisterRoute
+  '/restablecer-clave': typeof RestablecerClaveRoute
   '/superadmin': typeof SuperadminRouteWithChildren
   '/admin/auditoria': typeof AdminAuditoriaRoute
   '/admin/login': typeof AdminLoginRoute
+  '/apoderados/login': typeof ApoderadosLoginRoute
   '/curriculum/cobertura': typeof CurriculumCoberturaRoute
   '/curriculum/unidades': typeof CurriculumUnidadesRoute
   '/estudiantes/$id': typeof EstudiantesIdRoute
@@ -435,9 +451,11 @@ export interface FileRoutesById {
   '/recursos': typeof RecursosRoute
   '/reemplazos': typeof ReemplazosRoute
   '/register': typeof RegisterRoute
+  '/restablecer-clave': typeof RestablecerClaveRoute
   '/superadmin': typeof SuperadminRouteWithChildren
   '/admin/auditoria': typeof AdminAuditoriaRoute
   '/admin/login': typeof AdminLoginRoute
+  '/apoderados/login': typeof ApoderadosLoginRoute
   '/curriculum/cobertura': typeof CurriculumCoberturaRoute
   '/curriculum/unidades': typeof CurriculumUnidadesRoute
   '/estudiantes/$id': typeof EstudiantesIdRoute
@@ -487,9 +505,11 @@ export interface FileRouteTypes {
     | '/recursos'
     | '/reemplazos'
     | '/register'
+    | '/restablecer-clave'
     | '/superadmin'
     | '/admin/auditoria'
     | '/admin/login'
+    | '/apoderados/login'
     | '/curriculum/cobertura'
     | '/curriculum/unidades'
     | '/estudiantes/$id'
@@ -537,9 +557,11 @@ export interface FileRouteTypes {
     | '/recursos'
     | '/reemplazos'
     | '/register'
+    | '/restablecer-clave'
     | '/superadmin'
     | '/admin/auditoria'
     | '/admin/login'
+    | '/apoderados/login'
     | '/curriculum/cobertura'
     | '/curriculum/unidades'
     | '/estudiantes/$id'
@@ -587,9 +609,11 @@ export interface FileRouteTypes {
     | '/recursos'
     | '/reemplazos'
     | '/register'
+    | '/restablecer-clave'
     | '/superadmin'
     | '/admin/auditoria'
     | '/admin/login'
+    | '/apoderados/login'
     | '/curriculum/cobertura'
     | '/curriculum/unidades'
     | '/estudiantes/$id'
@@ -638,9 +662,11 @@ export interface RootRouteChildren {
   RecursosRoute: typeof RecursosRoute
   ReemplazosRoute: typeof ReemplazosRoute
   RegisterRoute: typeof RegisterRoute
+  RestablecerClaveRoute: typeof RestablecerClaveRoute
   SuperadminRoute: typeof SuperadminRouteWithChildren
   AdminAuditoriaRoute: typeof AdminAuditoriaRoute
   AdminLoginRoute: typeof AdminLoginRoute
+  ApoderadosLoginRoute: typeof ApoderadosLoginRoute
   CurriculumCoberturaRoute: typeof CurriculumCoberturaRoute
   CurriculumUnidadesRoute: typeof CurriculumUnidadesRoute
   InspectoriaAtrasosRoute: typeof InspectoriaAtrasosRoute
@@ -891,6 +917,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/restablecer-clave': {
+      id: '/restablecer-clave'
+      path: '/restablecer-clave'
+      fullPath: '/restablecer-clave'
+      preLoaderRoute: typeof RestablecerClaveRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/superadmin': {
       id: '/superadmin'
       path: '/superadmin'
@@ -910,6 +943,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/login'
       fullPath: '/admin/login'
       preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/apoderados/login': {
+      id: '/apoderados/login'
+      path: '/apoderados/login'
+      fullPath: '/apoderados/login'
+      preLoaderRoute: typeof ApoderadosLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/curriculum/cobertura': {
@@ -1063,9 +1103,11 @@ const rootRouteChildren: RootRouteChildren = {
   RecursosRoute: RecursosRoute,
   ReemplazosRoute: ReemplazosRoute,
   RegisterRoute: RegisterRoute,
+  RestablecerClaveRoute: RestablecerClaveRoute,
   SuperadminRoute: SuperadminRouteWithChildren,
   AdminAuditoriaRoute: AdminAuditoriaRoute,
   AdminLoginRoute: AdminLoginRoute,
+  ApoderadosLoginRoute: ApoderadosLoginRoute,
   CurriculumCoberturaRoute: CurriculumCoberturaRoute,
   CurriculumUnidadesRoute: CurriculumUnidadesRoute,
   InspectoriaAtrasosRoute: InspectoriaAtrasosRoute,

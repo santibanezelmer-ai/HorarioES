@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState, type FormEvent } from "react";
-import { Building2, ArrowRight } from "lucide-react";
+import { Building2, ArrowRight, Users, Sparkles } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 
 export const Route = createFileRoute("/login")({
@@ -37,15 +37,41 @@ function LoginPickerPage() {
       </div>
 
       <div className="w-full max-w-md">
-        <div className="flex flex-col items-center mb-8">
+        <div className="flex flex-col items-center mb-6">
           <div className="w-14 h-14 rounded-2xl bg-gradient-primary flex items-center justify-center shadow-elegant mb-4">
             <Building2 className="w-7 h-7 text-white" />
           </div>
           <h1 className="text-2xl font-bold">HorarioES</h1>
-          <p className="text-sm text-muted-foreground">Ingresa al portal de tu colegio</p>
+          <p className="text-sm text-muted-foreground">Portal de Acceso Institucional</p>
+        </div>
+
+        {/* Acceso Directo Destacado para Apoderados */}
+        <div className="mb-4 p-4 rounded-2xl bg-surface border border-primary/30 shadow-elegant flex items-center justify-between gap-3">
+          <div className="space-y-0.5">
+            <div className="flex items-center gap-1.5">
+              <Users className="w-4 h-4 text-primary" />
+              <span className="text-xs font-bold text-foreground">
+                ¿Eres apoderado o familia?
+              </span>
+            </div>
+            <p className="text-[11px] text-muted-foreground">
+              Ingreso directo con tu correo, sin seleccionar colegio.
+            </p>
+          </div>
+          <Link
+            to="/apoderados/login"
+            className="px-3.5 py-2 bg-gradient-primary text-white text-xs font-semibold rounded-xl hover:opacity-90 shrink-0 shadow-sm flex items-center gap-1.5 transition-opacity"
+          >
+            Portal Apoderados <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
         </div>
 
         <div className="bg-surface border border-border rounded-xl p-6 shadow-elegant">
+          <div className="mb-4 pb-3 border-b border-border">
+            <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+              Acceso Funcionarios y Docentes
+            </span>
+          </div>
           <form onSubmit={go} className="space-y-3">
             <label className="text-xs font-medium text-muted-foreground block mb-1.5">Identificador del colegio</label>
             <div className="flex items-stretch gap-2">
