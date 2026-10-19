@@ -5,6 +5,7 @@ import { Toaster } from "sonner";
 import { AuthProvider, useAuth } from "@/lib/auth-context";
 import { AppSidebar } from "@/components/AppSidebar";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { useSupabaseKeepAlive } from "@/lib/use-supabase-keep-alive";
 
 import appCss from "../styles.css?url";
 
@@ -74,6 +75,8 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 function RootComponent() {
+  useSupabaseKeepAlive();
+
   const [queryClient] = useState(() => new QueryClient({
     defaultOptions: { queries: { staleTime: 30_000, retry: 1 } },
   }));
