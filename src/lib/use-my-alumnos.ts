@@ -11,6 +11,7 @@ export interface MyAlumno {
   curso_id: string;
   curso_nombre?: string;
   nivel?: string | null;
+  colegio_id?: string;
 }
 
 /**
@@ -26,11 +27,11 @@ export function useMyAlumnos() {
 
   return useQuery({
     queryKey: ["my-alumnos-secure", colegioId, session?.user?.id],
-    enabled: !!accessToken && !!colegioId,
+    enabled: !!accessToken,
     staleTime: 60_000,
     queryFn: async () => {
       const pupils = await getMyAlumnosSecure({
-        data: { accessToken: accessToken!, colegioId: colegioId! },
+        data: { accessToken: accessToken!, colegioId: colegioId ?? undefined },
       });
       return pupils as MyAlumno[];
     },

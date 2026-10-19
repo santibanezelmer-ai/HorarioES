@@ -43,13 +43,13 @@ export function FichaApoderadoView({ alumnos, colegioId }: Props) {
   // Cargar datos escolares mediante Server Function con verificación Zero-Trust en el backend
   const { data, isLoading } = useQuery({
     queryKey: ["ficha-apoderado-detalle-secure", alumnoId, colegioId, accessToken],
-    enabled: !!alumnoId && !!colegioId && !!accessToken,
+    enabled: !!alumnoId && !!accessToken,
     staleTime: 60_000,
     queryFn: async () => {
       return await getFichaAlumnoSecure({
         data: {
           accessToken: accessToken!,
-          colegioId,
+          colegioId: colegioId || undefined,
           alumnoId: alumnoId!,
         },
       });

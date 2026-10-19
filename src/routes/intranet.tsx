@@ -95,7 +95,8 @@ const AMBITO_DOCENTE_BADGE: Record<
 
 function IntranetPage() {
   const { profile, user } = useAuth();
-  const colegioId = profile?.colegio_id;
+  const { data: myAlumnos = [], isLoading: loadingAlumnos } = useMyAlumnos();
+  const colegioId = profile?.colegio_id || myAlumnos[0]?.colegio_id;
   const navigate = useNavigate();
   const { data: roles = [] } = useUserRoles();
   const { data: docente } = useMyDocente();
@@ -107,7 +108,6 @@ function IntranetPage() {
   );
   const isApoderado = roles.includes("apoderado") || (!isStaff && !isDocente);
   const canPublish = isStaff || isDocente;
-  const { data: myAlumnos = [], isLoading: loadingAlumnos } = useMyAlumnos();
 
   // Si un funcionario o docente ingresa a /intranet sin tener pupilos asociados, redirigir a su portal correspondiente
   const isStaffOrDocenteOnly =

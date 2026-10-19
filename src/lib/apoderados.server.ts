@@ -11,6 +11,7 @@ export interface SecurePupil {
   curso_id: string;
   curso_nombre?: string;
   nivel?: string | null;
+  colegio_id?: string;
 }
 
 /**
@@ -30,16 +31,43 @@ export async function getVerifiedUserEmail(uid: string): Promise<string> {
  */
 export async function getApoderadoAlumnosImpl(
   uid: string,
-  colegioId: string
+  colegioId?: string
 ): Promise<SecurePupil[]> {
   const userEmail = await getVerifiedUserEmail(uid);
 
+  let targetColegioId = colegioId;
+  if (!targetColegioId) {
+    const { data: prof } = await supabaseAdmin
+      .from("profiles")
+      .select("colegio_id")
+      .eq("user_id", uid)
+      .maybeSingle();
+    if (prof?.colegio_id) {
+      targetColegioId = prof.colegio_id;
+    } else {
+      const { data: mat } = await supabaseAdmin
+        .from("matriculas")
+        .select("colegio_id")
+        .or(`apoderado_titular_email.ilike.${userEmail},apoderado_suplente_email.ilike.${userEmail}`)
+        .limit(1)
+        .maybeSingle();
+      if (mat?.colegio_id) {
+        targetColegioId = mat.colegio_id;
+      }
+    }
+  }
+
   // 1. Buscar en matriculas aprobadas/registradas por correo del apoderado
-  const { data: mats, error: matErr } = await supabaseAdmin
+  let matQuery = supabaseAdmin
     .from("matriculas")
     .select("alumno_id, estudiante_nombres, estudiante_apellidos, estudiante_rut, curso_asignado_id")
-    .eq("colegio_id", colegioId)
     .or(`apoderado_titular_email.ilike.${userEmail},apoderado_suplente_email.ilike.${userEmail}`);
+
+  if (targetColegioId) {
+    matQuery = matQuery.eq("colegio_id", targetColegioId);
+  }
+
+  const { data: mats, error: matErr } = await matQuery;
 
   if (matErr) {
     console.error("[apoderados.server] Error consultando matriculas:", matErr);
@@ -56,7 +84,7 @@ export async function getApoderadoAlumnosImpl(
   if (alumnoIds.size > 0) {
     const { data: alumnosList, error: alErr } = await supabaseAdmin
       .from("alumnos")
-      .select("id, nombres, apellidos, rut, numero_lista, curso_id, cursos(nombre, nivel)")
+      .select("id, nombres, apellidos, rut, numero_lista, curso_id, colegio_id, cursos(nombre, nivel)")
       .in("id", Array.from(alumnoIds));
 
     if (!alErr && alumnosList) {
@@ -69,18 +97,24 @@ export async function getApoderadoAlumnosImpl(
         curso_id: a.curso_id,
         curso_nombre: a.cursos?.nombre ?? "Sin curso",
         nivel: a.cursos?.nivel ?? null,
+        colegio_id: a.colegio_id ?? targetColegioId,
       }));
     }
   }
 
   // 3. Fallback: Buscar en la tabla alumnos si el campo apoderado contiene el correo
   if (pupils.length === 0) {
-    const { data: byApoderadoField } = await supabaseAdmin
+    let alQuery = supabaseAdmin
       .from("alumnos")
-      .select("id, nombres, apellidos, rut, numero_lista, curso_id, cursos(nombre, nivel)")
-      .eq("colegio_id", colegioId)
+      .select("id, nombres, apellidos, rut, numero_lista, curso_id, colegio_id, cursos(nombre, nivel)")
       .ilike("apoderado", `%${userEmail}%`)
       .limit(10);
+
+    if (targetColegioId) {
+      alQuery = alQuery.eq("colegio_id", targetColegioId);
+    }
+
+    const { data: byApoderadoField } = await alQuery;
 
     if (byApoderadoField && byApoderadoField.length > 0) {
       pupils = byApoderadoField.map((a: any) => ({
@@ -92,6 +126,7 @@ export async function getApoderadoAlumnosImpl(
         curso_id: a.curso_id,
         curso_nombre: a.cursos?.nombre ?? "Sin curso",
         nivel: a.cursos?.nivel ?? null,
+        colegio_id: a.colegio_id ?? targetColegioId,
       }));
     }
   }
@@ -133,10 +168,26 @@ export async function assertApoderadoOwnsAlumno(
 export async function getFichaAlumnoApoderadoImpl(
   uid: string,
   alumnoId: string,
-  colegioId: string
+  colegioId?: string
 ) {
+  let targetColegioId = colegioId;
+  if (!targetColegioId) {
+    const { data: alRow } = await supabaseAdmin
+      .from("alumnos")
+      .select("colegio_id")
+      .eq("id", alumnoId)
+      .maybeSingle();
+    if (alRow?.colegio_id) {
+      targetColegioId = alRow.colegio_id;
+    }
+  }
+
+  if (!targetColegioId) {
+    throw new Error("No fue posible determinar el establecimiento del estudiante.");
+  }
+
   // Verificación estricta de autorización
-  await assertApoderadoOwnsAlumno(uid, alumnoId, colegioId);
+  await assertApoderadoOwnsAlumno(uid, alumnoId, targetColegioId);
 
   const [asis, califs, asigs, atrasos, anots] = await Promise.all([
     supabaseAdmin
@@ -153,7 +204,7 @@ export async function getFichaAlumnoApoderadoImpl(
     supabaseAdmin
       .from("asignaturas")
       .select("id, nombre, color")
-      .eq("colegio_id", colegioId),
+      .eq("colegio_id", targetColegioId),
     supabaseAdmin
       .from("atrasos")
       .select("fecha, hora, motivo, justificado")
@@ -368,11 +419,15 @@ export async function ensureApoderadoLinkedImpl(uid: string) {
   }
 
   if (targetColegioId) {
-    await supabaseAdmin.from("user_roles").upsert({
-      user_id: uid,
-      colegio_id: targetColegioId,
-      role: "apoderado",
-    } as never);
+    try {
+      await supabaseAdmin.from("user_roles").upsert({
+        user_id: uid,
+        colegio_id: targetColegioId,
+        role: "viewer",
+      } as never, { onConflict: "user_id,colegio_id,role" });
+    } catch (e) {
+      console.warn("[ensureApoderadoLinked] Warning updating user_roles:", e);
+    }
 
     await supabaseAdmin
       .from("profiles")

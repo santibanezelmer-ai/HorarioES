@@ -4,7 +4,7 @@ import { uidFromToken } from "@/lib/tenant.server";
 
 const getMyAlumnosSchema = z.object({
   accessToken: z.string().min(1),
-  colegioId: z.string().uuid(),
+  colegioId: z.string().uuid().optional(),
 });
 
 export const getMyAlumnosSecure = createServerFn({ method: "POST" })
@@ -19,7 +19,7 @@ export const getMyAlumnosSecure = createServerFn({ method: "POST" })
 
 const getFichaAlumnoSchema = z.object({
   accessToken: z.string().min(1),
-  colegioId: z.string().uuid(),
+  colegioId: z.string().uuid().optional(),
   alumnoId: z.string().uuid(),
 });
 

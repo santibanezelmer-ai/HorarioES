@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useState, useRef, type FormEvent } from "react";
 import {
   Users,
   Mail,
@@ -37,6 +37,8 @@ function ApoderadosLoginPage() {
   const { user, session, profile, loading, refreshProfile } = useAuth();
   const navigate = useNavigate();
 
+  const redirectingRef = useRef(false);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
@@ -51,16 +53,18 @@ function ApoderadosLoginPage() {
   // Si el usuario ya está autenticado (o viene volviendo de Google OAuth)
   useEffect(() => {
     if (loading || !user || !session?.access_token) return;
+    if (redirectingRef.current) return;
+    redirectingRef.current = true;
 
     (async () => {
       try {
         await ensureApoderadoLinked({ data: { accessToken: session.access_token } });
         await refreshProfile();
-        toast.success("¡Bienvenido a la Intranet!");
-        navigate({ to: "/intranet" });
+        toast.success("¡Bienvenido a la Intranet!", { id: "portal-apoderados-login-toast" });
+        navigate({ to: "/intranet", replace: true });
       } catch (err) {
         console.error("Error vinculando apoderado:", err);
-        navigate({ to: "/intranet" });
+        navigate({ to: "/intranet", replace: true });
       }
     })();
   }, [user, session, loading, navigate, refreshProfile]);
@@ -128,12 +132,14 @@ function ApoderadosLoginPage() {
       }
 
       if (authData.session?.access_token) {
+        redirectingRef.current = true;
         await ensureApoderadoLinked({
           data: { accessToken: authData.session.access_token },
         });
         await refreshProfile();
-        toast.success("Ingreso correcto");
-        navigate({ to: "/intranet" });
+        toast.success("¡Bienvenido a la Intranet!", { id: "portal-apoderados-login-toast" });
+        navigate({ to: "/intranet", replace: true });
+        return;
       }
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Error al iniciar sesión");
