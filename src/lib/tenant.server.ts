@@ -62,7 +62,45 @@ export async function validateAndSetActiveColegioImpl(accessToken: string, slug:
     const { data: m } = await supabaseAdmin
       .from("user_roles").select("role")
       .eq("user_id", uid).eq("colegio_id", c.id);
-    if (!m || m.length === 0) throw new Error("No perteneces a este colegio");
+    if (!m || m.length === 0) {
+      // Verificar si el usuario es un apoderado registrado por email en matriculas de este colegio
+      const userRes = await supabaseAdmin.auth.admin.getUserById(uid);
+      const email = userRes?.data?.user?.email?.toLowerCase().trim();
+      let matched = false;
+
+      if (email) {
+        const { data: matCheck } = await supabaseAdmin
+          .from("matriculas")
+          .select("id")
+          .eq("colegio_id", c.id)
+          .or(`apoderado_titular_email.ilike.${email},apoderado_suplente_email.ilike.${email}`)
+          .limit(1);
+
+        if (matCheck && matCheck.length > 0) {
+          matched = true;
+        } else {
+          const { data: alCheck } = await supabaseAdmin
+            .from("alumnos")
+            .select("id")
+            .eq("colegio_id", c.id)
+            .ilike("apoderado", `%${email}%`)
+            .limit(1);
+          if (alCheck && alCheck.length > 0) {
+            matched = true;
+          }
+        }
+      }
+
+      if (matched) {
+        await supabaseAdmin.from("user_roles").insert({
+          user_id: uid,
+          colegio_id: c.id,
+          role: "apoderado",
+        } as never);
+      } else {
+        throw new Error("No perteneces a este colegio");
+      }
+    }
   }
 
   await supabaseAdmin.from("profiles").update({ colegio_id: c.id }).eq("user_id", uid);

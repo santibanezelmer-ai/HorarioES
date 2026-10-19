@@ -167,6 +167,9 @@ function Dashboard() {
   const isDocenteOnly =
     roles.includes("docente") &&
     !roles.some((r) => ["admin", "utp", "editor", "viewer", "direccion", "inspectoria", "superadmin"].includes(r));
+  const isApoderadoOnly =
+    roles.includes("apoderado") &&
+    !roles.some((r) => ["admin", "utp", "editor", "viewer", "direccion", "inspectoria", "docente", "superadmin"].includes(r));
 
   useEffect(() => {
     if (rolesLoading) return;
@@ -174,8 +177,10 @@ function Dashboard() {
       navigate({ to: "/superadmin", replace: true });
     } else if (isDocenteOnly) {
       navigate({ to: "/mis-clases", replace: true });
+    } else if (isApoderadoOnly) {
+      navigate({ to: "/intranet", replace: true });
     }
-  }, [isDocenteOnly, isPlatformOnly, rolesLoading, navigate]);
+  }, [isDocenteOnly, isApoderadoOnly, isPlatformOnly, rolesLoading, navigate]);
 
   // Consulta consolidada con datos reales de la base de datos
   const { data: metrics, isLoading: metricsLoading } = useQuery({
