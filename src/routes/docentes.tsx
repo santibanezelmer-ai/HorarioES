@@ -3,7 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
-import { Plus, Pencil, Trash2, Users, Link2, Unlink, MailQuestion } from "lucide-react";
+import { Plus, Pencil, Trash2, Users, Link2, Unlink, MailQuestion, Mail } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { withRetry } from "@/lib/db-retry";
 import { useAuth } from "@/lib/auth-context";
@@ -11,6 +11,7 @@ import { inviteOrLinkDocente } from "@/lib/docentes.functions";
 import { PageHeader } from "@/components/PageHeader";
 import { ColorPicker } from "@/components/ColorPicker";
 import { EmptyState } from "@/components/EmptyState";
+import { InvitacionMasivaDialog } from "@/components/InvitacionMasivaDialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -53,6 +54,7 @@ function DocentesPage() {
   const [toDelete, setToDelete] = useState<Docente | null>(null);
   const [linking, setLinking] = useState<Docente | null>(null);
   const [linkEmail, setLinkEmail] = useState("");
+  const [bulkInviteOpen, setBulkInviteOpen] = useState(false);
 
   const { data: items = [], isLoading } = useQuery({
     queryKey: ["docentes", colegioId],
@@ -154,17 +156,72 @@ function DocentesPage() {
     onError: (e: unknown) => toast.error(handleDbError(e)),
   });
 
+  const docentesSinCuenta = items.filter((d) => !d.user_id);
+  const docentesVinculados = items.filter((d) => !!d.user_id);
+  const docentesInvitados = items.filter((d) => !d.user_id && !!d.invited_email);
+
   return (
-    <div>
+    <div className="space-y-4">
       <PageHeader
         title="Docentes"
         subtitle="Profesores y profesoras del colegio"
         actions={
-          <Button onClick={() => { setEditing(null); setOpen(true); }}>
-            <Plus className="w-4 h-4 mr-2" /> Nuevo
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setBulkInviteOpen(true)}
+              className="gap-2"
+              title="Generar enlaces o enviar invitaciones para crear clave a docentes"
+            >
+              <Mail className="w-4 h-4 text-primary" />
+              Invitación Masiva
+              {docentesSinCuenta.length > 0 && (
+                <span className="ml-1 text-[11px] px-1.5 py-0.2 rounded-full bg-primary/20 text-primary font-semibold">
+                  {docentesSinCuenta.length}
+                </span>
+              )}
+            </Button>
+            <Button onClick={() => { setEditing(null); setOpen(true); }}>
+              <Plus className="w-4 h-4 mr-2" /> Nuevo
+            </Button>
+          </div>
         }
       />
+
+      {/* Barra de estado de cuentas docentes */}
+      {items.length > 0 && (
+        <div className="bg-surface border border-border rounded-xl p-3 flex flex-wrap items-center justify-between gap-3 text-xs">
+          <div className="flex items-center gap-4 flex-wrap">
+            <div className="flex items-center gap-1.5">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+              <span className="font-medium text-foreground">{docentesVinculados.length}</span>
+              <span className="text-muted-foreground">con cuenta activa</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
+              <span className="font-medium text-foreground">{docentesInvitados.length}</span>
+              <span className="text-muted-foreground">invitación pendiente</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="w-2.5 h-2.5 rounded-full bg-muted-foreground/40" />
+              <span className="font-medium text-foreground">
+                {docentesSinCuenta.length - docentesInvitados.length}
+              </span>
+              <span className="text-muted-foreground">sin invitar</span>
+            </div>
+          </div>
+
+          {docentesSinCuenta.length > 0 && (
+            <button
+              type="button"
+              onClick={() => setBulkInviteOpen(true)}
+              className="text-primary hover:underline font-medium text-xs flex items-center gap-1 cursor-pointer"
+            >
+              Invitar docentes pendientes ({docentesSinCuenta.length}) →
+            </button>
+          )}
+        </div>
+      )}
 
       {isLoading ? (
         <div className="text-sm text-muted-foreground">Cargando…</div>
@@ -274,6 +331,17 @@ function DocentesPage() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <InvitacionMasivaDialog
+        open={bulkInviteOpen}
+        onOpenChange={setBulkInviteOpen}
+        docentes={items}
+        colegioId={colegioId ?? ""}
+        accessToken={session?.access_token}
+        onSuccess={() => {
+          qc.invalidateQueries({ queryKey: ["docentes", colegioId] });
+        }}
+      />
     </div>
   );
 }
