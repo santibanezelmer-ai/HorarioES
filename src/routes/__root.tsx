@@ -113,6 +113,8 @@ function AuthGate() {
     path === "/login" ||
     path === "/register" ||
     path === "/admin/login" ||
+    path === "/apoderados/login" ||
+    path === "/restablecer-clave" ||
     path.startsWith("/c/") ||
     path.startsWith("/invitacion/");
 
@@ -125,7 +127,13 @@ function AuthGate() {
   }
 
   if (!user) {
-    if (typeof window !== "undefined") window.location.href = "/login";
+    if (typeof window !== "undefined") {
+      if (path === "/intranet" || path.startsWith("/apoderados")) {
+        window.location.href = "/apoderados/login";
+      } else {
+        window.location.href = "/login";
+      }
+    }
     return null;
   }
 

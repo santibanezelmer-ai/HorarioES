@@ -100,12 +100,12 @@ export const MODULES: ModuleDef[] = [
   },
   {
     id: "intranet",
-    label: "Intranet",
+    label: "Intranet Apoderados",
     icon: Newspaper,
     to: "/intranet",
-    description: "Muro institucional, circulares y documentos oficiales",
+    description: "Ficha escolar de alumnos, circulares y documentos",
     group: "principal",
-    roles: ["admin", "direccion", "utp", "inspectoria", "docente", "apoderado", "editor", "viewer"],
+    roles: ["apoderado"],
   },
   {
     id: "academico",

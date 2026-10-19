@@ -1,5 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useState, useMemo } from "react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useState, useMemo, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   Newspaper,
@@ -96,6 +96,7 @@ const AMBITO_DOCENTE_BADGE: Record<
 function IntranetPage() {
   const { profile, user } = useAuth();
   const colegioId = profile?.colegio_id;
+  const navigate = useNavigate();
   const { data: roles = [] } = useUserRoles();
   const { data: docente } = useMyDocente();
   const queryClient = useQueryClient();
@@ -108,11 +109,18 @@ function IntranetPage() {
   const canPublish = isStaff || isDocente;
   const { data: myAlumnos = [], isLoading: loadingAlumnos } = useMyAlumnos();
 
-  // Pestañas principales de navegación
-  const [tab, setTab] = useState<"general" | "mis-pupilos" | "apoderados" | "docente" | "documentos">(() => {
-    // Si el usuario es principalmente apoderado o tiene alumnos vinculados, abrir por defecto la ficha de sus alumnos
-    return roles.includes("apoderado") ? "mis-pupilos" : "general";
-  });
+  // Si un funcionario o docente ingresa a /intranet sin tener pupilos asociados, redirigir a su portal correspondiente
+  const isStaffOrDocenteOnly =
+    (isDocente || isStaff) && !roles.includes("apoderado") && myAlumnos.length === 0;
+
+  useEffect(() => {
+    if (!loadingAlumnos && isStaffOrDocenteOnly) {
+      navigate({ to: isDocente ? "/mis-clases" : "/dashboard", replace: true });
+    }
+  }, [isStaffOrDocenteOnly, loadingAlumnos, isDocente, navigate]);
+
+  // Pestañas principales de navegación para apoderados
+  const [tab, setTab] = useState<"mis-pupilos" | "apoderados" | "documentos">("mis-pupilos");
 
   // Filtros
   const [catFilter, setCatFilter] = useState<string>("todas");
@@ -315,15 +323,6 @@ function IntranetPage() {
             return false;
           }
         }
-      } else if (tab === "docente") {
-        const isDocentePub =
-          dests.includes("docentes") || (p.ambito_docente && p.ambito_docente !== "general");
-        if (!isDocentePub) return false;
-
-        // Filtro por ámbito docente específico
-        if (ambitoFilter !== "todos") {
-          if (p.ambito_docente !== ambitoFilter) return false;
-        }
       }
 
       // Filtro por categoría general (urgente, circular, etc.)
@@ -515,102 +514,48 @@ function IntranetPage() {
   return (
     <div className="space-y-6 pb-12">
       <PageHeader
-        title="Intranet Institucional"
-        subtitle="Comunicación escolar, circulares oficiales, trabajo docente y repositorio normativo"
-        actions={
-          <div className="flex items-center gap-2">
-            {canPublish && (
-              <button
-                onClick={() => {
-                  setNuevoCanal(tab === "apoderados" ? "apoderados" : tab === "docente" ? "docentes" : "general");
-                  if (tab === "apoderados" && miCursoJefe) {
-                    setNuevoTipoApoderado("especificos");
-                    setCursosSeleccionados([miCursoJefe.id]);
-                  }
-                  setIsNewModalOpen(true);
-                }}
-                className="inline-flex items-center gap-2 px-3.5 py-2 bg-primary text-primary-foreground font-semibold rounded-lg text-sm shadow-elegant hover:bg-primary/90 transition-all cursor-pointer"
-              >
-                <Plus className="w-4 h-4" />
-                Nueva Publicación
-              </button>
-            )}
-            {isStaff && tab === "documentos" && (
-              <button
-                onClick={() => setIsNewDocModalOpen(true)}
-                className="inline-flex items-center gap-2 px-3.5 py-2 bg-surface border border-border text-foreground font-semibold rounded-lg text-sm hover:bg-surface-2 transition-all cursor-pointer"
-              >
-                <Upload className="w-4 h-4" />
-                Subir Documento
-              </button>
-            )}
-          </div>
-        }
+        title="Intranet de Apoderados"
+        subtitle="Portal escolar para familias: calificaciones, asistencia, hoja de vida y circulares oficiales"
       />
 
-      {/* Selector de Canales Principales */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-2 border-b border-border pb-3">
-        {/* Pestaña exclusiva Ficha de Mis Estudiantes (visible para apoderados o usuarios con pupilos) */}
-        {(isApoderado || myAlumnos.length > 0) && (
-          <button
-            onClick={() => setTab("mis-pupilos")}
-            className={`flex items-center justify-center sm:justify-start gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
-              tab === "mis-pupilos"
-                ? "bg-emerald-600 text-white shadow-sm"
-                : "bg-surface text-muted-foreground hover:text-foreground hover:bg-surface-2 border border-border/60"
-            }`}
-          >
-            <GraduationCap className="w-4 h-4" />
-            <span>Ficha de mis Alumnos</span>
-            <span
-              className={`text-xs px-2 py-0.5 rounded-full ${
-                tab === "mis-pupilos"
-                  ? "bg-white/20 text-white"
-                  : "bg-surface-2 text-muted-foreground"
-              }`}
-            >
-              {myAlumnos.length}
-            </span>
-          </button>
-        )}
-
+      {/* Selector de Pestañas de Apoderados */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 border-b border-border pb-3">
+        {/* Pestaña Ficha de Mis Alumnos */}
         <button
-          onClick={() => {
-            setTab("general");
-            setCatFilter("todas");
-          }}
-          className={`flex items-center justify-center sm:justify-start gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
-            tab === "general"
-              ? "bg-primary text-primary-foreground shadow-sm"
+          onClick={() => setTab("mis-pupilos")}
+          className={`flex items-center justify-center sm:justify-start gap-2.5 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
+            tab === "mis-pupilos"
+              ? "bg-emerald-600 text-white shadow-sm"
               : "bg-surface text-muted-foreground hover:text-foreground hover:bg-surface-2 border border-border/60"
           }`}
         >
-          <Newspaper className="w-4 h-4" />
-          <span>Muro General</span>
+          <GraduationCap className="w-4 h-4" />
+          <span>Ficha de mis Alumnos</span>
           <span
             className={`text-xs px-2 py-0.5 rounded-full ${
-              tab === "general"
-                ? "bg-primary-foreground/20 text-primary-foreground"
+              tab === "mis-pupilos"
+                ? "bg-white/20 text-white"
                 : "bg-surface-2 text-muted-foreground"
             }`}
           >
-            {publicaciones.length}
+            {myAlumnos.length}
           </span>
         </button>
 
+        {/* Pestaña Circulares y Comunicados */}
         <button
           onClick={() => {
             setTab("apoderados");
             setCatFilter("todas");
           }}
-          className={`flex items-center justify-center sm:justify-start gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
+          className={`flex items-center justify-center sm:justify-start gap-2.5 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
             tab === "apoderados"
               ? "bg-amber-600 text-white shadow-sm"
               : "bg-surface text-muted-foreground hover:text-foreground hover:bg-surface-2 border border-border/60"
           }`}
         >
           <Users className="w-4 h-4" />
-          <span>Para Apoderados</span>
+          <span>Circulares y Comunicados</span>
           <span
             className={`text-xs px-2 py-0.5 rounded-full ${
               tab === "apoderados"
@@ -628,39 +573,10 @@ function IntranetPage() {
           </span>
         </button>
 
-        <button
-          onClick={() => {
-            setTab("docente");
-            setCatFilter("todas");
-          }}
-          className={`flex items-center justify-center sm:justify-start gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
-            tab === "docente"
-              ? "bg-indigo-600 text-white shadow-sm"
-              : "bg-surface text-muted-foreground hover:text-foreground hover:bg-surface-2 border border-border/60"
-          }`}
-        >
-          <GraduationCap className="w-4 h-4" />
-          <span>Trabajo Docente</span>
-          <span
-            className={`text-xs px-2 py-0.5 rounded-full ${
-              tab === "docente"
-                ? "bg-white/20 text-white"
-                : "bg-surface-2 text-muted-foreground"
-            }`}
-          >
-            {
-              publicaciones.filter(
-                (p) =>
-                  (p.destinatarios || []).includes("docentes") ||
-                  (p.ambito_docente && p.ambito_docente !== "general")
-              ).length
-            }
-          </span>
-        </button>
-
+        {/* Pestaña Normativa y Reglamentos */}
         <button
           onClick={() => setTab("documentos")}
-          className={`flex items-center justify-center sm:justify-start gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
+          className={`flex items-center justify-center sm:justify-start gap-2.5 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
             tab === "documentos"
               ? "bg-teal-700 text-white shadow-sm"
               : "bg-surface text-muted-foreground hover:text-foreground hover:bg-surface-2 border border-border/60"
@@ -722,32 +638,7 @@ function IntranetPage() {
             </div>
           )}
 
-          {tab === "docente" && (
-            <div className="p-4 bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-900/50 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-indigo-900 dark:text-indigo-200">
-              <div className="flex items-center gap-2">
-                <Briefcase className="w-4 h-4 text-indigo-600 shrink-0" />
-                <span>
-                  <strong>Sala de Profesores Digital & Trabajo Técnico:</strong> Actas de Consejo de Profesores, lineamientos UTP, coordinación de departamentos y acuerdos pedagógicos.
-                </span>
-              </div>
-              {/* Filtro por ámbito docente */}
-              <div className="flex items-center gap-2 shrink-0">
-                <span className="font-semibold text-indigo-800 dark:text-indigo-300">Área:</span>
-                <select
-                  value={ambitoFilter}
-                  onChange={(e) => setAmbitoFilter(e.target.value)}
-                  className="px-2.5 py-1 bg-surface border border-indigo-300 dark:border-indigo-800 rounded-lg text-xs font-semibold text-foreground focus:outline-none capitalize"
-                >
-                  <option value="todos">Todas las áreas</option>
-                  <option value="consejo">Consejo de Profesores</option>
-                  <option value="utp">UTP & Currículum</option>
-                  <option value="departamento">Departamentos de Asignatura</option>
-                  <option value="convivencia">Convivencia e Inspectoría</option>
-                  <option value="general">General Docente</option>
-                </select>
-              </div>
-            </div>
-          )}
+
 
           {/* Barra de Búsqueda y Filtros de Categoría */}
           <div className="flex flex-col sm:flex-row gap-3">
