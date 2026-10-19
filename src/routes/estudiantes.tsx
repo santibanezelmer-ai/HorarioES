@@ -1,11 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Search } from "lucide-react";
+import { Search, ShieldCheck, EyeOff } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { PageHeader } from "@/components/PageHeader";
 import { EmptyState } from "@/components/EmptyState";
+import { PrivacyShield } from "@/components/PrivacyShield";
+import { maskName, maskPhone } from "@/lib/rut";
 
 export const Route = createFileRoute("/estudiantes")({
   head: () => ({ meta: [{ title: "Estudiantes — HorarioES" }] }),
@@ -30,6 +32,7 @@ function EstudiantesPage() {
   const colegioId = profile?.colegio_id;
   const [q, setQ] = useState("");
   const [cursoFilter, setCursoFilter] = useState<string>("");
+  const [modoPrivacidad, setModoPrivacidad] = useState(false);
 
   const { data: cursos = [] } = useQuery({
     queryKey: ["cursos-min", colegioId], enabled: !!colegioId,
@@ -78,7 +81,7 @@ function EstudiantesPage() {
         subtitle={`${totalActivos} estudiantes activos · ${alumnos.length} total`}
       />
 
-      <div className="flex flex-col md:flex-row gap-3 mb-4">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-4">
         <div className="relative flex-1">
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
           <input
@@ -94,6 +97,23 @@ function EstudiantesPage() {
           <option value="">Todos los cursos</option>
           {cursos.map((c) => <option key={c.id} value={c.id}>{c.nombre}</option>)}
         </select>
+        <button
+          type="button"
+          onClick={() => setModoPrivacidad((prev) => !prev)}
+          className={`flex items-center justify-center gap-2 px-3.5 py-2 rounded-md text-xs font-semibold border transition-all cursor-pointer ${
+            modoPrivacidad
+              ? "bg-amber-500/15 border-amber-500/40 text-amber-500 shadow-sm"
+              : "bg-surface border-border text-muted-foreground hover:text-foreground"
+          }`}
+          title="Oculta o protege RUNs y datos personales para proyecciones en pantalla o reuniones"
+        >
+          {modoPrivacidad ? (
+            <ShieldCheck className="w-4 h-4 text-amber-500" />
+          ) : (
+            <EyeOff className="w-4 h-4" />
+          )}
+          <span>{modoPrivacidad ? "Privacidad Activada" : "Modo Privacidad"}</span>
+        </button>
       </div>
 
       {isLoading ? (
@@ -116,14 +136,40 @@ function EstudiantesPage() {
             <tbody>
               {filtered.map((a) => {
                 const curso = a.curso_id ? cursoMap[a.curso_id] : null;
+                const nombreCompleto = `${a.apellidos}, ${a.nombres}`;
                 return (
                   <tr key={a.id} className="border-t border-border hover:bg-surface-2 cursor-pointer">
-                    <td className="px-3 py-2 text-muted-foreground"><Link to="/estudiantes/$id" params={{ id: a.id }} className="block">{a.numero_lista ?? "—"}</Link></td>
-                    <td className="px-3 py-2 font-medium"><Link to="/estudiantes/$id" params={{ id: a.id }} className="block hover:text-primary">{a.apellidos}, {a.nombres}</Link></td>
-                    <td className="px-3 py-2 text-muted-foreground">{a.rut ?? "—"}</td>
-                    <td className="px-3 py-2">{curso?.nombre ?? "—"}</td>
                     <td className="px-3 py-2 text-muted-foreground">
-                      {a.apoderado ?? "—"}{a.telefono ? ` · ${a.telefono}` : ""}
+                      <Link to="/estudiantes/$id" params={{ id: a.id }} className="block">
+                        {a.numero_lista ?? "—"}
+                      </Link>
+                    </td>
+                    <td className="px-3 py-2 font-medium">
+                      <Link to="/estudiantes/$id" params={{ id: a.id }} className="block hover:text-primary">
+                        {modoPrivacidad ? maskName(nombreCompleto, "first_initial") : nombreCompleto}
+                      </Link>
+                    </td>
+                    <td className="px-3 py-2 text-muted-foreground" onClick={(e) => e.stopPropagation()}>
+                      <PrivacyShield
+                        value={a.rut}
+                        type="rut"
+                        rutMode={modoPrivacidad ? "strict" : "banco"}
+                        copyable={true}
+                        label={`RUN de ${a.nombres}`}
+                      />
+                    </td>
+                    <td className="px-3 py-2">{curso?.nombre ?? "—"}</td>
+                    <td className="px-3 py-2 text-muted-foreground text-xs">
+                      {a.apoderado ? (
+                        <span>
+                          {modoPrivacidad ? maskName(a.apoderado, "first_initial") : a.apoderado}
+                        </span>
+                      ) : (
+                        "—"
+                      )}
+                      {a.telefono && (
+                        <span> · {modoPrivacidad ? maskPhone(a.telefono) : a.telefono}</span>
+                      )}
                     </td>
                     <td className="px-3 py-2">
                       {a.retirado_en ? (

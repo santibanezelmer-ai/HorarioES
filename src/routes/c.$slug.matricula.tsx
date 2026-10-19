@@ -29,7 +29,7 @@ import {
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { getColegioBySlug } from "@/lib/tenant.functions";
-import { validateRut, formatRut } from "@/lib/rut";
+import { validateRut, formatRut, maskRut } from "@/lib/rut";
 import type { MatriculaEstado, Matricula } from "@/lib/matricula.types";
 
 export const Route = createFileRoute("/c/$slug/matricula")({
@@ -1575,8 +1575,10 @@ function PublicMatriculaPortal() {
                             </h3>
                             <p className="text-xs text-muted-foreground">
                               RUN:{" "}
-                              <span className="font-mono text-foreground">
-                                {trackingResult.estudiante_rut || "Sin RUN registrado"}
+                              <span className="font-mono font-medium text-foreground">
+                                {trackingResult.estudiante_rut
+                                  ? maskRut(trackingResult.estudiante_rut)
+                                  : "Sin RUN registrado"}
                               </span>
                             </p>
                           </div>

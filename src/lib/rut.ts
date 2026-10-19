@@ -83,3 +83,103 @@ export function formatRut(rut: string | null | undefined): string {
 
   return `${cuerpoFormateado}-${dv}`;
 }
+
+export type RutMaskMode = "banco" | "privacy" | "strict";
+
+/**
+ * Enmascara un RUT para proteger la privacidad del titular (Ley 19.628 / PII).
+ * - "banco" (por defecto): Oculta el cuerpo inicial, muestra últimos 3 dígitos y DV (ej: "**.***.678-5").
+ * - "privacy": Oculta dígitos intermedios, preserva inicio y DV (ej: "12.***.***-5").
+ * - "strict": Oculta completamente el cuerpo y DV (ej: "**.***.***-*").
+ */
+export function maskRut(
+  rut: string | null | undefined,
+  mode: RutMaskMode = "banco"
+): string {
+  if (!rut) return "";
+  const cleaned = cleanRut(rut);
+  if (!cleaned) return "";
+
+  if (cleaned.length < 3) return "**-*";
+
+  const cuerpo = cleaned.slice(0, -1);
+  const dv = cleaned.slice(-1);
+
+  if (mode === "strict") {
+    return "**.***.***-*";
+  }
+
+  if (mode === "privacy") {
+    const prefix = cuerpo.length >= 6 ? cuerpo.slice(0, 2) : cuerpo.slice(0, 1);
+    return `${prefix}.***.***-${dv}`;
+  }
+
+  // mode === "banco"
+  const visibleCuerpo = cuerpo.slice(-3);
+  return `**.***.${visibleCuerpo}-${dv}`;
+}
+
+/**
+ * Enmascara un nombre completo protegiendo la identidad de menores de edad y apoderados.
+ * - "first_initial": "Juan Carlos Pérez Soto" -> "Juan P. S."
+ * - "asterisks": "Juan Carlos Pérez Soto" -> "J*** C*** P*** S***"
+ * - "initials": "Juan Carlos Pérez Soto" -> "J. C. P. S."
+ */
+export function maskName(
+  fullName: string | null | undefined,
+  mode: "first_initial" | "asterisks" | "initials" = "first_initial"
+): string {
+  if (!fullName) return "";
+  const parts = fullName.trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return "";
+  if (parts.length === 1) {
+    if (mode === "asterisks") {
+      const w = parts[0];
+      return w.length > 2 ? `${w[0]}***${w.slice(-1)}` : `${w[0]}*`;
+    }
+    return parts[0];
+  }
+
+  if (mode === "initials") {
+    return parts.map((p) => `${p[0].toUpperCase()}.`).join(" ");
+  }
+
+  if (mode === "asterisks") {
+    return parts
+      .map((p) => (p.length > 2 ? `${p[0].toUpperCase()}***` : `${p[0].toUpperCase()}*`))
+      .join(" ");
+  }
+
+  const [first, ...rest] = parts;
+  const restInitials = rest.map((p) => `${p[0].toUpperCase()}.`).join(" ");
+  return `${first} ${restInitials}`;
+}
+
+/**
+ * Enmascara una dirección de correo electrónico.
+ * ej: "rodrigo.gonzalez@colegio.cl" -> "r***z@colegio.cl"
+ */
+export function maskEmail(email: string | null | undefined): string {
+  if (!email || !email.includes("@")) return "";
+  const [user, domain] = email.trim().split("@");
+  if (!user || !domain) return email;
+  if (user.length <= 2) {
+    return `${user[0]}*@${domain}`;
+  }
+  const maskedUser = `${user[0]}***${user[user.length - 1]}`;
+  return `${maskedUser}@${domain}`;
+}
+
+/**
+ * Enmascara un número de teléfono celular chileno o internacional.
+ * ej: "+56912345678" -> "+56 **** 5678"
+ */
+export function maskPhone(phone: string | null | undefined): string {
+  if (!phone) return "";
+  const cleaned = phone.replace(/\s+/g, "");
+  if (cleaned.length < 8) return "****";
+  const last4 = cleaned.slice(-4);
+  const prefix = cleaned.startsWith("+56") ? "+56 " : "";
+  return `${prefix}**** ${last4}`;
+}
+

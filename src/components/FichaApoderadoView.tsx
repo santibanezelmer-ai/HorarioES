@@ -15,9 +15,10 @@ import {
   HelpCircle,
   ChevronDown,
 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { type MyAlumno } from "@/lib/use-my-alumnos";
+import { getFichaAlumnoSecure } from "@/lib/apoderados.functions";
+import { PrivacyShield } from "@/components/PrivacyShield";
 
 interface Props {
   alumnos: MyAlumno[];
@@ -25,6 +26,9 @@ interface Props {
 }
 
 export function FichaApoderadoView({ alumnos, colegioId }: Props) {
+  const { session } = useAuth();
+  const accessToken = session?.access_token;
+
   const [selectedAlumnoId, setSelectedAlumnoId] = useState<string>(
     alumnos[0]?.id ?? ""
   );
@@ -36,48 +40,19 @@ export function FichaApoderadoView({ alumnos, colegioId }: Props) {
 
   const alumnoId = alumnoActual?.id;
 
-  // Cargar datos académicos y de convivencia del alumno seleccionado
+  // Cargar datos escolares mediante Server Function con verificación Zero-Trust en el backend
   const { data, isLoading } = useQuery({
-    queryKey: ["ficha-apoderado-detalle", alumnoId, colegioId],
-    enabled: !!alumnoId && !!colegioId,
+    queryKey: ["ficha-apoderado-detalle-secure", alumnoId, colegioId, accessToken],
+    enabled: !!alumnoId && !!colegioId && !!accessToken,
+    staleTime: 60_000,
     queryFn: async () => {
-      const [asis, califs, asigs, atrasos, anots] = await Promise.all([
-        supabase
-          .from("asistencias")
-          .select("fecha, estado")
-          .eq("alumno_id", alumnoId!)
-          .order("fecha", { ascending: false })
-          .limit(300),
-        supabase
-          .from("calificaciones")
-          .select("asignatura_id, nota, descripcion, fecha, ponderacion")
-          .eq("alumno_id", alumnoId!)
-          .order("fecha", { ascending: false }),
-        supabase
-          .from("asignaturas")
-          .select("id, nombre, color")
-          .eq("colegio_id", colegioId),
-        supabase
-          .from("atrasos")
-          .select("fecha, hora, motivo, justificado")
-          .eq("alumno_id", alumnoId!)
-          .order("fecha", { ascending: false })
-          .limit(50),
-        supabase
-          .from("anotaciones")
-          .select("fecha, tipo, categoria, descripcion")
-          .eq("alumno_id", alumnoId!)
-          .order("fecha", { ascending: false })
-          .limit(50),
-      ]);
-
-      return {
-        asis: asis.data ?? [],
-        califs: califs.data ?? [],
-        asigs: asigs.data ?? [],
-        atrasos: atrasos.data ?? [],
-        anots: anots.data ?? [],
-      };
+      return await getFichaAlumnoSecure({
+        data: {
+          accessToken: accessToken!,
+          colegioId,
+          alumnoId: alumnoId!,
+        },
+      });
     },
   });
 
@@ -186,7 +161,15 @@ export function FichaApoderadoView({ alumnos, colegioId }: Props) {
                 {alumnoActual.curso_nombre}
               </span>
               <span>·</span>
-              <span>RUN: {alumnoActual.rut ?? "Sin registrar"}</span>
+              <span className="inline-flex items-center gap-1.5">
+                <span>RUN:</span>
+                <PrivacyShield
+                  value={alumnoActual.rut}
+                  type="rut"
+                  copyable={true}
+                  label={`RUN de ${alumnoActual.nombres}`}
+                />
+              </span>
               {alumnoActual.numero_lista && (
                 <>
                   <span>·</span>
