@@ -84,21 +84,34 @@ export async function getApoderadoAlumnosImpl(
   if (alumnoIds.size > 0) {
     const { data: alumnosList, error: alErr } = await supabaseAdmin
       .from("alumnos")
-      .select("id, nombres, apellidos, rut, numero_lista, curso_id, colegio_id, cursos(nombre, nivel)")
+      .select("id, nombres, apellidos, rut, numero_lista, curso_id, colegio_id")
       .in("id", Array.from(alumnoIds));
 
-    if (!alErr && alumnosList) {
-      pupils = alumnosList.map((a: any) => ({
-        id: a.id,
-        nombres: a.nombres,
-        apellidos: a.apellidos,
-        rut: a.rut,
-        numero_lista: a.numero_lista,
-        curso_id: a.curso_id,
-        curso_nombre: a.cursos?.nombre ?? "Sin curso",
-        nivel: a.cursos?.nivel ?? null,
-        colegio_id: a.colegio_id ?? targetColegioId,
-      }));
+    if (!alErr && alumnosList && alumnosList.length > 0) {
+      const cursoIds = alumnosList.map((a: any) => a.curso_id).filter(Boolean);
+      let cursosMap = new Map<string, { id: string; nombre: string; nivel?: string | null }>();
+      if (cursoIds.length > 0) {
+        const { data: cList } = await supabaseAdmin
+          .from("cursos")
+          .select("id, nombre, nivel")
+          .in("id", cursoIds);
+        cursosMap = new Map((cList ?? []).map((c: any) => [c.id, c]));
+      }
+
+      pupils = alumnosList.map((a: any) => {
+        const c = cursosMap.get(a.curso_id);
+        return {
+          id: a.id,
+          nombres: a.nombres,
+          apellidos: a.apellidos,
+          rut: a.rut,
+          numero_lista: a.numero_lista,
+          curso_id: a.curso_id,
+          curso_nombre: c?.nombre ?? "Sin curso",
+          nivel: c?.nivel ?? null,
+          colegio_id: a.colegio_id ?? targetColegioId,
+        };
+      });
     }
   }
 
@@ -106,7 +119,7 @@ export async function getApoderadoAlumnosImpl(
   if (pupils.length === 0) {
     let alQuery = supabaseAdmin
       .from("alumnos")
-      .select("id, nombres, apellidos, rut, numero_lista, curso_id, colegio_id, cursos(nombre, nivel)")
+      .select("id, nombres, apellidos, rut, numero_lista, curso_id, colegio_id")
       .ilike("apoderado", `%${userEmail}%`)
       .limit(10);
 
@@ -114,20 +127,33 @@ export async function getApoderadoAlumnosImpl(
       alQuery = alQuery.eq("colegio_id", targetColegioId);
     }
 
-    const { data: byApoderadoField } = await alQuery;
+    const { data: byApoderadoField, error: byApErr } = await alQuery;
 
-    if (byApoderadoField && byApoderadoField.length > 0) {
-      pupils = byApoderadoField.map((a: any) => ({
-        id: a.id,
-        nombres: a.nombres,
-        apellidos: a.apellidos,
-        rut: a.rut,
-        numero_lista: a.numero_lista,
-        curso_id: a.curso_id,
-        curso_nombre: a.cursos?.nombre ?? "Sin curso",
-        nivel: a.cursos?.nivel ?? null,
-        colegio_id: a.colegio_id ?? targetColegioId,
-      }));
+    if (!byApErr && byApoderadoField && byApoderadoField.length > 0) {
+      const cursoIds = byApoderadoField.map((a: any) => a.curso_id).filter(Boolean);
+      let cursosMap = new Map<string, { id: string; nombre: string; nivel?: string | null }>();
+      if (cursoIds.length > 0) {
+        const { data: cList } = await supabaseAdmin
+          .from("cursos")
+          .select("id, nombre, nivel")
+          .in("id", cursoIds);
+        cursosMap = new Map((cList ?? []).map((c: any) => [c.id, c]));
+      }
+
+      pupils = byApoderadoField.map((a: any) => {
+        const c = cursosMap.get(a.curso_id);
+        return {
+          id: a.id,
+          nombres: a.nombres,
+          apellidos: a.apellidos,
+          rut: a.rut,
+          numero_lista: a.numero_lista,
+          curso_id: a.curso_id,
+          curso_nombre: c?.nombre ?? "Sin curso",
+          nivel: c?.nivel ?? null,
+          colegio_id: a.colegio_id ?? targetColegioId,
+        };
+      });
     }
   }
 
@@ -438,5 +464,93 @@ export async function ensureApoderadoLinkedImpl(uid: string) {
   }
 
   return { colegioId: null, role: "apoderado" };
+}
+
+/**
+ * Consulta las publicaciones activas de la Intranet para el colegio del usuario autenticado de forma segura.
+ */
+export async function getIntranetPublicacionesSecureImpl(
+  uid: string,
+  colegioId?: string
+) {
+  let targetColegioId: string | null | undefined = colegioId;
+  if (!targetColegioId) {
+    const { data: prof } = await supabaseAdmin
+      .from("profiles")
+      .select("colegio_id")
+      .eq("user_id", uid)
+      .maybeSingle();
+    targetColegioId = prof?.colegio_id;
+  }
+
+  if (!targetColegioId) {
+    const email = await getVerifiedUserEmail(uid);
+    const { data: mats } = await supabaseAdmin
+      .from("matriculas")
+      .select("colegio_id")
+      .or(`apoderado_titular_email.ilike.${email},apoderado_suplente_email.ilike.${email}`)
+      .limit(1)
+      .maybeSingle();
+    targetColegioId = mats?.colegio_id;
+  }
+
+  if (!targetColegioId) return [];
+
+  const { data, error } = await supabaseAdmin
+    .from("intranet_publicaciones")
+    .select("*")
+    .eq("colegio_id", targetColegioId)
+    .eq("activo", true)
+    .order("fijado", { ascending: false })
+    .order("fecha_publicacion", { ascending: false });
+
+  if (error) {
+    console.error("[getIntranetPublicacionesSecureImpl] Error:", error);
+    return [];
+  }
+  return data ?? [];
+}
+
+/**
+ * Consulta los documentos oficiales para el colegio del usuario autenticado de forma segura.
+ */
+export async function getIntranetDocumentosSecureImpl(
+  uid: string,
+  colegioId?: string
+) {
+  let targetColegioId: string | null | undefined = colegioId;
+  if (!targetColegioId) {
+    const { data: prof } = await supabaseAdmin
+      .from("profiles")
+      .select("colegio_id")
+      .eq("user_id", uid)
+      .maybeSingle();
+    targetColegioId = prof?.colegio_id;
+  }
+
+  if (!targetColegioId) {
+    const email = await getVerifiedUserEmail(uid);
+    const { data: mats } = await supabaseAdmin
+      .from("matriculas")
+      .select("colegio_id")
+      .or(`apoderado_titular_email.ilike.${email},apoderado_suplente_email.ilike.${email}`)
+      .limit(1)
+      .maybeSingle();
+    targetColegioId = mats?.colegio_id;
+  }
+
+  if (!targetColegioId) return [];
+
+  const { data, error } = await supabaseAdmin
+    .from("intranet_documentos")
+    .select("*")
+    .eq("colegio_id", targetColegioId)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("[getIntranetDocumentosSecureImpl] Error:", error);
+    return [];
+  }
+  return data ?? [];
 }
 

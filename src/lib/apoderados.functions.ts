@@ -74,3 +74,34 @@ export const ensureApoderadoLinked = createServerFn({ method: "POST" })
     return await ensureApoderadoLinkedImpl(uid);
   });
 
+const getIntranetPublicacionesSchema = z.object({
+  accessToken: z.string().min(1),
+  colegioId: z.string().uuid().optional(),
+});
+
+export const getIntranetPublicacionesSecure = createServerFn({ method: "POST" })
+  .inputValidator((input: z.infer<typeof getIntranetPublicacionesSchema>) =>
+    getIntranetPublicacionesSchema.parse(input)
+  )
+  .handler(async ({ data }) => {
+    const { getIntranetPublicacionesSecureImpl } = await import("@/lib/apoderados.server");
+    const uid = await uidFromToken(data.accessToken);
+    return await getIntranetPublicacionesSecureImpl(uid, data.colegioId);
+  });
+
+const getIntranetDocumentosSchema = z.object({
+  accessToken: z.string().min(1),
+  colegioId: z.string().uuid().optional(),
+});
+
+export const getIntranetDocumentosSecure = createServerFn({ method: "POST" })
+  .inputValidator((input: z.infer<typeof getIntranetDocumentosSchema>) =>
+    getIntranetDocumentosSchema.parse(input)
+  )
+  .handler(async ({ data }) => {
+    const { getIntranetDocumentosSecureImpl } = await import("@/lib/apoderados.server");
+    const uid = await uidFromToken(data.accessToken);
+    return await getIntranetDocumentosSecureImpl(uid, data.colegioId);
+  });
+
+

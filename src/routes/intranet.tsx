@@ -34,6 +34,10 @@ import { useMyAlumnos } from "@/lib/use-my-alumnos";
 import { PageHeader } from "@/components/PageHeader";
 import { EmptyState } from "@/components/EmptyState";
 import { FichaApoderadoView } from "@/components/FichaApoderadoView";
+import {
+  getIntranetPublicacionesSecure,
+  getIntranetDocumentosSecure,
+} from "@/lib/apoderados.functions";
 import type {
   IntranetPublicacion,
   IntranetDocumento,
@@ -94,7 +98,8 @@ const AMBITO_DOCENTE_BADGE: Record<
 };
 
 function IntranetPage() {
-  const { profile, user } = useAuth();
+  const { profile, user, session } = useAuth();
+  const accessToken = session?.access_token;
   const { data: myAlumnos = [], isLoading: loadingAlumnos } = useMyAlumnos();
   const colegioId = profile?.colegio_id || myAlumnos[0]?.colegio_id;
   const navigate = useNavigate();
@@ -206,9 +211,19 @@ function IntranetPage() {
 
   // Consulta de publicaciones
   const { data: publicaciones = [], isLoading: pubsLoading } = useQuery({
-    queryKey: ["intranet-publicaciones", colegioId],
-    enabled: !!colegioId,
+    queryKey: ["intranet-publicaciones", colegioId, accessToken],
+    enabled: !!colegioId || !!accessToken,
     queryFn: async () => {
+      if (accessToken) {
+        try {
+          const res = await getIntranetPublicacionesSecure({
+            data: { accessToken, colegioId: colegioId || undefined },
+          });
+          return res as IntranetPublicacion[];
+        } catch (e) {
+          console.warn("[intranet] Error en getIntranetPublicacionesSecure, probando fallback:", e);
+        }
+      }
       const { data, error } = await supabase
         .from("intranet_publicaciones")
         .select("*")
@@ -223,9 +238,19 @@ function IntranetPage() {
 
   // Consulta de documentos oficiales
   const { data: documentos = [], isLoading: docsLoading } = useQuery({
-    queryKey: ["intranet-documentos", colegioId],
-    enabled: !!colegioId,
+    queryKey: ["intranet-documentos", colegioId, accessToken],
+    enabled: !!colegioId || !!accessToken,
     queryFn: async () => {
+      if (accessToken) {
+        try {
+          const res = await getIntranetDocumentosSecure({
+            data: { accessToken, colegioId: colegioId || undefined },
+          });
+          return res as IntranetDocumento[];
+        } catch (e) {
+          console.warn("[intranet] Error en getIntranetDocumentosSecure, probando fallback:", e);
+        }
+      }
       const { data, error } = await supabase
         .from("intranet_documentos")
         .select("*")
