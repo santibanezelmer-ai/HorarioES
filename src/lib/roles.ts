@@ -25,6 +25,7 @@ export type AppRole =
   | "utp"
   | "inspectoria"
   | "docente"
+  | "apoderado"
   | "editor"
   | "viewer";
 
@@ -35,6 +36,7 @@ export const ROLE_LABEL: Record<AppRole, string> = {
   utp: "UTP",
   inspectoria: "Inspectoría",
   docente: "Docente",
+  apoderado: "Apoderado",
   editor: "Editor",
   viewer: "Lectura",
 };
@@ -94,7 +96,7 @@ export const MODULES: ModuleDef[] = [
     to: "/dashboard",
     description: "Resumen contextual según tu rol",
     group: "principal",
-    roles: ["admin", "direccion", "utp", "inspectoria", "docente", "editor", "viewer"],
+    roles: ["admin", "direccion", "utp", "inspectoria", "docente", "apoderado", "editor", "viewer"],
   },
   {
     id: "intranet",
@@ -103,7 +105,7 @@ export const MODULES: ModuleDef[] = [
     to: "/intranet",
     description: "Muro institucional, circulares y documentos oficiales",
     group: "principal",
-    roles: ["admin", "direccion", "utp", "inspectoria", "docente", "editor", "viewer"],
+    roles: ["admin", "direccion", "utp", "inspectoria", "docente", "apoderado", "editor", "viewer"],
   },
   {
     id: "academico",
@@ -268,9 +270,10 @@ export function primaryRole(roles: AppRole[]): AppRole {
     "editor",
     "viewer",
     "docente",
+    "apoderado",
   ];
   for (const r of priority) if (roles.includes(r)) return r;
-  return "docente";
+  return "apoderado";
 }
 
 // Suppress unused icon lint

@@ -30,8 +30,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { useUserRoles } from "@/lib/use-role";
 import { useMyDocente } from "@/lib/use-my-docente";
+import { useMyAlumnos } from "@/lib/use-my-alumnos";
 import { PageHeader } from "@/components/PageHeader";
 import { EmptyState } from "@/components/EmptyState";
+import { FichaApoderadoView } from "@/components/FichaApoderadoView";
 import type {
   IntranetPublicacion,
   IntranetDocumento,
@@ -102,10 +104,15 @@ function IntranetPage() {
   const isStaff = roles.some((r) =>
     ["admin", "direccion", "utp", "inspectoria", "superadmin"].includes(r)
   );
+  const isApoderado = roles.includes("apoderado") || (!isStaff && !isDocente);
   const canPublish = isStaff || isDocente;
+  const { data: myAlumnos = [], isLoading: loadingAlumnos } = useMyAlumnos();
 
   // Pestañas principales de navegación
-  const [tab, setTab] = useState<"general" | "apoderados" | "docente" | "documentos">("general");
+  const [tab, setTab] = useState<"general" | "mis-pupilos" | "apoderados" | "docente" | "documentos">(() => {
+    // Si el usuario es principalmente apoderado o tiene alumnos vinculados, abrir por defecto la ficha de sus alumnos
+    return roles.includes("apoderado") ? "mis-pupilos" : "general";
+  });
 
   // Filtros
   const [catFilter, setCatFilter] = useState<string>("todas");
@@ -542,7 +549,31 @@ function IntranetPage() {
       />
 
       {/* Selector de Canales Principales */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 border-b border-border pb-3">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-2 border-b border-border pb-3">
+        {/* Pestaña exclusiva Ficha de Mis Estudiantes (visible para apoderados o usuarios con pupilos) */}
+        {(isApoderado || myAlumnos.length > 0) && (
+          <button
+            onClick={() => setTab("mis-pupilos")}
+            className={`flex items-center justify-center sm:justify-start gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
+              tab === "mis-pupilos"
+                ? "bg-emerald-600 text-white shadow-sm"
+                : "bg-surface text-muted-foreground hover:text-foreground hover:bg-surface-2 border border-border/60"
+            }`}
+          >
+            <GraduationCap className="w-4 h-4" />
+            <span>Ficha de mis Alumnos</span>
+            <span
+              className={`text-xs px-2 py-0.5 rounded-full ${
+                tab === "mis-pupilos"
+                  ? "bg-white/20 text-white"
+                  : "bg-surface-2 text-muted-foreground"
+              }`}
+            >
+              {myAlumnos.length}
+            </span>
+          </button>
+        )}
+
         <button
           onClick={() => {
             setTab("general");
@@ -649,7 +680,12 @@ function IntranetPage() {
         </button>
       </div>
 
-      {tab !== "documentos" ? (
+      {tab === "mis-pupilos" ? (
+        <FichaApoderadoView
+          alumnos={myAlumnos}
+          colegioId={colegioId ?? ""}
+        />
+      ) : tab !== "documentos" ? (
         <div className="space-y-5">
           {/* Sub-banner explicativo según pestaña */}
           {tab === "apoderados" && (

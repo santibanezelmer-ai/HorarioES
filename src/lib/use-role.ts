@@ -8,6 +8,7 @@ export type AppRole =
   | "editor"
   | "viewer"
   | "docente"
+  | "apoderado"
   | "superadmin"
   | "direccion"
   | "inspectoria";
