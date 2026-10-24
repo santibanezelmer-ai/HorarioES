@@ -45,7 +45,7 @@
     "@tailwindcss/vite": "^4.2.1",
     "@tanstack/react-query": "^5.83.0",
     "@tanstack/react-router": "1.170.41",
-    "@tanstack/react-start": "1.168.60",
+    "@tanstack/react-start": "1.169.2",
     "@tanstack/router-plugin": "^1.168.23",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -68,7 +68,7 @@
     "vaul": "^1.1.2",
     "vite-tsconfig-paths": "^6.0.2",
     "xlsx": "npm:@e965/xlsx@^0.20.3",
-    "zod": "^3.24.2"
+    "zod": "^4.6.6"
   },
   "devDependencies": {
     "@eslint/js": "^9.32.0",
@@ -89,13 +89,15 @@
     "vite": "^7.3.1"
   },
   "overrides": {
-    "@tanstack/start-server-core": "1.169.39",
-    "seroval": "^1.7.1",
-    "seroval-plugins": "^1.7.1",
-    "sharp": "0.35.5",
     "picomatch": "^4.0.5",
     "js-yaml": "^4.3.0",
-    "ws": "^8.21.1"
+    "ws": "^8.21.1",
+    "seroval": "1.6.4",
+    "seroval-plugins": "1.6.5",
+    "@tanstack/react-start": "1.168.60",
+    "@tanstack/start-server-core": "1.169.39",
+    "sharp": "0.35.5",
+    "react-hook-form": "7.81.0"
   },
   "resolutions": {
     "@tanstack/start-server-core": "1.169.39",
